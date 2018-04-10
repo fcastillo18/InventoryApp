@@ -20,6 +20,6 @@ public class App {
         new ConnectionDB().startServer();
         SystemDaoJdbc daoJdbc = new SystemDaoJdbc();
         daoJdbc.execTask();
-        
+        //Some comment
     }
 }
