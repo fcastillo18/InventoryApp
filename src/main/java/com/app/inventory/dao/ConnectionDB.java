@@ -27,32 +27,40 @@ public class ConnectionDB {
     
     public Connection getConnection(){
         try {
-            connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/invdb", "sa", "");
+            /*For Embedded type, this will be use in productio*/
+            //Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            //connection = DriverManager.getConnection("jdbc:derby:inventory;create=true");
+            
+            /*For Cliente-Server type, this will be use in development*/
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/inventory;user=sa;password=sa");
         } catch (SQLException ex) {
+            Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return connection;
     }
       
-    public static void startServer(){
-        HsqlProperties hsqlProperties = new HsqlProperties();
-         hsqlProperties
-           .setProperty("server.database.0",
-             "file:C:/hsqldb/DBJava/HSQLDB/inventoryDB");
-         hsqlProperties.setProperty("server.dbname.0", "invdb");
-
-         Server server = new Server();
-        try {
-            server.setProperties(hsqlProperties);
-        } catch (IOException ex) {
-            Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServerAcl.AclFormatException ex) {
-            Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         server.setTrace(false);
-         System.out.println(server.getState() + " "
-           + server.getStateDescriptor());
-         server.start();
-    }
+//    public static void startServer(){
+//        HsqlProperties hsqlProperties = new HsqlProperties();
+//         hsqlProperties
+//           .setProperty("server.database.0",
+//             "file:C:/hsqldb/DBJava/HSQLDB/inventoryDB");
+//         hsqlProperties.setProperty("server.dbname.0", "invdb");
+//
+//         Server server = new Server();
+//        try {
+//            server.setProperties(hsqlProperties);
+//        } catch (IOException ex) {
+//            Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ServerAcl.AclFormatException ex) {
+//            Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//         server.setTrace(false);
+//         System.out.println(server.getState() + " "
+//           + server.getStateDescriptor());
+//         server.start();
+//    }
     
 }
