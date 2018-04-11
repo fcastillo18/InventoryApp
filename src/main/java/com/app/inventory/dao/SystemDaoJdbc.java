@@ -32,7 +32,7 @@ public class SystemDaoJdbc {
             statement = connection.createStatement();
             
             statement.executeUpdate("CREATE TABLE usuario ("
-                    + "ID varchar(6),"
+                    + "ID varchar(6) primary key,"
                     + "nombre varchar(20) NOT NULL,"
                     + "apellido varchar(20) NOT NULL,"
                     + "login varchar(20) NOT NULL,"
