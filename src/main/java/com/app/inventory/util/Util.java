@@ -5,10 +5,14 @@
  */
 package com.app.inventory.util;
 
+import com.app.inventory.dao.controller.ClientJpaController;
+import com.app.inventory.domain.Client;
 import java.awt.Component;
 import java.awt.Container;
+import java.util.Vector;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,6 +20,12 @@ import javax.swing.JTextField;
  */
 public class Util {
     
+    public Util(){
+        clientController = new ClientJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+    }
+    
+    private ClientJpaController clientController = null;
+    private DefaultTableModel tableModel = null;
     
     public void clearTextFields(Container container) {
         for (Component c : container.getComponents()) {
@@ -30,5 +40,15 @@ public class Util {
                 area.setText("");
             }
         }
+    }
+    
+    public DefaultTableModel getClientDataModel(){
+        String columns[] = {"Column1", "Column2"};
+        tableModel = new DefaultTableModel(columns, 0);
+        
+        clientController.findClientEntities().forEach(client -> {
+            tableModel.addRow(new Object[]{ client.getDocument(), client.getName()});
+        }); 
+        return tableModel;
     }
 }

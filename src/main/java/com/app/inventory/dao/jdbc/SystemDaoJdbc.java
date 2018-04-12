@@ -25,7 +25,7 @@ public class SystemDaoJdbc {
     
     public SystemDaoJdbc() {
         con= new ConnectionDB().getConnection();
-        em = EntityManagerUtil.getEntityManager();
+        //em = EntityManagerUtil.getEntityManager();
     }
    
     Statement statement = null;
@@ -34,11 +34,6 @@ public class SystemDaoJdbc {
     EntityManager em = null; 
     ClientJpaController clientController = null;
     
-    public void createClient(Client client){
-        clientController = new ClientJpaController(em.getEntityManagerFactory());
-        clientController.create(client);
-        System.out.println("com.app.inventory.dao.jdbc.SystemDaoJdbc.createClient()");
-    }
     
     public void execTask(){
         

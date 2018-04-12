@@ -5,6 +5,8 @@
  */
 package com.app.inventory.view;
 
+import com.app.inventory.view.client.ClientNewForm;
+
 /**
  *
  * @author Franklin Castillo
@@ -209,7 +211,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        ClientForm clientForm = new ClientForm();
+        ClientNewForm clientForm = new ClientNewForm();
         clientForm.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 

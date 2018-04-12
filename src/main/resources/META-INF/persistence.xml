@@ -3,6 +3,9 @@
   <persistence-unit name="InventoryApp_TPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.app.inventory.domain.Client</class>
+    <class>com.app.inventory.domain.Product</class>
+    <class>com.app.inventory.domain.Supplier</class>
+    <class>com.app.inventory.domain.Users</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/Inventory"/>
       <property name="javax.persistence.jdbc.password" value="sa"/>
