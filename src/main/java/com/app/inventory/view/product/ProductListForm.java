@@ -41,9 +41,9 @@ public class ProductListForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        btnEditClient1 = new javax.swing.JButton();
-        btnEditClient = new javax.swing.JButton();
-        btnDeleteClient = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnPrint = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
@@ -71,27 +71,27 @@ public class ProductListForm extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones cliente"));
 
-        btnEditClient1.setText("Registrar");
-        btnEditClient1.setNextFocusableComponent(btnRefresh);
-        btnEditClient1.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setText("Registrar");
+        btnAdd.setNextFocusableComponent(btnRefresh);
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditClient1ActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
-        btnEditClient.setText("Modificar");
-        btnEditClient.setNextFocusableComponent(btnRefresh);
-        btnEditClient.addActionListener(new java.awt.event.ActionListener() {
+        btnEdit.setText("Modificar");
+        btnEdit.setNextFocusableComponent(btnRefresh);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditClientActionPerformed(evt);
+                btnEditActionPerformed(evt);
             }
         });
 
-        btnDeleteClient.setText("Eliminar");
-        btnDeleteClient.setNextFocusableComponent(btnRefresh);
-        btnDeleteClient.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setText("Eliminar");
+        btnDelete.setNextFocusableComponent(btnRefresh);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteClientActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -101,11 +101,11 @@ public class ProductListForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEditClient1)
+                .addComponent(btnAdd)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEditClient)
+                .addComponent(btnEdit)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnDeleteClient)
+                .addComponent(btnDelete)
                 .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
@@ -113,9 +113,9 @@ public class ProductListForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEditClient)
-                    .addComponent(btnDeleteClient)
-                    .addComponent(btnEditClient1))
+                    .addComponent(btnEdit)
+                    .addComponent(btnDelete)
+                    .addComponent(btnAdd))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -175,7 +175,7 @@ public class ProductListForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(11, 11, 11))
         );
 
@@ -186,7 +186,7 @@ public class ProductListForm extends javax.swing.JFrame {
         idRowClicked = Integer.parseInt(jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0).toString());
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void btnEditClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditClientActionPerformed
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         if (idRowClicked != null) {
             ProductEditForm clEditForm = new ProductEditForm();
             clEditForm.idProduct = idRowClicked;
@@ -196,13 +196,13 @@ public class ProductListForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
         
-    }//GEN-LAST:event_btnEditClientActionPerformed
+    }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         loadTable();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
-    private void btnDeleteClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteClientActionPerformed
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (idRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Your Message", "Title on Box", dialogButton);
@@ -223,12 +223,12 @@ public class ProductListForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
 
-    }//GEN-LAST:event_btnDeleteClientActionPerformed
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void btnEditClient1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditClient1ActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         ProductNewForm clNewForm = new ProductNewForm();
         clNewForm.setVisible(true);
-    }//GEN-LAST:event_btnEditClient1ActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     private void loadTable(){
         jTable1.setModel(this.getProductDataModel());
@@ -289,9 +289,9 @@ public class ProductListForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDeleteClient;
-    private javax.swing.JButton btnEditClient;
-    private javax.swing.JButton btnEditClient1;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JPanel jPanel1;

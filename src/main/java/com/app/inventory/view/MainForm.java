@@ -6,6 +6,8 @@
 package com.app.inventory.view;
 
 import com.app.inventory.view.client.ClientNewForm;
+import com.app.inventory.view.product.ProductListForm;
+import com.app.inventory.view.supplier.SupplierListForm;
 
 /**
  *
@@ -30,12 +32,12 @@ public class MainForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnOut = new javax.swing.JButton();
+        btnIn = new javax.swing.JButton();
+        btnProduct = new javax.swing.JButton();
+        btnClient = new javax.swing.JButton();
+        bntSupplier = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -64,22 +66,32 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
-        jButton1.setText("Salida");
+        btnOut.setText("Salida");
 
-        jButton2.setText("Entrada");
+        btnIn.setText("Entrada");
 
-        jButton3.setText("Producto");
-
-        jButton4.setText("Cliente");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnProduct.setText("Producto");
+        btnProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnProductActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Proveedor");
+        btnClient.setText("Cliente");
+        btnClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Rep. al corte");
+        bntSupplier.setText("Proveedor");
+        bntSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntSupplierActionPerformed(evt);
+            }
+        });
+
+        btnReport.setText("Rep. al corte");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -87,17 +99,17 @@ public class MainForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(jButton2)
+                .addComponent(btnIn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(btnOut)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(btnProduct)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
+                .addComponent(btnClient)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addComponent(bntSupplier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton6)
+                .addComponent(btnReport)
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -106,13 +118,13 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton4)
-                        .addComponent(jButton3)
-                        .addComponent(jButton5)
-                        .addComponent(jButton6))
+                        .addComponent(btnClient)
+                        .addComponent(btnProduct)
+                        .addComponent(bntSupplier)
+                        .addComponent(btnReport))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jButton2)))
+                        .addComponent(btnOut)
+                        .addComponent(btnIn)))
                 .addContainerGap())
         );
 
@@ -210,10 +222,20 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientActionPerformed
         ClientNewForm clientForm = new ClientNewForm();
         clientForm.setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnClientActionPerformed
+
+    private void btnProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductActionPerformed
+        ProductListForm productList = new ProductListForm();
+        productList.setVisible(true);
+    }//GEN-LAST:event_btnProductActionPerformed
+
+    private void bntSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSupplierActionPerformed
+        SupplierListForm supplierList = new SupplierListForm();
+        supplierList.setVisible(true);
+    }//GEN-LAST:event_bntSupplierActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,12 +274,12 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton bntSupplier;
+    private javax.swing.JButton btnClient;
+    private javax.swing.JButton btnIn;
+    private javax.swing.JButton btnOut;
+    private javax.swing.JButton btnProduct;
+    private javax.swing.JButton btnReport;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

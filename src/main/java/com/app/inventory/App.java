@@ -5,6 +5,7 @@
  */
 package com.app.inventory;
 
+import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.view.MainForm;
 
 /**
@@ -14,7 +15,8 @@ import com.app.inventory.view.MainForm;
 public class App {
     public static void main(String[] args) {
         MainForm mainForm = new MainForm();
-        //mainForm.setVisible(true);
+        EntityManagerUtil.getEntityManager();
+        mainForm.setVisible(true);
 //        new ConnectionDB().startServer();
 //        SystemDaoJdbc daoJdbc = new SystemDaoJdbc();
 //        daoJdbc.execTask();

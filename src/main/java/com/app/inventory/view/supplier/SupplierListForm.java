@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.app.inventory.view.client;
+package com.app.inventory.view.supplier;
 
-import com.app.inventory.dao.controller.ClientJpaController;
+import com.app.inventory.view.client.*;
+import com.app.inventory.dao.controller.SupplierJpaController;
 import com.app.inventory.dao.controller.exceptions.NonexistentEntityException;
 import com.app.inventory.util.EntityManagerUtil;
 import java.util.logging.Level;
@@ -17,12 +18,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Franklin Castillo
  */
-public class ClientListForm extends javax.swing.JFrame {
+public class SupplierListForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form ListClients
+     * Creates new form ListSuppliers
      */
-    public ClientListForm() {
+    public SupplierListForm() {
         initComponents();
         loadTable();
     }
@@ -39,9 +40,9 @@ public class ClientListForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        btnAdd = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
+        btnEditClient1 = new javax.swing.JButton();
+        btnEditClient = new javax.swing.JButton();
+        btnDeleteClient = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnPrint = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
@@ -69,27 +70,27 @@ public class ClientListForm extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones cliente"));
 
-        btnAdd.setText("Registrar");
-        btnAdd.setNextFocusableComponent(btnRefresh);
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        btnEditClient1.setText("Registrar");
+        btnEditClient1.setNextFocusableComponent(btnRefresh);
+        btnEditClient1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnEditClient1ActionPerformed(evt);
             }
         });
 
-        btnEdit.setText("Modificar");
-        btnEdit.setNextFocusableComponent(btnRefresh);
-        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+        btnEditClient.setText("Modificar");
+        btnEditClient.setNextFocusableComponent(btnRefresh);
+        btnEditClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditActionPerformed(evt);
+                btnEditClientActionPerformed(evt);
             }
         });
 
-        btnDelete.setText("Eliminar");
-        btnDelete.setNextFocusableComponent(btnRefresh);
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+        btnDeleteClient.setText("Eliminar");
+        btnDeleteClient.setNextFocusableComponent(btnRefresh);
+        btnDeleteClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
+                btnDeleteClientActionPerformed(evt);
             }
         });
 
@@ -99,11 +100,11 @@ public class ClientListForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAdd)
+                .addComponent(btnEditClient1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEdit)
+                .addComponent(btnEditClient)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnDelete)
+                .addComponent(btnDeleteClient)
                 .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
@@ -111,9 +112,9 @@ public class ClientListForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEdit)
-                    .addComponent(btnDelete)
-                    .addComponent(btnAdd))
+                    .addComponent(btnEditClient)
+                    .addComponent(btnDeleteClient)
+                    .addComponent(btnEditClient1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -173,7 +174,7 @@ public class ClientListForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
                 .addGap(11, 11, 11))
         );
 
@@ -184,34 +185,34 @@ public class ClientListForm extends javax.swing.JFrame {
         idRowClicked = Integer.parseInt(jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0).toString());
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+    private void btnEditClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditClientActionPerformed
         if (idRowClicked != null) {
-            ClientEditForm clEditForm = new ClientEditForm();
-            clEditForm.idClient = idRowClicked;
+            SupplierEditForm clEditForm = new SupplierEditForm();
+            clEditForm.idSupplier = idRowClicked;
             clEditForm.setVisible(true);
-            System.out.println("com.app.inventory.view.ClientListForm.btnEditClientActionPerformed()");
+            System.out.println("com.app.inventory.view.SupplierListForm.btnEditSupplierActionPerformed()");
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
         
-    }//GEN-LAST:event_btnEditActionPerformed
+    }//GEN-LAST:event_btnEditClientActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         loadTable();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+    private void btnDeleteClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteClientActionPerformed
         if (idRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Your Message", "Title on Box", dialogButton);
             if(dialogResult == 0) {
-                ClientJpaController clientController = new ClientJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+                SupplierJpaController clientController = new SupplierJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {
                     clientController.destroy(idRowClicked);
                     loadTable();
                 } catch (NonexistentEntityException ex) {
-                    System.out.println("com.app.inventory.view.ClientListForm.btnDeleteClientActionPerformed()");
-                    Logger.getLogger(ClientListForm.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("com.app.inventory.view.SupplierListForm.btnDeleteSupplierActionPerformed()");
+                    Logger.getLogger(SupplierListForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente");
             } else {
@@ -221,15 +222,15 @@ public class ClientListForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
 
-    }//GEN-LAST:event_btnDeleteActionPerformed
+    }//GEN-LAST:event_btnDeleteClientActionPerformed
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        ClientNewForm clNewForm = new ClientNewForm();
+    private void btnEditClient1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditClient1ActionPerformed
+        SupplierNewForm clNewForm = new SupplierNewForm();
         clNewForm.setVisible(true);
-    }//GEN-LAST:event_btnAddActionPerformed
+    }//GEN-LAST:event_btnEditClient1ActionPerformed
 
     private void loadTable(){
-        jTable1.setModel(this.getClientDataModel());
+        jTable1.setModel(this.getSupplierDataModel());
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
     }
     /**
@@ -249,41 +250,47 @@ public class ClientListForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ClientListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ClientListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ClientListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ClientListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierListForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ClientListForm().setVisible(true);
+                new SupplierListForm().setVisible(true);
             }
         });
     }
-    private DefaultTableModel getClientDataModel(){
+    private DefaultTableModel getSupplierDataModel(){
         String columns[] = {"ID","Documento", "Nombre", "Direccion", "Sector", "Telefono", "Correo"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
         
-        ClientJpaController clientController = new ClientJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+        SupplierJpaController clientController = new SupplierJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 
-        clientController.findClientEntities().forEach(client -> {
-            tableModel.addRow(new Object[]{ client.getIdClient(),client.getDocument(), client.getName(), client.getAddress(), client.getZone(), client.getPhone() ,client.getEmail()});
+        clientController.findSupplierEntities().forEach(client -> {
+            tableModel.addRow(new Object[]{ client.getIdSupplier(),client.getDocument(), client.getName(), client.getAddress(), client.getZone(), client.getPhone() ,client.getEmail()});
         }); 
         
         return tableModel;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnDeleteClient;
+    private javax.swing.JButton btnEditClient;
+    private javax.swing.JButton btnEditClient1;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JPanel jPanel1;
