@@ -276,13 +276,13 @@ public class ProductListForm extends javax.swing.JFrame {
         });
     }
     private DefaultTableModel getProductDataModel(){
-        String columns[] = {"ID","Documento", "Nombre", "Direccion", "Sector", "Telefono", "Correo"};
+        String columns[] = {"ID","ID Suplidor" ,"Codigo", "Descripcion", "Categoria", "Precio", "Costo", "Min Stock", "Ideal Stock"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
         
         ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 
         productController.findProductEntities().forEach(product -> {
-            tableModel.addRow(new Object[]{ product.getIdProduct(),product.getDocument(), product.getName(), product.getAddress(), product.getZone(), product.getPhone() ,product.getEmail()});
+            tableModel.addRow(new Object[]{ product.getIdProduct(),product.getIdSupplier(), product.getProductCode(), product.getDescripcion(), product.getCategory(), product.getPrice1() ,product.getCost(), product.getMinStock(), product.getMaxStock()});
         }); 
         
         return tableModel;

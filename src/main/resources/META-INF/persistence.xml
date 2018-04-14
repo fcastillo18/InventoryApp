@@ -6,6 +6,7 @@
     <class>com.app.inventory.domain.Product</class>
     <class>com.app.inventory.domain.Supplier</class>
     <class>com.app.inventory.domain.Users</class>
+    <class>com.app.inventory.domain.Inventory</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/Inventory"/>
       <property name="javax.persistence.jdbc.password" value="sa"/>

@@ -54,7 +54,7 @@
                   <Component id="btnSave" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnClear" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="15" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -83,39 +83,50 @@
                       <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="txtSupplier" min="-2" pref="136" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" pref="60" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="txtDescripcion" alignment="0" pref="213" max="32767" attributes="0"/>
-                      <Component id="txtPrice1" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
-                      <Component id="txtPrice2" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
-                      <Component id="txtPrice3" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
-                      <Component id="txtCode" alignment="0" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtCategory" max="32767" attributes="0"/>
-                          <Component id="txtCost" min="-2" pref="184" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jpStockMin" min="-2" pref="59" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="txtSupplier" min="-2" pref="136" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="jButton1" min="-2" pref="60" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="txtDescripcion" alignment="0" pref="213" max="32767" attributes="0"/>
+                                  <Component id="txtCode" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="ftxtPrice1" min="-2" pref="106" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" pref="35" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jpStockMax" min="-2" pref="51" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPane1" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="ftxtPrice2" min="-2" pref="106" max="-2" attributes="0"/>
+                              <Component id="ftxtPrice3" min="-2" pref="106" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtCategory" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jpStockMin" min="-2" pref="59" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jpStockMax" min="-2" pref="51" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                      </Group>
+                      <Component id="ftxtCost" min="-2" pref="106" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               </Group>
@@ -151,7 +162,7 @@
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtCost" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="ftxtCost" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -166,24 +177,24 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPrice1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                              <Component id="ftxtPrice1" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPrice2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="ftxtPrice2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPrice3" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="ftxtPrice3" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jScrollPane1" min="-2" pref="70" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="15" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -215,19 +226,9 @@
             <Property name="text" type="java.lang.String" value="Precio 3:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtPrice3">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="0"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="text" type="java.lang.String" value="Precio 1:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="txtPrice1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
@@ -235,16 +236,9 @@
             <Property name="text" type="java.lang.String" value="Costo:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtCost">
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
             <Property name="text" type="java.lang.String" value="Precio 2:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="txtPrice2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
@@ -283,9 +277,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtSupplier">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
@@ -305,6 +296,34 @@
               <SpinnerModel initial="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JFormattedTextField" name="ftxtPrice1">
+          <Properties>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Text Cursor"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JFormattedTextField" name="ftxtPrice2">
+          <Properties>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Text Cursor"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JFormattedTextField" name="ftxtPrice3">
+          <Properties>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Text Cursor"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JFormattedTextField" name="ftxtCost">
+          <Properties>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Text Cursor"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

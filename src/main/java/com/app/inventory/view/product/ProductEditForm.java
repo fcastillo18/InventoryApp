@@ -8,7 +8,7 @@ package com.app.inventory.view.product;
 import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
-import com.app.inventory.util.Util;
+import com.app.inventory.util.UtilInv;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,11 +26,11 @@ public class ProductEditForm extends javax.swing.JFrame {
      */
     public ProductEditForm() {
         initComponents();
-        util = new Util();
+        util = new UtilInv();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
     }
     public int idProduct;
-    private Util util;
+    private UtilInv util;
     private ProductJpaController productController = null;
     /**
      * This method is called from within the constructor to initialize the form.

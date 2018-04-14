@@ -10,7 +10,7 @@ import com.app.inventory.dao.controller.SupplierJpaController;
 import com.app.inventory.dao.jdbc.SystemDaoJdbc;
 import com.app.inventory.domain.Supplier;
 import com.app.inventory.util.EntityManagerUtil;
-import com.app.inventory.util.Util;
+import com.app.inventory.util.UtilInv;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,10 +27,10 @@ public class SupplierNewForm extends javax.swing.JFrame {
      */
     public SupplierNewForm() {
         initComponents();
-        util = new Util();
+        util = new UtilInv();
         supplierController = new SupplierJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
     }
-    private Util util;
+    private UtilInv util;
     private SupplierJpaController supplierController = null;
     /**
      * This method is called from within the constructor to initialize the form.

@@ -8,7 +8,7 @@ package com.app.inventory.view.user;
 import com.app.inventory.dao.controller.UsersJpaController;
 import com.app.inventory.domain.Users;
 import com.app.inventory.util.EntityManagerUtil;
-import com.app.inventory.util.Util;
+import com.app.inventory.util.UtilInv;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,10 +25,10 @@ public class UserNewForm extends javax.swing.JFrame {
      */
     public UserNewForm() {
         initComponents();
-        util = new Util();
+        util = new UtilInv();
         usersController = new UsersJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
     }
-    private Util util;
+    private UtilInv util;
     private UsersJpaController usersController = null;
     /**
      * This method is called from within the constructor to initialize the form.

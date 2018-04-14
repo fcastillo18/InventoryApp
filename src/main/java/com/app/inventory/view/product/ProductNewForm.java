@@ -8,7 +8,7 @@ package com.app.inventory.view.product;
 import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
-import com.app.inventory.util.Util;
+import com.app.inventory.util.UtilInv;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,11 +26,15 @@ public class ProductNewForm extends javax.swing.JFrame {
      */
     public ProductNewForm() {
         initComponents();
-        util = new Util();
+        
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+        ftxtPrice1.setFormatterFactory(UtilInv.getDecimalFormatFactory());
+        ftxtPrice2.setFormatterFactory(UtilInv.getDecimalFormatFactory());
+        ftxtPrice3.setFormatterFactory(UtilInv.getDecimalFormatFactory());
+        ftxtCost.setFormatterFactory(UtilInv.getDecimalFormatFactory());
     }
-    private Util util;
     private ProductJpaController productController = null;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,13 +52,9 @@ public class ProductNewForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtCategory = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txtPrice3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtPrice1 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtCost = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txtPrice2 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaNote = new javax.swing.JTextArea();
@@ -65,6 +65,10 @@ public class ProductNewForm extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jpStockMin = new javax.swing.JSpinner();
         jpStockMax = new javax.swing.JSpinner();
+        ftxtPrice1 = new javax.swing.JFormattedTextField();
+        ftxtPrice2 = new javax.swing.JFormattedTextField();
+        ftxtPrice3 = new javax.swing.JFormattedTextField();
+        ftxtCost = new javax.swing.JFormattedTextField();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
@@ -85,17 +89,11 @@ public class ProductNewForm extends javax.swing.JFrame {
 
         jLabel4.setText("Precio 3:");
 
-        txtPrice3.setText("0");
-
         jLabel5.setText("Precio 1:");
-
-        txtPrice1.setText("0");
 
         jLabel7.setText("Costo:");
 
         jLabel8.setText("Precio 2:");
-
-        txtPrice2.setText("0");
 
         jLabel9.setText("Nota:");
 
@@ -109,14 +107,20 @@ public class ProductNewForm extends javax.swing.JFrame {
 
         jLabel11.setText("Proveedor:");
 
-        txtSupplier.setEditable(false);
-
         jButton1.setText("Find");
 
         jpStockMin.setModel(new javax.swing.SpinnerNumberModel());
 
         jpStockMax.setModel(new javax.swing.SpinnerNumberModel());
         jpStockMax.setToolTipText("");
+
+        ftxtPrice1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        ftxtPrice2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        ftxtPrice3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        ftxtCost.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -132,34 +136,40 @@ public class ProductNewForm extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                    .addComponent(txtPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrice2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrice3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCode))
-                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(txtSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                                .addComponent(txtCode))
+                            .addComponent(ftxtPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 35, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ftxtPrice2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ftxtPrice3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtCategory)
-                        .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jpStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpStockMax, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jpStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel10)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jpStockMax, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1))
+                    .addComponent(ftxtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12))
         );
         jPanel1Layout.setVerticalGroup(
@@ -187,7 +197,7 @@ public class ProductNewForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ftxtCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
@@ -198,19 +208,19 @@ public class ProductNewForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel5)
-                            .addComponent(txtPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ftxtPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(txtPrice2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ftxtPrice2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(txtPrice3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(ftxtPrice3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         btnCancel.setText("Cancelar");
@@ -259,14 +269,14 @@ public class ProductNewForm extends javax.swing.JFrame {
                     .addComponent(btnCancel)
                     .addComponent(btnSave)
                     .addComponent(btnClear))
-                .addGap(0, 19, Short.MAX_VALUE))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        util.clearTextFields(this.getContentPane());
+        UtilInv.clearTextFields(this.getContentPane());
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -279,23 +289,23 @@ public class ProductNewForm extends javax.swing.JFrame {
         
         Product product = new Product();
         product.setCategory(txtCategory.getText());
-        product.setCost(BigDecimal.valueOf(Double.parseDouble(txtCost.getText().trim())));
+        product.setCost(BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim())));
         product.setCreatedDate(new java.sql.Timestamp(date.getTime()));
         product.setDescripcion(txtDescripcion.getText());
         product.setIdSupplier(1);//Pendiente colocar el ID de un supplidor registrado
         product.setMinStock(Integer.parseInt(jpStockMin.getValue().toString()));
         product.setMaxStock(Integer.parseInt(jpStockMax.getValue().toString()));
-        product.setPrice1(BigDecimal.valueOf(Double.parseDouble(txtPrice1.getText().trim())));
-        product.setPrice2(BigDecimal.valueOf(Double.parseDouble(txtPrice2.getText().trim())));
-        product.setPrice3(BigDecimal.valueOf(Double.parseDouble(txtPrice3.getText().trim())));
+        product.setPrice1((BigDecimal) (ftxtPrice1.getText().trim().isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim())))); ;
+        product.setPrice2((BigDecimal) (ftxtPrice2.getText().trim().isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim())))); ;
+        product.setPrice3((BigDecimal) (ftxtPrice3.getText().trim().isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim())))); ;
         product.setProductCode(txtCode.getText());
         product.setStatus(true);
     
         productController.create(product);
         JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-        util.clearTextFields(this.getContentPane());
+        UtilInv.clearTextFields(this.getContentPane());
     }//GEN-LAST:event_btnSaveActionPerformed
-
+   
     /**
      * @param args the command line arguments
      */
@@ -366,6 +376,10 @@ public class ProductNewForm extends javax.swing.JFrame {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnSave;
+    private javax.swing.JFormattedTextField ftxtCost;
+    private javax.swing.JFormattedTextField ftxtPrice1;
+    private javax.swing.JFormattedTextField ftxtPrice2;
+    private javax.swing.JFormattedTextField ftxtPrice3;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -385,11 +399,7 @@ public class ProductNewForm extends javax.swing.JFrame {
     private javax.swing.JTextArea txtAreaNote;
     private javax.swing.JTextField txtCategory;
     private javax.swing.JTextField txtCode;
-    private javax.swing.JTextField txtCost;
     private javax.swing.JTextField txtDescripcion;
-    private javax.swing.JTextField txtPrice1;
-    private javax.swing.JTextField txtPrice2;
-    private javax.swing.JTextField txtPrice3;
     private javax.swing.JTextField txtSupplier;
     // End of variables declaration//GEN-END:variables
 }
