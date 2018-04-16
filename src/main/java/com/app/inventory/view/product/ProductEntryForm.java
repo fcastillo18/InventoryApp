@@ -451,6 +451,7 @@ public class ProductEntryForm extends javax.swing.JFrame {
         }else{ 
             listInv.forEach(inv -> {
                 //Inventory
+                //hay que verificar si existe para crear o editar 
                 inventoryController.create(inv);
                 
                 /*Inventory Transaction*/

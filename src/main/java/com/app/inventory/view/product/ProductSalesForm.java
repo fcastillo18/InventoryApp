@@ -89,7 +89,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
      */
     public ProductSalesForm() {
         initComponents();
-        initObjects();
+        //initObjects();
         loadTable(listInv);
     }
 
@@ -187,8 +187,13 @@ public class ProductSalesForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle de la entrada"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle de la venta"));
 
         jLabel1.setText("Numero:");
 
@@ -471,7 +476,9 @@ public class ProductSalesForm extends javax.swing.JFrame {
         if(listInv == null ){
             JOptionPane.showMessageDialog(this, "Debe agregar registros a la lista para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }else{ 
+            //Actualiza el inventario, descontando las ventas 
             listInv.forEach(inv -> {
+                int qty = inventoryController.findInventory(inv.getIdInventory()).getQuantity() - inv.getQuantity();
                 try {
                     //Inventory
                     inventoryController.edit(inv);
@@ -488,11 +495,11 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 invTrans.setIdUser(1);//modificar cuando se haga modulo de user
                 invTrans.setTransType("out");
                 invTrans.setDiscount(BigDecimal.ZERO);
-                invTrans.setQuantity(inv.getQuantity());
+                invTrans.setQuantity(qty);
                 //pendiente cambiar y poner a guardar en priceunit as bigdecimal`
                 BigDecimal price = productController.findProduct(inv.getIdProduct()).getPrice1();
                 invTrans.setPricexunit(price);
-                invTrans.setTotal(price.multiply(new BigDecimal(inv.getQuantity())));
+                invTrans.setTotal(price.multiply(new BigDecimal(qty)));
                 invTrans.setCreatedDate(inv.getLastUpdated());
             
                 invTransController.create(invTrans);
@@ -527,16 +534,14 @@ public class ProductSalesForm extends javax.swing.JFrame {
                     //es por que existe el registro en la tabla
                     inv.setIdInventory(invt.getIdInventory());
                     //cantidad existenten menos la de salida
-                    inv.setQuantity(invt.getQuantity() - prodQty);
+                    inv.setQuantity(invt.getQuantity()-prodQty);
                     
                     //Es necesario reducir de la lista, para mostrar la cantidad segun se vayan agregando items
                     if (!listInv.isEmpty()) {
-                         listInv.get(invt.getIdInventory()).setQuantity(prodQty);
+                         listInv.get(invt.getIdInventory()).setQuantity(invt.getQuantity() - prodQty);
                     }
                 }//de lo contrario,=...DO nothing
             });
-            
-            
             
             inv.setIdProduct(product.getIdProduct());
             inv.setIdProveedor(client.getIdClient());
@@ -675,6 +680,11 @@ public class ProductSalesForm extends javax.swing.JFrame {
         idProductRowClicked = jTable1.getSelectedRow();//Integer.parseInt(jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 1).toString());
         inventory = inventoryController.findInventory(Integer.parseInt(jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0).toString()));
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        System.out.println("Inicializando objetos on windows open");
+        initObjects();
+    }//GEN-LAST:event_formWindowOpened
 
     private void loadTable(List<Inventory> list){
         jTable1.setModel(this.getTableDataModel(list));
