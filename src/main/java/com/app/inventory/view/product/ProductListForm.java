@@ -234,6 +234,20 @@ public class ProductListForm extends javax.swing.JFrame {
         jTable1.setModel(this.getProductDataModel());
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
     }
+    
+    private DefaultTableModel getProductDataModel(){
+        String columns[] = {"ID","ID Suplidor" ,"Codigo", "Descripcion", "Categoria", "Precio", "Costo", "Min Stock", "Ideal Stock"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+        
+        ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+                
+        productController.findProductEntities().forEach(product -> {
+            tableModel.addRow(new Object[]{ product.getIdProduct(),product.getIdSupplier(), product.getProductCode(), product.getDescripcion(), product.getCategory(), product.getPrice1() ,product.getCost(), product.getMinStock(), product.getMaxStock()});
+        }); 
+        
+        return tableModel;
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -275,19 +289,7 @@ public class ProductListForm extends javax.swing.JFrame {
             }
         });
     }
-    private DefaultTableModel getProductDataModel(){
-        String columns[] = {"ID","ID Suplidor" ,"Codigo", "Descripcion", "Categoria", "Precio", "Costo", "Min Stock", "Ideal Stock"};
-        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
-        
-        ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
-                
-        productController.findProductEntities().forEach(product -> {
-            tableModel.addRow(new Object[]{ product.getIdProduct(),product.getIdSupplier(), product.getProductCode(), product.getDescripcion(), product.getCategory(), product.getPrice1() ,product.getCost(), product.getMinStock(), product.getMaxStock()});
-        }); 
-        
-        return tableModel;
-    }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
