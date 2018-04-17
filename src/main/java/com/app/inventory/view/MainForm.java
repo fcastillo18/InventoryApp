@@ -198,7 +198,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenu2.setText("Movimientos");
 
-        jMenuItem1.setText("Registrar venta/entrada");
+        jMenuItem1.setText("Registrar compra/entrada");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -206,7 +206,7 @@ public class MainForm extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem1);
 
-        jMenuItem3.setText("Registrar compra/salida");
+        jMenuItem3.setText("Registrar venta/salida");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);

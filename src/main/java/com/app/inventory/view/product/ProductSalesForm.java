@@ -69,21 +69,6 @@ public class ProductSalesForm extends javax.swing.JFrame {
         fillCombo("client");
     }
     
-    private void fillCombo(String combo){
-        if(combo.equals("product")){
-            comboProduct.addItem("");
-            productController.findProductEntities().forEach(prod -> {
-                comboProduct.addItem(prod.getIdProduct()+"-"+prod.getDescripcion());
-            });
-        }else if(combo.equals("client")){
-            comboClient.addItem("");
-            clientController.findClientEntities().forEach(sup -> {
-                comboClient.addItem(sup.getIdClient()+"-"+sup.getName());
-            });
-        }
-        
-    }
-    
     /**
      * Creates new form ProductEntryForm
      */
@@ -478,9 +463,11 @@ public class ProductSalesForm extends javax.swing.JFrame {
         }else{ 
             //Actualiza el inventario, descontando las ventas 
             listInv.forEach(inv -> {
-                int qty = inventoryController.findInventory(inv.getIdInventory()).getQuantity() - inv.getQuantity();
+                int qtyOfItemOnList = inv.getQuantity();
+                int newQtyOnInv = inventoryController.findInventory(inv.getIdInventory()).getQuantity() - inv.getQuantity();
                 try {
                     //Inventory
+                    inv.setQuantity(newQtyOnInv);
                     inventoryController.edit(inv);
                 } catch (Exception ex) {
                     Logger.getLogger(ProductSalesForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -495,11 +482,11 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 invTrans.setIdUser(1);//modificar cuando se haga modulo de user
                 invTrans.setTransType("out");
                 invTrans.setDiscount(BigDecimal.ZERO);
-                invTrans.setQuantity(qty);
+                invTrans.setQuantity(qtyOfItemOnList);
                 //pendiente cambiar y poner a guardar en priceunit as bigdecimal`
                 BigDecimal price = productController.findProduct(inv.getIdProduct()).getPrice1();
                 invTrans.setPricexunit(price);
-                invTrans.setTotal(price.multiply(new BigDecimal(qty)));
+                invTrans.setTotal(price.multiply(new BigDecimal(qtyOfItemOnList)));
                 invTrans.setCreatedDate(inv.getLastUpdated());
             
                 invTransController.create(invTrans);
@@ -523,23 +510,23 @@ public class ProductSalesForm extends javax.swing.JFrame {
 
             Inventory inv = new Inventory();
             Date date = new Date(datePicker.getText());
-            DateFormat defaultDf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//DateFormat.getDateTimeInstance();
+            //DateFormat defaultDf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//DateFormat.getDateTimeInstance();
     //        System.out.println(defaultDf.format(date));
             
             /*Antes de este set, debo ir a la base de datos para identificar si
                 el registro es nuevo. Solo setear este atributo para modificados
-            */
-            inventoryController.findInventoryEntities().forEach(invt -> {
+            *///inventoryController.findInventoryEntities().forEach(invt -> {
+            listInvFromDB.forEach(invt -> {
                 if(Objects.equals(invt.getIdProduct(), product.getIdProduct())){
                     //es por que existe el registro en la tabla
                     inv.setIdInventory(invt.getIdInventory());
-                    //cantidad existenten menos la de salida
-                    inv.setQuantity(invt.getQuantity()-prodQty);
+                    //cantidad existenten menos la de salida inv.setQuantity(invt.getQuantity()-prodQty);
+                    inv.setQuantity(prodQty);
                     
-                    //Es necesario reducir de la lista, para mostrar la cantidad segun se vayan agregando items
-                    if (!listInv.isEmpty()) {
-                         listInv.get(invt.getIdInventory()).setQuantity(invt.getQuantity() - prodQty);
-                    }
+//                    //Es necesario reducir de la lista, para mostrar la cantidad segun se vayan agregando items
+//                    if (!listInv.isEmpty()) {
+//                         listInv.get(invt.getIdInventory()-1).setQuantity(prodQty);
+//                    }
                 }//de lo contrario,=...DO nothing
             });
             
@@ -547,7 +534,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
             inv.setIdProveedor(client.getIdClient());
             inv.setLastUpdated(UtilInv.getDateNow());
 //            inv.setQuantity(prodQty);
-            inv.setLastUpdated(date);
+//            inv.setLastUpdated(date);
             listInv.add(inv);
 
             product = productController.findProduct(inv.getIdProduct());
@@ -557,6 +544,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
             UtilInv.clearTextFields(this.getContentPane());
 
             txtLastTrans.setText(String.valueOf(lastNoTrans++));
+            //Restando la cantidad agregada de la info de la base de datos
             listInvFromDB.get(listInvFromDB.indexOf(inventoryController.findInventory(product.getIdProduct()))).setQuantity(inStock-prodQty);
         }else{
             JOptionPane.showMessageDialog(this, "Debe digitar una cantidad menor al stock...", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -567,9 +555,11 @@ public class ProductSalesForm extends javax.swing.JFrame {
         UtilInv.clearTextFields(this.getContentPane());
         loadTable(null);
         txtLastTrans.setText(String.valueOf(lastNoTrans++));
+        listInvFromDB = inventoryController.findInventoryEntities();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        listInvFromDB = inventoryController.findInventoryEntities();
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -645,8 +635,15 @@ public class ProductSalesForm extends javax.swing.JFrame {
             product = productController.findProduct(idProductRowClicked);
             System.out.println("");
             System.out.println("");
-            Inventory inv = inventoryController.findInventory(product.getIdProduct());
-            int inStock = inv.getQuantity();//inventoryController.findInventory(product.getIdProduct()).getQuantity();
+            
+            listInvFromDB.forEach(i -> {
+                if (Objects.equals(product.getIdProduct(), i.getIdProduct())) {
+                    inventory = i;
+                }
+            });
+            
+//inventoryController.findInventory(product.getIdProduct());
+            int inStock = inventory.getQuantity();//inventoryController.findInventory(product.getIdProduct()).getQuantity();
             txtInStock.setText(String.valueOf(inStock));
 //            //for client
 //            idClientRowClicked = product.getIdClient();
@@ -711,7 +708,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     }
             
     private DefaultTableModel getTableDataModel(List<Inventory> list){
-        String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Total"};
+        String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Precio", "Total"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
         
         try {
@@ -719,9 +716,9 @@ public class ProductSalesForm extends javax.swing.JFrame {
             //tableModel.addRow(new Object[]{ }); 
             }else{
                 list.forEach(inv -> {
-    //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
-                    BigDecimal total =  product.getCost().multiply(new BigDecimal(inv.getQuantity()));
-                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdProveedor(), product.getProductCode(), product.getDescripcion(), inv.getQuantity(), product.getCost(), total});
+                    product = productController.findProduct(inv.getIdProduct());
+                    BigDecimal total =  product.getPrice1().multiply(new BigDecimal(inv.getQuantity()));
+                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdProveedor(), product.getProductCode(), product.getDescripcion(), inv.getQuantity(), product.getPrice1(), total});
                 }); 
             }
         } catch (Exception e) {
@@ -731,6 +728,21 @@ public class ProductSalesForm extends javax.swing.JFrame {
         
         
         return tableModel;
+    }
+    
+    private void fillCombo(String combo){
+        if(combo.equals("product")){
+            comboProduct.addItem("");
+            productController.findProductEntities().forEach(prod -> {
+                comboProduct.addItem(prod.getIdProduct()+"-"+prod.getDescripcion());
+            });
+        }else if(combo.equals("client")){
+            comboClient.addItem("");
+            clientController.findClientEntities().forEach(sup -> {
+                comboClient.addItem(sup.getIdClient()+"-"+sup.getName());
+            });
+        }
+        
     }
     
     /**

@@ -99,3 +99,4 @@ select * from product;
 select * from inventory;
 
 select * from inventory_trans;
+

@@ -24,6 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -61,21 +64,6 @@ public class ProductEntryForm extends javax.swing.JFrame {
         txtLastTrans.setText(String.valueOf(lastNoTrans));
         fillCombo("product");
         fillCombo("supplier");
-    }
-    
-    private void fillCombo(String combo){
-        if(combo.equals("product")){
-            comboProduct.addItem("");
-            productController.findProductEntities().forEach(prod -> {
-                comboProduct.addItem(prod.getIdProduct()+"-"+prod.getDescripcion());
-            });
-        }else if(combo.equals("supplier")){
-            comboSupplier.addItem("");
-            supplierController.findSupplierEntities().forEach(sup -> {
-                comboSupplier.addItem(sup.getIdSupplier()+"-"+sup.getName());
-            });
-        }
-        
     }
     
     /**
@@ -445,15 +433,31 @@ public class ProductEntryForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean notFound = true;
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        
         if(listInv == null ){
             JOptionPane.showMessageDialog(this, "Debe agregar registros a la lista para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }else{ 
             listInv.forEach(inv -> {
-                //Inventory
-                //hay que verificar si existe para crear o editar 
-                inventoryController.create(inv);
-                
+                //hay que verificar si existe para crear o editar
+                inventoryController.findInventoryEntities().forEach(i -> {
+                    if (Objects.equals(inv.getIdProduct(), i.getIdProduct())) { 
+                        try {
+                            //SI el producto ya existe, EDIT
+                            inv.setIdInventory(i.getIdInventory());
+                            inv.setQuantity(inv.getQuantity() + i.getQuantity());//cantidad entratante + cantidad en existencia
+                            inventoryController.edit(inv);
+                            inv.setQuantity(inv.getQuantity() - i.getQuantity());//Esto para reestablecer cantidad entratante a ser insertada en inventory_trans
+                            notFound = false;
+                        } catch (Exception ex) {
+                            Logger.getLogger(ProductEntryForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+                if(notFound){//Si el producto no existe. CREATE
+                    inventoryController.create(inv);
+                }
                 /*Inventory Transaction*/
                 invTrans = new InventoryTrans();
                 invTrans.setIdInventory(1);//sopesar el colocar el id del inventory creado en la linea de arriba
@@ -645,7 +649,7 @@ public class ProductEntryForm extends javax.swing.JFrame {
     }
             
     private DefaultTableModel getTableDataModel(List<Inventory> list){
-        String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Total"};
+        String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Precio", "Total"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
         
         try {
@@ -653,9 +657,10 @@ public class ProductEntryForm extends javax.swing.JFrame {
             //tableModel.addRow(new Object[]{ }); 
             }else{
                 list.forEach(inv -> {
+                    product = productController.findProduct(inv.getIdProduct());
     //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
-                    BigDecimal total =  product.getCost().multiply(new BigDecimal(inv.getQuantity()));
-                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdProveedor(), product.getProductCode(), product.getDescripcion(), inv.getQuantity(), product.getCost(), total});
+                    BigDecimal total =  product.getPrice1().multiply(new BigDecimal(inv.getQuantity()));
+                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdProveedor(), product.getProductCode(), product.getDescripcion(), inv.getQuantity(), product.getPrice1(), total});
                 }); 
             }
         } catch (Exception e) {
@@ -666,7 +671,20 @@ public class ProductEntryForm extends javax.swing.JFrame {
         
         return tableModel;
     }
-    
+    private void fillCombo(String combo){
+        if(combo.equals("product")){
+            comboProduct.addItem("");
+            productController.findProductEntities().forEach(prod -> {
+                comboProduct.addItem(prod.getIdProduct()+"-"+prod.getDescripcion());
+            });
+        }else if(combo.equals("supplier")){
+            comboSupplier.addItem("");
+            supplierController.findSupplierEntities().forEach(sup -> {
+                comboSupplier.addItem(sup.getIdSupplier()+"-"+sup.getName());
+            });
+        }
+        
+    }
     /**
      * @param args the command line arguments
      */
