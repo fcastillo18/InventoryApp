@@ -114,10 +114,13 @@ public class ProductNewForm extends javax.swing.JFrame {
         jpStockMax.setToolTipText("");
 
         ftxtPrice1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        ftxtPrice1.setNextFocusableComponent(ftxtPrice2);
 
         ftxtPrice2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        ftxtPrice2.setNextFocusableComponent(ftxtPrice3);
 
         ftxtPrice3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        ftxtPrice3.setNextFocusableComponent(txtAreaNote);
 
         ftxtCost.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
@@ -288,15 +291,15 @@ public class ProductNewForm extends javax.swing.JFrame {
         
         Product product = new Product();
         product.setCategory(txtCategory.getText());
-        product.setCost(ftxtCost.getText().trim().equals("") ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
+        product.setCost(ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
         product.setCreatedDate(new java.sql.Timestamp(date.getTime()));
         product.setDescripcion(txtDescripcion.getText());
         product.setIdSupplier(1);//Pendiente colocar el ID de un supplidor registrado
         product.setMinStock(Integer.parseInt(jpStockMin.getValue().toString()));
         product.setMaxStock(Integer.parseInt(jpStockMax.getValue().toString()));
-        product.setPrice1(ftxtPrice1.getText().trim().equals("") ? 0 :(BigDecimal) (ftxtPrice1.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim())))); ;
-        product.setPrice2(ftxtPrice2.getText().trim().equals("") ? 0 : (BigDecimal) (ftxtPrice2.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim())))); ;
-        product.setPrice3(ftxtPrice3.getText().trim().equals("") ? 0 : (BigDecimal) (ftxtPrice3.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim())))); ;
+        product.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :(BigDecimal) (ftxtPrice1.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim())))); ;
+        product.setPrice2(ftxtPrice2.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice2.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim())))); ;
+        product.setPrice3(ftxtPrice3.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice3.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim())))); ;
         product.setProductCode(txtCode.getText().replace(",", ""));
         product.setStatus(true);
     

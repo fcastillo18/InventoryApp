@@ -272,7 +272,7 @@ public class SupplierEditForm extends javax.swing.JFrame {
         txtAreaNote.setText(supplier.getNote());
         txtDocument.setText(supplier.getDocument());
         txtEmail.setText(supplier.getEmail());
-        txtLastName.setText(supplier.getName().split(" ")[1]);
+        txtLastName.setText(supplier.getName().contains(" ") ?  supplier.getName().split(" ")[1] : "");
         txtName.setText(supplier.getName().split(" ")[0]);
         txtPhone.setText(supplier.getPhone());
         txtZone.setText(supplier.getZone());

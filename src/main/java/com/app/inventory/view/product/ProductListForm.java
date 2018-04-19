@@ -205,7 +205,7 @@ public class ProductListForm extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (idRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
-            int dialogResult = JOptionPane.showConfirmDialog(this, "Your Message", "Title on Box", dialogButton);
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar el registro?", "Info", dialogButton);
             if(dialogResult == 0) {
                 ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {

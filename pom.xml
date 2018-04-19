@@ -48,20 +48,26 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.griffon.plugins</groupId>
-            <artifactId>griffon-lookandfeel-plugin</artifactId>
-            <version>2.0.0</version>
-            <type>pom</type>
-            <!--<scope>import</scope>-->
+            <groupId>de.javasoft.plaf.synthetica</groupId>
+            <artifactId>synthetica</artifactId>
+            <version>2.7</version>
+            <scope>compile</scope>
         </dependency>
         
-               <!-- https://mvnrepository.com/artifact/org.codehaus.griffon.plugins/griffon-lookandfeel-synthetica -->
         <dependency>
-            <groupId>org.codehaus.griffon.plugins</groupId>
-            <artifactId>griffon-lookandfeel-synthetica</artifactId>
-            <version>2.0.0</version>
+            <groupId>de.javasoft.plaf.synthetica</groupId>
+            <artifactId>syntheticaWhiteVision</artifactId>
+            <version>2.7</version>
+            <scope>compile</scope>
         </dependency>
-
+        
+        <dependency>
+            <groupId>de.javasoft.plaf.synthetica</groupId>
+            <artifactId>syntheticaBlackStar</artifactId>
+            <version>2.7</version>
+            <scope>compile</scope>
+        </dependency>
+        
     </dependencies>
     <name>InventoryApp</name>
 </project>

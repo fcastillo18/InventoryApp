@@ -9,6 +9,7 @@ import com.app.inventory.dao.controller.ClientJpaController;
 import com.app.inventory.dao.controller.InventoryJpaController;
 import com.app.inventory.dao.controller.InventoryTransJpaController;
 import com.app.inventory.dao.controller.ProductJpaController;
+import com.app.inventory.dao.controller.exceptions.NonexistentEntityException;
 import com.app.inventory.domain.Client;
 import com.app.inventory.domain.Inventory;
 import com.app.inventory.domain.InventoryTrans;
@@ -499,6 +500,14 @@ public class ProductSalesForm extends javax.swing.JFrame {
             loadTable(listInv);
             lastNoTrans = inventoryController.getInventoryCount()+1;
             txtLastTrans.setText(String.valueOf(lastNoTrans));
+            
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Desea imprimir el recibo?", "Info", dialogButton);
+            if(dialogResult == 0) {
+                
+            } else {
+              System.out.println("No Option");
+            } 
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 

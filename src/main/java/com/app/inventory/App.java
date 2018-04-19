@@ -7,11 +7,12 @@ package com.app.inventory;
 
 import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.view.MainForm;
+import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.codehaus.griffon.runtime.lookandfeel.synthetica.SyntheticaLookAndFeelHandler;
 
 /**
  *
@@ -19,17 +20,14 @@ import org.codehaus.griffon.runtime.lookandfeel.synthetica.SyntheticaLookAndFeel
  */
 public class App {
     public static void main(String[] args) {
-//        try {
-//            UIManager.setLookAndFeel(org.codehaus.griffon.runtime.lookandfeel.synthetica.SyntheticaLookAndFeelModule"");
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (UnsupportedLookAndFeelException ex) {
-//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
+        try {
+            UIManager.setLookAndFeel(new SyntheticaWhiteVisionLookAndFeel());
+        } catch (ParseException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
         MainForm mainForm = new MainForm();
         EntityManagerUtil.getEntityManager();
         mainForm.setVisible(true);

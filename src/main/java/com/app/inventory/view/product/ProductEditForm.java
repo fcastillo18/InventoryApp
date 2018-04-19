@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -75,6 +77,11 @@ public class ProductEditForm extends javax.swing.JFrame {
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del producto"));
 
@@ -151,9 +158,8 @@ public class ProductEditForm extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtCategory)
-                        .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCategory)
+                    .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jpStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -267,7 +273,7 @@ public class ProductEditForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        util.clearTextFields(this.getContentPane());
+        UtilInv.clearTextFields(this.getContentPane());
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -275,7 +281,7 @@ public class ProductEditForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	Date date = new Date();
         
         Product product = productController.findProduct(idProduct);
@@ -292,11 +298,33 @@ public class ProductEditForm extends javax.swing.JFrame {
         product.setProductCode(txtCode.getText());
         product.setStatus(true);
     
-        productController.create(product);
+        try {
+            productController.edit(product);
+        } catch (Exception ex) {
+            Logger.getLogger(ProductEditForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-        util.clearTextFields(this.getContentPane());
+        UtilInv.clearTextFields(this.getContentPane());
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        loadClientDataOnForm();
+    }//GEN-LAST:event_formWindowOpened
+    
+    private void loadClientDataOnForm(){
+        Product prod = productController.findProduct(idProduct);
+        txtAreaNote.setText("");//pendiente guardar note
+        txtCategory.setText(prod.getCategory());
+        txtCode.setText(prod.getProductCode());
+        txtCost.setText(prod.getCost().toString());
+        txtDescripcion.setText(prod.getDescripcion());
+        txtPrice1.setText(prod.getPrice1().toString());
+        txtPrice2.setText(prod.getPrice2().toString());
+        txtPrice3.setText(prod.getPrice3().toString());
+        txtSupplier.setText(prod.getIdSupplier().toString());
+        jpStockMin.setValue(prod.getMinStock());
+        jpStockMax.setValue(prod.getMaxStock());
+    }
     /**
      * @param args the command line arguments
      */

@@ -15,6 +15,8 @@ import com.app.inventory.view.product.ProductSalesForm;
 import com.app.inventory.view.supplier.SupplierListForm;
 import com.app.inventory.view.supplier.SupplierListForm;
 import com.app.inventory.view.supplier.SupplierNewForm;
+import com.app.inventory.view.trans.InventoryList;
+import com.app.inventory.view.trans.InventoryTransList;
 
 /**
  *
@@ -45,6 +47,7 @@ public class MainForm extends javax.swing.JFrame {
         btnClient = new javax.swing.JButton();
         bntSupplier = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -61,6 +64,7 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem12 = new javax.swing.JMenuItem();
@@ -70,12 +74,24 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem15 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema de Inventario");
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
         btnOut.setText("Salida");
+        btnOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOutActionPerformed(evt);
+            }
+        });
 
         btnIn.setText("Entrada");
+        btnIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInActionPerformed(evt);
+            }
+        });
 
         btnProduct.setText("Producto");
         btnProduct.addActionListener(new java.awt.event.ActionListener() {
@@ -132,7 +148,18 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnOut)
                         .addComponent(btnIn)))
-                .addContainerGap())
+                .addGap(122, 122, 122))
+        );
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 287, Short.MAX_VALUE)
         );
 
         jMenu1.setText("Archivo");
@@ -218,6 +245,14 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenu4.setText("Reportes");
 
+        jMenuItem16.setText("Inventario");
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem16);
+
         jMenuItem6.setText("Productos");
         jMenu4.add(jMenuItem6);
 
@@ -228,9 +263,19 @@ public class MainForm extends javax.swing.JFrame {
         jMenu4.add(jMenuItem12);
 
         jMenuItem13.setText("Compras/Entradas");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem13);
 
         jMenuItem14.setText("Ventas/Salidas");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem14);
 
         jMenuBar1.add(jMenu4);
@@ -249,12 +294,14 @@ public class MainForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jDesktopPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 282, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -266,8 +313,8 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void btnClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientActionPerformed
-        ClientNewForm clientForm = new ClientNewForm();
-        clientForm.setVisible(true);
+        ClientListForm c = new ClientListForm();
+        c.setVisible(true);
     }//GEN-LAST:event_btnClientActionPerformed
 
     private void btnProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductActionPerformed
@@ -315,6 +362,31 @@ public class MainForm extends javax.swing.JFrame {
         p.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        InventoryList i = new InventoryList();
+        i.setVisible(true);
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        InventoryTransList i = new InventoryTransList();
+        i.setVisible(true);
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        InventoryTransList i = new InventoryTransList();
+        i.setVisible(true);
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void btnInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInActionPerformed
+        ProductEntryForm p = new ProductEntryForm();
+        p.setVisible(true);
+    }//GEN-LAST:event_btnInActionPerformed
+
+    private void btnOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutActionPerformed
+        ProductSalesForm p = new ProductSalesForm();
+        p.setVisible(true);
+    }//GEN-LAST:event_btnOutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -358,6 +430,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnOut;
     private javax.swing.JButton btnProduct;
     private javax.swing.JButton btnReport;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -371,6 +444,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
+    private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

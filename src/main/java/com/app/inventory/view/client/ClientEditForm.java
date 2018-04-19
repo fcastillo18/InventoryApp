@@ -271,7 +271,7 @@ public class ClientEditForm extends javax.swing.JFrame {
         txtAreaNote.setText(client.getNote());
         txtDocument.setText(client.getDocument());
         txtEmail.setText(client.getEmail());
-        txtLastName.setText(client.getName().split(" ")[1]);
+        txtLastName.setText(client.getName().contains(" ") ?  client.getName().split(" ")[1] : "");
         txtName.setText(client.getName().split(" ")[0]);
         txtPhone.setText(client.getPhone());
         txtZone.setText(client.getZone());
