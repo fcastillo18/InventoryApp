@@ -88,6 +88,10 @@
 --     CREATED_DATE    TIMESTAMP
 -- )
 
+-- CREATE TABLE INV_TRANS_MASTER(
+--     ID_TRANS_MASTER 
+-- )
+
 /**/
 
 select * from client;
