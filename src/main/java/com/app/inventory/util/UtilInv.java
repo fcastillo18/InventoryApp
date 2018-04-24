@@ -113,4 +113,14 @@ public class UtilInv {
        
         return new java.sql.Timestamp(date.getTime());
     }
+    
+    /*
+    
+            LocalDate now = LocalDate.now(); // 2015-11-23
+//        LocalDate start = now.with(firstDayOfYear()); // 2015-01-01
+//        LocalDate end = now.with(lastDayOfYear()); // 2015-12-31
+        Date start = Date.from(now.with(firstDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date end = Date.from(now.with(lastDayOfYear()).atStartOfDay(ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).toInstant());
+        
+    */
 }
