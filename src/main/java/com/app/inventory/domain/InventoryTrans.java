@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author frank
+ * @author Franklin Castillo
  */
 @Entity
 @Table(name = "INVENTORY_TRANS")
@@ -33,47 +33,50 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "InventoryTrans.findByIdInvTrans", query = "SELECT i FROM InventoryTrans i WHERE i.idInvTrans = :idInvTrans")
     , @NamedQuery(name = "InventoryTrans.findByIdInventory", query = "SELECT i FROM InventoryTrans i WHERE i.idInventory = :idInventory")
     , @NamedQuery(name = "InventoryTrans.findByIdProduct", query = "SELECT i FROM InventoryTrans i WHERE i.idProduct = :idProduct")
-    , @NamedQuery(name = "InventoryTrans.findByIdProveedor", query = "SELECT i FROM InventoryTrans i WHERE i.idProveedor = :idProveedor")
+    , @NamedQuery(name = "InventoryTrans.findByIdSupplier", query = "SELECT i FROM InventoryTrans i WHERE i.idSupplier = :idSupplier")
     , @NamedQuery(name = "InventoryTrans.findByIdClient", query = "SELECT i FROM InventoryTrans i WHERE i.idClient = :idClient")
     , @NamedQuery(name = "InventoryTrans.findByIdUser", query = "SELECT i FROM InventoryTrans i WHERE i.idUser = :idUser")
     , @NamedQuery(name = "InventoryTrans.findByTransType", query = "SELECT i FROM InventoryTrans i WHERE i.transType = :transType")
     , @NamedQuery(name = "InventoryTrans.findByDiscount", query = "SELECT i FROM InventoryTrans i WHERE i.discount = :discount")
     , @NamedQuery(name = "InventoryTrans.findByQuantity", query = "SELECT i FROM InventoryTrans i WHERE i.quantity = :quantity")
+    , @NamedQuery(name = "InventoryTrans.findByCostxunit", query = "SELECT i FROM InventoryTrans i WHERE i.costxunit = :costxunit")
     , @NamedQuery(name = "InventoryTrans.findByPricexunit", query = "SELECT i FROM InventoryTrans i WHERE i.pricexunit = :pricexunit")
+    , @NamedQuery(name = "InventoryTrans.findByTax", query = "SELECT i FROM InventoryTrans i WHERE i.tax = :tax")
     , @NamedQuery(name = "InventoryTrans.findByTotal", query = "SELECT i FROM InventoryTrans i WHERE i.total = :total")
-    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")
-    , @NamedQuery(name = "InventoryTrans.findByDates" , query="SELECT i FROM InventoryTrans i WHERE i.createdDate between :startDate AND :endDate")
-})
+    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")})
 public class InventoryTrans implements Serializable {
-
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "DISCOUNT")
-    private BigDecimal discount;
-    @Column(name = "PRICEXUNIT")
-    private BigDecimal pricexunit;
-    @Column(name = "TOTAL")
-    private BigDecimal total;
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID_INV_TRANS", nullable = false)
+    @Column(name = "ID_INV_TRANS")
     private Integer idInvTrans;
     @Column(name = "ID_INVENTORY")
     private Integer idInventory;
     @Column(name = "ID_PRODUCT")
     private Integer idProduct;
-    @Column(name = "ID_PROVEEDOR")
-    private Integer idProveedor;
+    @Column(name = "ID_SUPPLIER")
+    private Integer idSupplier;
     @Column(name = "ID_CLIENT")
     private Integer idClient;
     @Column(name = "ID_USER")
     private Integer idUser;
-    @Column(name = "TRANS_TYPE", length = 50)
+    @Column(name = "TRANS_TYPE")
     private String transType;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "DISCOUNT")
+    private BigDecimal discount;
     @Column(name = "QUANTITY")
     private Integer quantity;
+    @Column(name = "COSTXUNIT")
+    private BigDecimal costxunit;
+    @Column(name = "PRICEXUNIT")
+    private BigDecimal pricexunit;
+    @Column(name = "TAX")
+    private BigDecimal tax;
+    @Column(name = "TOTAL")
+    private BigDecimal total;
     @Column(name = "CREATED_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -109,12 +112,12 @@ public class InventoryTrans implements Serializable {
         this.idProduct = idProduct;
     }
 
-    public Integer getIdProveedor() {
-        return idProveedor;
+    public Integer getIdSupplier() {
+        return idSupplier;
     }
 
-    public void setIdProveedor(Integer idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setIdSupplier(Integer idSupplier) {
+        this.idSupplier = idSupplier;
     }
 
     public Integer getIdClient() {
@@ -141,6 +144,13 @@ public class InventoryTrans implements Serializable {
         this.transType = transType;
     }
 
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
 
     public Integer getQuantity() {
         return quantity;
@@ -150,6 +160,37 @@ public class InventoryTrans implements Serializable {
         this.quantity = quantity;
     }
 
+    public BigDecimal getCostxunit() {
+        return costxunit;
+    }
+
+    public void setCostxunit(BigDecimal costxunit) {
+        this.costxunit = costxunit;
+    }
+
+    public BigDecimal getPricexunit() {
+        return pricexunit;
+    }
+
+    public void setPricexunit(BigDecimal pricexunit) {
+        this.pricexunit = pricexunit;
+    }
+
+    public BigDecimal getTax() {
+        return tax;
+    }
+
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
 
     public Date getCreatedDate() {
         return createdDate;
@@ -182,30 +223,6 @@ public class InventoryTrans implements Serializable {
     @Override
     public String toString() {
         return "com.app.inventory.domain.InventoryTrans[ idInvTrans=" + idInvTrans + " ]";
-    }
-
-    public BigDecimal getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
-    }
-
-    public BigDecimal getPricexunit() {
-        return pricexunit;
-    }
-
-    public void setPricexunit(BigDecimal pricexunit) {
-        this.pricexunit = pricexunit;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
     }
     
 }

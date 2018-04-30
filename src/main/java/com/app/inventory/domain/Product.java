@@ -6,7 +6,6 @@
 package com.app.inventory.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -29,20 +28,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "PRODUCT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
-    @NamedQuery(name = "Product.findByIdProduct", query = "SELECT p FROM Product p WHERE p.idProduct = :idProduct"),
-    @NamedQuery(name = "Product.findByIdSupplier", query = "SELECT p FROM Product p WHERE p.idSupplier = :idSupplier"),
-    @NamedQuery(name = "Product.findByProductCode", query = "SELECT p FROM Product p WHERE p.productCode = :productCode"),
-    @NamedQuery(name = "Product.findByDescripcion", query = "SELECT p FROM Product p WHERE p.descripcion = :descripcion"),
-    @NamedQuery(name = "Product.findByCategory", query = "SELECT p FROM Product p WHERE p.category = :category"),
-    @NamedQuery(name = "Product.findByPrice1", query = "SELECT p FROM Product p WHERE p.price1 = :price1"),
-    @NamedQuery(name = "Product.findByPrice2", query = "SELECT p FROM Product p WHERE p.price2 = :price2"),
-    @NamedQuery(name = "Product.findByPrice3", query = "SELECT p FROM Product p WHERE p.price3 = :price3"),
-    @NamedQuery(name = "Product.findByCost", query = "SELECT p FROM Product p WHERE p.cost = :cost"),
-    @NamedQuery(name = "Product.findByMinStock", query = "SELECT p FROM Product p WHERE p.minStock = :minStock"),
-    @NamedQuery(name = "Product.findByMaxStock", query = "SELECT p FROM Product p WHERE p.maxStock = :maxStock"),
-    @NamedQuery(name = "Product.findByCreatedDate", query = "SELECT p FROM Product p WHERE p.createdDate = :createdDate"),
-    @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status")})
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")
+    , @NamedQuery(name = "Product.findByIdProduct", query = "SELECT p FROM Product p WHERE p.idProduct = :idProduct")
+    , @NamedQuery(name = "Product.findByIdSupplier", query = "SELECT p FROM Product p WHERE p.idSupplier = :idSupplier")
+    , @NamedQuery(name = "Product.findByProductCode", query = "SELECT p FROM Product p WHERE p.productCode = :productCode")
+    , @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description")
+    , @NamedQuery(name = "Product.findByCategory", query = "SELECT p FROM Product p WHERE p.category = :category")
+    , @NamedQuery(name = "Product.findByCreatedDate", query = "SELECT p FROM Product p WHERE p.createdDate = :createdDate")
+    , @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status")})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,23 +48,10 @@ public class Product implements Serializable {
     private Integer idSupplier;
     @Column(name = "PRODUCT_CODE")
     private String productCode;
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
+    @Column(name = "DESCRIPTION")
+    private String description;
     @Column(name = "CATEGORY")
     private String category;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "PRICE1")
-    private BigDecimal price1;
-    @Column(name = "PRICE2")
-    private BigDecimal price2;
-    @Column(name = "PRICE3")
-    private BigDecimal price3;
-    @Column(name = "COST")
-    private BigDecimal cost;
-    @Column(name = "MIN_STOCK")
-    private Integer minStock;
-    @Column(name = "MAX_STOCK")
-    private Integer maxStock;
     @Column(name = "CREATED_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -109,12 +89,12 @@ public class Product implements Serializable {
         this.productCode = productCode;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getCategory() {
@@ -123,54 +103,6 @@ public class Product implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public BigDecimal getPrice1() {
-        return price1;
-    }
-
-    public void setPrice1(BigDecimal price1) {
-        this.price1 = price1;
-    }
-
-    public BigDecimal getPrice2() {
-        return price2;
-    }
-
-    public void setPrice2(BigDecimal price2) {
-        this.price2 = price2;
-    }
-
-    public BigDecimal getPrice3() {
-        return price3;
-    }
-
-    public void setPrice3(BigDecimal price3) {
-        this.price3 = price3;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
-    public Integer getMinStock() {
-        return minStock;
-    }
-
-    public void setMinStock(Integer minStock) {
-        this.minStock = minStock;
-    }
-
-    public Integer getMaxStock() {
-        return maxStock;
-    }
-
-    public void setMaxStock(Integer maxStock) {
-        this.maxStock = maxStock;
     }
 
     public Date getCreatedDate() {
@@ -211,7 +143,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "com.app.inventory.dao.controller.Product[ idProduct=" + idProduct + " ]";
+        return "com.app.inventory.domain.Product[ idProduct=" + idProduct + " ]";
     }
     
 }

@@ -6,6 +6,7 @@
 package com.app.inventory.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -28,12 +29,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "INVENTORY")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Inventory.findAll", query = "SELECT i FROM Inventory i"),
-    @NamedQuery(name = "Inventory.findByIdInventory", query = "SELECT i FROM Inventory i WHERE i.idInventory = :idInventory"),
-    @NamedQuery(name = "Inventory.findByIdProduct", query = "SELECT i FROM Inventory i WHERE i.idProduct = :idProduct"),
-    @NamedQuery(name = "Inventory.findByIdProveedor", query = "SELECT i FROM Inventory i WHERE i.idProveedor = :idProveedor"),
-    @NamedQuery(name = "Inventory.findByQuantity", query = "SELECT i FROM Inventory i WHERE i.quantity = :quantity"),
-    @NamedQuery(name = "Inventory.findByLastUpdated", query = "SELECT i FROM Inventory i WHERE i.lastUpdated = :lastUpdated")})
+    @NamedQuery(name = "Inventory.findAll", query = "SELECT i FROM Inventory i")
+    , @NamedQuery(name = "Inventory.findByIdInventory", query = "SELECT i FROM Inventory i WHERE i.idInventory = :idInventory")
+    , @NamedQuery(name = "Inventory.findByIdProduct", query = "SELECT i FROM Inventory i WHERE i.idProduct = :idProduct")
+    , @NamedQuery(name = "Inventory.findByIdSupplier", query = "SELECT i FROM Inventory i WHERE i.idSupplier = :idSupplier")
+    , @NamedQuery(name = "Inventory.findByPrice1", query = "SELECT i FROM Inventory i WHERE i.price1 = :price1")
+    , @NamedQuery(name = "Inventory.findByPrice2", query = "SELECT i FROM Inventory i WHERE i.price2 = :price2")
+    , @NamedQuery(name = "Inventory.findByPrice3", query = "SELECT i FROM Inventory i WHERE i.price3 = :price3")
+    , @NamedQuery(name = "Inventory.findByPrice4", query = "SELECT i FROM Inventory i WHERE i.price4 = :price4")
+    , @NamedQuery(name = "Inventory.findByCost", query = "SELECT i FROM Inventory i WHERE i.cost = :cost")
+    , @NamedQuery(name = "Inventory.findByAvgCost", query = "SELECT i FROM Inventory i WHERE i.avgCost = :avgCost")
+    , @NamedQuery(name = "Inventory.findByTax", query = "SELECT i FROM Inventory i WHERE i.tax = :tax")
+    , @NamedQuery(name = "Inventory.findByStock", query = "SELECT i FROM Inventory i WHERE i.stock = :stock")
+    , @NamedQuery(name = "Inventory.findByMinStock", query = "SELECT i FROM Inventory i WHERE i.minStock = :minStock")
+    , @NamedQuery(name = "Inventory.findByLastUpdated", query = "SELECT i FROM Inventory i WHERE i.lastUpdated = :lastUpdated")})
 public class Inventory implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,10 +53,27 @@ public class Inventory implements Serializable {
     private Integer idInventory;
     @Column(name = "ID_PRODUCT")
     private Integer idProduct;
-    @Column(name = "ID_PROVEEDOR")
-    private Integer idProveedor;
-    @Column(name = "QUANTITY")
-    private Integer quantity;
+    @Column(name = "ID_SUPPLIER")
+    private Integer idSupplier;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "PRICE1")
+    private BigDecimal price1;
+    @Column(name = "PRICE2")
+    private BigDecimal price2;
+    @Column(name = "PRICE3")
+    private BigDecimal price3;
+    @Column(name = "PRICE4")
+    private BigDecimal price4;
+    @Column(name = "COST")
+    private BigDecimal cost;
+    @Column(name = "AVG_COST")
+    private BigDecimal avgCost;
+    @Column(name = "TAX")
+    private Integer tax;
+    @Column(name = "STOCK")
+    private Integer stock;
+    @Column(name = "MIN_STOCK")
+    private Integer minStock;
     @Column(name = "LAST_UPDATED")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
@@ -75,20 +101,84 @@ public class Inventory implements Serializable {
         this.idProduct = idProduct;
     }
 
-    public Integer getIdProveedor() {
-        return idProveedor;
+    public Integer getIdSupplier() {
+        return idSupplier;
     }
 
-    public void setIdProveedor(Integer idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setIdSupplier(Integer idSupplier) {
+        this.idSupplier = idSupplier;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public BigDecimal getPrice1() {
+        return price1;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setPrice1(BigDecimal price1) {
+        this.price1 = price1;
+    }
+
+    public BigDecimal getPrice2() {
+        return price2;
+    }
+
+    public void setPrice2(BigDecimal price2) {
+        this.price2 = price2;
+    }
+
+    public BigDecimal getPrice3() {
+        return price3;
+    }
+
+    public void setPrice3(BigDecimal price3) {
+        this.price3 = price3;
+    }
+
+    public BigDecimal getPrice4() {
+        return price4;
+    }
+
+    public void setPrice4(BigDecimal price4) {
+        this.price4 = price4;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public BigDecimal getAvgCost() {
+        return avgCost;
+    }
+
+    public void setAvgCost(BigDecimal avgCost) {
+        this.avgCost = avgCost;
+    }
+
+    public Integer getTax() {
+        return tax;
+    }
+
+    public void setTax(Integer tax) {
+        this.tax = tax;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public Integer getMinStock() {
+        return minStock;
+    }
+
+    public void setMinStock(Integer minStock) {
+        this.minStock = minStock;
     }
 
     public Date getLastUpdated() {

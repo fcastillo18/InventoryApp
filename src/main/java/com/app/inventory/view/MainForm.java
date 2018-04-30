@@ -8,7 +8,7 @@ package com.app.inventory.view;
 import com.app.inventory.view.client.ClientListForm;
 import com.app.inventory.view.client.ClientNewForm;
 import com.app.inventory.view.product.ProductListForm;
-import com.app.inventory.view.product.ProductEntryForm;
+import com.app.inventory.view.product.ProductPurchaseForm;
 import com.app.inventory.view.product.ProductListForm;
 import com.app.inventory.view.product.ProductNewForm;
 import com.app.inventory.view.product.ProductSalesForm;
@@ -358,7 +358,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        ProductEntryForm p = new ProductEntryForm();
+        ProductPurchaseForm p = new ProductPurchaseForm();
         p.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -378,7 +378,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void btnInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInActionPerformed
-        ProductEntryForm p = new ProductEntryForm();
+        ProductPurchaseForm p = new ProductPurchaseForm();
         p.setVisible(true);
     }//GEN-LAST:event_btnInActionPerformed
 

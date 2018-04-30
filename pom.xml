@@ -47,14 +47,14 @@
             <version>10.3.1</version>
         </dependency>
 
-        <dependency>
+<!--        <dependency>
             <groupId>de.javasoft.plaf.synthetica</groupId>
             <artifactId>synthetica</artifactId>
             <version>2.7</version>
             <scope>compile</scope>
         </dependency>
-        
-        <dependency>
+        -->
+<!--        <dependency>
             <groupId>de.javasoft.plaf.synthetica</groupId>
             <artifactId>syntheticaWhiteVision</artifactId>
             <version>2.7</version>
@@ -66,8 +66,8 @@
             <artifactId>syntheticaBlackStar</artifactId>
             <version>2.7</version>
             <scope>compile</scope>
-        </dependency>
-        
+        </dependency>-->
+
     </dependencies>
     
   <build>
@@ -131,4 +131,11 @@
 	</build>
         
     <name>InventoryApp</name>
+    <repositories>
+        <repository>
+            <id>unknown-jars-temp-repo</id>
+            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+    </repositories>
 </project>

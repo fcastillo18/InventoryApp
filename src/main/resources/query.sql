@@ -21,22 +21,25 @@
 -- --     STATUS BOOLEAN
 -- -- )
 -- 
+drop table product
+
 CREATE TABLE PRODUCT(
     ID_PRODUCT      INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     ID_SUPPLIER     INTEGER,
     PRODUCT_CODE    VARCHAR(50),
-    DESCRIPCION     VARCHAR(200),
+    DESCRIPTION     VARCHAR(200),
     CATEGORY        VARCHAR(50),
 --     PRICE1          DECIMAL(10,2),
 --     PRICE2          DECIMAL(10,2),
 --     PRICE3          DECIMAL(10,2),
 --     COST            DECIMAL(10,2),
 --     AVG_COST        DECIMAL(10,2),
-    MIN_STOCK       INTEGER,
-    MAX_STOCK       INTEGER,
+--     MIN_STOCK       INTEGER,
+--     MAX_STOCK       INTEGER,
     CREATED_DATE    TIMESTAMP,
     STATUS          BOOLEAN
 )
+
 -- 
 -- CREATE TABLE SUPPLIER(
 --     ID_SUPPLIER     INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
@@ -66,42 +69,50 @@ CREATE TABLE PRODUCT(
 --     STATUS          BOOLEAN
 -- )
 -- 
+drop table inventory
 CREATE TABLE INVENTORY(
     ID_INVENTORY    INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     ID_PRODUCT      INTEGER,
-    ID_PROVEEDOR    INTEGER,
+    ID_SUPPLIER     INTEGER,
     PRICE1          DECIMAL(10,2),
     PRICE2          DECIMAL(10,2),
     PRICE3          DECIMAL(10,2),
     PRICE4          DECIMAL(10,2),
     COST            DECIMAL(10,2),
-    TAX             INTEGER, --Relacionado cola la tabla taxes
     AVG_COST        DECIMAL(10,2),
-    QUANTITY        INTEGER,
+    TAX             INTEGER, --Relacionado cola la tabla taxes
+    STOCK           INTEGER,
+    MIN_STOCK       INTEGER,
+--     IDEAL_STOCK       INTEGER,
     LAST_UPDATED    TIMESTAMP
 )
--- 
--- CREATE TABLE INVENTORY_TRANS(
---     ID_INV_TRANS    INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
---     ID_INVENTORY    INTEGER,
---     ID_PRODUCT      INTEGER,
---     ID_PROVEEDOR    INTEGER,
---     ID_CLIENT       INTEGER,
---     ID_USER         INTEGER,
---     TRANS_TYPE      VARCHAR(50),
---     DISCOUNT        DECIMAL(10,2),
---     QUANTITY        INTEGER,
---     PRICEXUNIT      DECIMAL(10,2),
---     TOTAL           DECIMAL(10,2),
---     CREATED_DATE    TIMESTAMP
--- )
 
--- CREATE TABLE INV_TRANS_MASTER(
---     ID_TRANS_MASTER 
--- )
+DROP TABLE INVENTORY_TRANS
+CREATE TABLE INVENTORY_TRANS(
+    ID_INV_TRANS    INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    ID_INVENTORY    INTEGER,
+    ID_PRODUCT      INTEGER,
+    ID_SUPPLIER     INTEGER,
+    ID_CLIENT       INTEGER,
+    ID_USER         INTEGER,
+    TRANS_TYPE      VARCHAR(50),
+    DISCOUNT        DECIMAL(10,2),
+    QUANTITY        INTEGER,
+    COSTXUNIT       DECIMAL(10,2),
+    PRICEXUNIT      DECIMAL(10,2),
+    TAX             DECIMAL(10,2),-- Para compras: 0.18 si es calculado y 0 cuando el precio incluye ITBIS
+    TOTAL           DECIMAL(10,2),-- = (QUANTITY * COSTXUNIT) + (QUANTITY * COSTXUNIT * TAX) para el caso de Compras
+                                  -- = (QUANTITY * PRICEXUNIT) + (QUANTITY * PRICEXUNIT * TAX) para el caso de Ventas
+    CREATED_DATE    TIMESTAMP
+)
+
+CREATE TABLE INV_TRANS_MASTER(
+    ID_TRANS_MASTER
+    
+)
 
 CREATE TABLE TAXES(
-    ID INTEGER,
+    ID_TAX INTEGER,
     TAX_AMOUNT DECIMAL(10,2),
     TAX_DESCRIPTION VARCHAR(50)
 )
@@ -120,8 +131,8 @@ select * from supplier;
 
 select * from product;
 
+--where year(created_Date) = 2018;
 select * from inventory;
 
 select *  from inventory_trans
---where year(created_Date) = 2018;
 

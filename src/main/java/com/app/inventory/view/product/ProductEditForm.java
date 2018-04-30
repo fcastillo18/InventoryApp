@@ -62,12 +62,10 @@ public class ProductEditForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaNote = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         txtSupplier = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jpStockMin = new javax.swing.JSpinner();
-        jpStockMax = new javax.swing.JSpinner();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
@@ -113,8 +111,6 @@ public class ProductEditForm extends javax.swing.JFrame {
 
         jLabel6.setText("Stock min:");
 
-        jLabel10.setText("Stock max:");
-
         jLabel11.setText("Proveedor:");
 
         txtSupplier.setEditable(false);
@@ -122,9 +118,6 @@ public class ProductEditForm extends javax.swing.JFrame {
         jButton1.setText("Find");
 
         jpStockMin.setModel(new javax.swing.SpinnerNumberModel());
-
-        jpStockMax.setModel(new javax.swing.SpinnerNumberModel());
-        jpStockMax.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -162,10 +155,7 @@ public class ProductEditForm extends javax.swing.JFrame {
                     .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jpStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpStockMax, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(126, 126, 126))
                     .addComponent(jScrollPane1))
                 .addGap(12, 12, 12))
         );
@@ -198,9 +188,7 @@ public class ProductEditForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel10)
-                            .addComponent(jpStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jpStockMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jpStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
@@ -429,7 +417,6 @@ public class ProductEditForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -441,7 +428,6 @@ public class ProductEditForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jpStockMax;
     private javax.swing.JSpinner jpStockMin;
     private javax.swing.JTextArea txtAreaNote;
     private javax.swing.JTextField txtCategory;

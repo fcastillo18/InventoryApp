@@ -8,23 +8,19 @@ package com.app.inventory.view.product;
 import com.app.inventory.dao.controller.ClientJpaController;
 import com.app.inventory.dao.controller.InventoryJpaController;
 import com.app.inventory.dao.controller.InventoryTransJpaController;
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.domain.Client;
 import com.app.inventory.domain.Inventory;
 import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
+import com.app.inventory.printer.PrintReports;
 import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.util.UtilInv;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
-import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Query;
@@ -40,6 +36,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         
     List<Inventory> listInv = null;
     List<Inventory> listInvFromDB = null;
+    List<Product> listProduct= null;
     Client client = null;
     Product product = null;
     Inventory inventory = null;
@@ -51,6 +48,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     private int lastNoTrans;  
     private int idProductRowClicked;
     private int idClientRowClicked;
+    MainAppController mainController = new MainAppController();
     
     private void initObjects(){
         inventoryController = new InventoryJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
@@ -61,6 +59,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         datePicker.setDateToToday();
         datePicker.setName("datePicker");
         listInv = new ArrayList<Inventory>();
+        listProduct = new ArrayList<Product>();
         listInvFromDB = inventoryController.findInventoryEntities();
         //lastNoTrans = inventoryController.getInventoryCount()+1; 
         txtLastTrans.setText(lastTrans());
@@ -81,7 +80,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     public ProductSalesForm() {
         initComponents();
         //initObjects();
-        loadTable(listInv);
+        loadTable(mainController.getSalesProductTableModel());
     }
 
     
@@ -118,6 +117,8 @@ public class ProductSalesForm extends javax.swing.JFrame {
         btnFindProduct = new javax.swing.JButton();
         txtProductDesc = new javax.swing.JTextField();
         ftxtQuantity = new javax.swing.JFormattedTextField();
+        jLabel3 = new javax.swing.JLabel();
+        ftxtPrice = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
@@ -186,7 +187,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle de la venta"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle de la salida"));
 
         jLabel1.setText("Numero:");
 
@@ -272,6 +273,10 @@ public class ProductSalesForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Precio:");
+
+        ftxtPrice.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -288,44 +293,50 @@ public class ProductSalesForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtClient)
                             .addComponent(txtProduct)
-                            .addComponent(txtLastTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnFindProduct)
-                            .addComponent(btnFindClient, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtLastTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                            .addComponent(txtProductDesc)
-                            .addComponent(txtClientName)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(ftxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ftxtQuantity))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnFindProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnFindClient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                                    .addComponent(txtProductDesc)
+                                    .addComponent(txtClientName)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(txtNote)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(241, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ftxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(124, 124, 124))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(txtLastTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtLastTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(datePicker, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -340,23 +351,21 @@ public class ProductSalesForm extends javax.swing.JFrame {
                             .addComponent(jLabel5)))
                     .addComponent(jLabel7)
                     .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel8)
+                    .addComponent(ftxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ftxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(ftxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(txtInStock, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jLabel4)
-                            .addComponent(txtNote, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
-                        .addGap(0, 7, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4))
+                    .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -421,7 +430,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnDelete)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -468,23 +477,23 @@ public class ProductSalesForm extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                         .addComponent(jcPriceToChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lbPrice)))
-                .addContainerGap())
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if(listInv == null ){
+        if(mainController.getListInv() == null ){
             JOptionPane.showMessageDialog(this, "Debe agregar registros a la lista para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }else{ 
             //Actualiza el inventario, descontando las ventas 
-            listInv.forEach(inv -> {
-                int qtyOfItemOnList = inv.getQuantity();
-                int newQtyOnInv = inventoryController.findInventory(inv.getIdInventory()).getQuantity() - inv.getQuantity();
+            mainController.getListInv().forEach(inv -> {
+                int qtyOfItemOnList = inv.getStock();
+                int newQtyOnInv = inventoryController.findInventory(inv.getIdInventory()).getStock()- inv.getStock();
                 try {
                     //Inventory
-                    inv.setQuantity(newQtyOnInv);
+                    inv.setStock(newQtyOnInv);
                     inventoryController.edit(inv);
                 } catch (Exception ex) {
                     Logger.getLogger(ProductSalesForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -494,14 +503,14 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 invTrans = new InventoryTrans();
                 invTrans.setIdInventory(1);//sopesar el colocar el id del inventory creado en la linea de arriba
                 invTrans.setIdProduct(inv.getIdProduct());
-                invTrans.setIdProveedor(inv.getIdProveedor());
+                invTrans.setIdSupplier(inv.getIdSupplier());
                 invTrans.setIdClient(0);
                 invTrans.setIdUser(1);//modificar cuando se haga modulo de user
                 invTrans.setTransType("out");
                 invTrans.setDiscount(BigDecimal.ZERO);
                 invTrans.setQuantity(qtyOfItemOnList);
                 
-                BigDecimal price = productController.findProduct(inv.getIdProduct()).getPrice1();
+                BigDecimal price = inventoryController.findInventory(inv.getIdInventory()).getPrice1();
                 invTrans.setPricexunit(price);
                 invTrans.setTotal(price.multiply(new BigDecimal(qtyOfItemOnList)));
                 invTrans.setCreatedDate(inv.getLastUpdated());
@@ -511,82 +520,132 @@ public class ProductSalesForm extends javax.swing.JFrame {
             
             //Final
             JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-            listInv.clear(); //this lista has to be empty to store new products that will be shown on the table
+            
+            //imprimir reporte
+            PrintReports printReport = new PrintReports();
+            String[] values = {txtLastTrans.getText(), datePicker.getDateStringOrEmptyString(), "Franklin Castillo"};
+            printReport.productSalesReport(mainController.getListInv(), values);
+                    
+            mainController.getListInv().clear(); //this lista has to be empty to store new products that will be shown on the table
             UtilInv.clearTextFields(this.getContentPane());
-            loadTable(listInv);
+            loadTable(mainController.getSalesProductTableModel());
             lastNoTrans = inventoryController.getInventoryCount()+1;
             txtLastTrans.setText(String.valueOf(lastNoTrans));
             //Actualizando lista proveniente de BD
             listInvFromDB = inventoryController.findInventoryEntities();
-            int dialogButton = JOptionPane.YES_NO_OPTION;
-            int dialogResult = JOptionPane.showConfirmDialog(this, "Desea imprimir el recibo?", "Info", dialogButton);
-            if(dialogResult == 0) {
-                
-            } else {
-              System.out.println("No Option");
-            }
+//            int dialogButton = JOptionPane.YES_NO_OPTION;
+//            int dialogResult = JOptionPane.showConfirmDialog(this, "Desea imprimir el recibo?", "Info", dialogButton);
+//            if(dialogResult == 0) {
+//                
+//            } else {
+//              System.out.println("No Option");
+//            }
             txtLastTrans.setText(lastTrans());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        int inStock = Integer.parseInt(txtInStock.getText());
-        int prodQty = Integer.parseInt(ftxtQuantity.getText().replace(",", ""));
+        /*Al llegar a este punto, hay tres objetos inicializados: 
+            -Product
+            -Client
+            -Inventory
+        */
         
         if (txtProduct.getText().isEmpty() || txtClient.getText().isEmpty() || ftxtQuantity.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Favor completar campos requerido", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }else{
-
+            int inStock = Integer.parseInt(txtInStock.getText());
+            int prodQty = Integer.parseInt(ftxtQuantity.getText().replace(",", ""));
             if (prodQty < inStock) {
 
-                Inventory inv = new Inventory();
-                Date date = new Date(datePicker.getText());
-                //DateFormat defaultDf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//DateFormat.getDateTimeInstance();
-        //        System.out.println(defaultDf.format(date));
-
-                /*Antes de este set, debo ir a la base de datos para identificar si
-                    el registro es nuevo. Solo setear este atributo para modificados
-                *///inventoryController.findInventoryEntities().forAEach(invt -> {
-                listInvFromDB.forEach(invt -> {
-                    if(Objects.equals(invt.getIdProduct(), product.getIdProduct())){
-                        //es por que existe el registro en la tabla
-                        inv.setIdInventory(invt.getIdInventory());
-                        //cantidad existenten menos la de salida inv.setQuantity(invt.getQuantity()-prodQty);
-                        inv.setQuantity(prodQty);
-
-    //                    //Es necesario reducir de la lista, para mostrar la cantidad segun se vayan agregando items
-    //                    if (!listInv.isEmpty()) {
-    //                         listInv.get(invt.getIdInventory()-1).setQuantity(prodQty);
-    //                    }
-                    }//de lo contrario,=...DO nothing
-                });
-
-                inv.setIdProduct(product.getIdProduct());
-                inv.setIdProveedor(client.getIdClient());
-                inv.setLastUpdated(UtilInv.getDateNow());
+                if (mainController.getListInv().indexOf(inventory) == -1) { //no existe en la lista
+                    inventory.setStock(prodQty);
+                    inventory.setIdProduct(product.getIdProduct());
+    ////                inventory.setIdSupplier(client.getIdClient());
+                    inventory.setLastUpdated(UtilInv.getDateNow());
+                    mainController.getListInv().add(inventory);
+                }else{
+                    Inventory inv = mainController.getListInv().get(mainController.getListInv().indexOf(inventory));
+                    inv.setStock(inv.getStock() + prodQty);
+//                    inventory.setStock(prodQty);
+                    inv.setIdProduct(product.getIdProduct());
+    //                inventory.setIdSupplier(client.getIdClient());
+                    inv.setLastUpdated(UtilInv.getDateNow());
+                    //mainController.getListInv().add(inv);
+                }
+//                listInvFromDB.forEach(inve -> {
+//                    if(i.getIdProduct().equals(product.getIdProduct())){
+                        //se crear un objeto con el inventario de ese producto
+                        //Entrada inicial al inventario
+//                        Inventory inventory = new Inventory();
+//                        inventory.setIdSupplier(inv.getIdSupplier());
+//                        inventory.setCost(ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
+//                        inventory.setAvgCost(ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
+//                        inventory.setMinStock(Integer.parseInt(jpMinStock.getValue().toString()));
+//                        inventory.setStock(Integer.parseInt(jpInitialStock.getValue().toString()));
+//                        inventory.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :(BigDecimal) (ftxtPrice1.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim())))); 
+//                        inventory.setPrice2(ftxtPrice2.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice2.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim())))); 
+//                        inventory.setPrice3(ftxtPrice3.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice3.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim())))); 
+//                        inventory.setPrice4(BigDecimal.ZERO);
+//                        inventory.setIdProduct(product.getIdProduct());
+//                        inventory.setTax(inventory.getCost().multiply(BigDecimal.valueOf(0.18)).intValue());//Pending
+//                        inventory.setLastUpdated(new java.sql.Timestamp(date.getTime()));
+////                        inventory.setStock(i.getStock());
+//                        System.out.println(i.getStock());
+//                        System.out.println(inventory);
+//                        if (mainController.getListInv().indexOf(inve) == -1) { //no existe en la lista
+//                            inve.setStock(prodQty);
+//                            inve.setIdProduct(product.getIdProduct());
+//            ////                inventory.setIdSupplier(client.getIdClient());
+//                            inve.setLastUpdated(UtilInv.getDateNow());
+//                            mainController.getListInv().add(inve);
+//                        }else{
+//                            Inventory inv = mainController.getListInv().get(mainController.getListInv().indexOf(inve));
+//                            inv.setStock(inv.getStock() + prodQty);
+//        //                    inventory.setStock(prodQty);
+//                            inv.setIdProduct(product.getIdProduct());
+//            //                inventory.setIdSupplier(client.getIdClient());
+//                            inv.setLastUpdated(UtilInv.getDateNow());
+//                            mainController.getListInv().add(inv);
+//                        }
+//                    }
+//                });
+//                inventory.setStock(prodQty);
+//                inventory.setIdProduct(product.getIdProduct());
+//////                inventory.setIdSupplier(client.getIdClient());
+//                inventory.setLastUpdated(UtilInv.getDateNow());
     //            inv.setQuantity(prodQty);
     //            inv.setLastUpdated(date);
-                listInv.add(inv);
-
-                product = productController.findProduct(inv.getIdProduct());
-                client = clientController.findClient(inv.getIdProveedor());
-
-                //Restando la cantidad agregada de la info de la base de datos
-                listInvFromDB.get(listInvFromDB.indexOf(inventoryController.findInventory(product.getIdProduct()))).setQuantity(inStock-prodQty);
+                
+                
+//                listInv.add(inventory);
+//                product = productController.findProduct(inv.getIdProduct());
+//                client = clientController.findClient(inv.getIdProveedor());
                 
                 int lastTotal = txtTotals.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtTotals.getText());
-                int newTotal = lastTotal + product.getPrice1().multiply(new BigDecimal(inv.getQuantity())).intValue();
+                int newTotal = lastTotal + inventory.getPrice1().multiply(new BigDecimal(prodQty)).intValue(); //ojo
                 //Cargar tabla y limpiar los campos
-                loadTable(listInv);
+                loadTable(mainController.getSalesProductTableModel());
                 UtilInv.clearTextFields(this.getContentPane());
+                //Restando la cantidad agregada de la info de la base de datos
+//                listInvFromDB.get(listInvFromDB.indexOf(inventoryController.findInventory(product.getIdProduct()))).setStock(inStock-prodQty);
+                listInvFromDB.get(listInvFromDB.indexOf(inventoryController.findInventory(inventory.getIdInventory()))).setStock(inStock-prodQty);
+//                listInvFromDB.forEach(inv ->{
+//                    if (Objects.equals(inv.getIdInventory(), inventory.getIdInventory())) {
+//                        inv.setStock(inStock-prodQty);
+//                    }
+//                });
                 //seteando textfield necesarios
                 txtTotals.setText(String.valueOf(newTotal));
                 txtLastTrans.setText(lastTrans());
                 txtProduct.requestFocus();
+            }else if(prodQty <= 0){
+                JOptionPane.showMessageDialog(this, "Debe digitar una cantidad mayor a cero...", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }else{
                 JOptionPane.showMessageDialog(this, "Debe digitar una cantidad menor al stock...", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
         }
+        //arreglar total y limpiar elementos
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -613,7 +672,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         if (idProductRowClicked !=0) {
             listInv.remove(idProductRowClicked);
     //        System.out.println(p+" remove: "+remove);
-            loadTable(listInv);
+            loadTable(mainController.getSalesProductTableModel());
 //                txtLastTrans.setText(String.valueOf(lastNoTrans--));    
         }else{
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -635,14 +694,14 @@ public class ProductSalesForm extends javax.swing.JFrame {
             //for product
             product = productController.findProduct(idProductRowClicked);
             txtProduct.setText(product.getProductCode());
-            txtProductDesc.setText(product.getDescripcion());
+            txtProductDesc.setText(product.getDescription());
             
             listInvFromDB.forEach(i -> {
                     if(i.getIdProduct().equals(product.getIdProduct())){
                         inventory = i;
                     }
                 });
-            txtInStock.setText(inventory.getQuantity().toString());
+            txtInStock.setText(inventory.getStock().toString());
             
 //            //for supplier
 //            supplier = supplierController.findSupplier(idSupplierRowClicked);
@@ -703,11 +762,20 @@ public class ProductSalesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtClientKeyPressed
 
     private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
-        loadTableDialog();
+        //loadTableDialog();
         jDialog1.setSize(600, 350);
         jDialog1.setVisible(true);
     }//GEN-LAST:event_btnFindProductActionPerformed
 
+//    public Inventory getInvFromProduct (int productId){
+//        Inventory inventor = new Inventory();
+//        mainController.getListInv().forEach(inv -> {
+//            if (inv.getIdProduct() == productId) {
+//                inventor = inv;
+//            }
+//        });
+//        return null;
+//    }
     private void txtProductKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             //Ejecutar proceso que busca producto
@@ -718,26 +786,20 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 System.out.println("Not found, char: "+evt.getKeyChar());
                 JOptionPane.showMessageDialog(this, "Producto no existe en el sistema");
             }else{
-//                listProd.forEach(p -> {
-//                    product = productController.findProduct(p.getIdProduct());
-//                    System.out.println(p.toString());
-//                });
+                //Inicializando el objeto product por primera vez
                 product = listProd.get(0);
                 //Buscando inventario del producto, para mostrar su cantidad disponible inStock
-//                query EntityManagerUtil.getEntityManager().createNamedQuery("Product.findByProductCode");
-                listInvFromDB.forEach(i -> {
-                    if(i.getIdProduct().equals(product.getIdProduct())){
-                        inventory = i;
-                    }
-                });
-                txtInStock.setText(inventory.getQuantity().toString());
-                txtProductDesc.setText(product.getDescripcion());
-                //Setting prices to choose for user
-                jcPriceToChoose.removeAllItems();
-                jcPriceToChoose.addItem(product.getPrice1().toString());
-                jcPriceToChoose.addItem(product.getPrice2().toString());
-                jcPriceToChoose.addItem(product.getPrice3().toString());
+                Query query2 = EntityManagerUtil.getEntityManager().createNamedQuery("Inventory.findByIdProduct");
+                query2.setParameter("idProduct", product.getIdProduct());
+                List<Inventory> listInventory = query2.getResultList();
+                inventory = listInventory.get(0);
+                int stock = listInvFromDB.get(listInvFromDB.indexOf(inventory)).getStock();
+                inventory.setStock(stock);
                 
+                txtInStock.setText(inventory.getStock().toString());
+                txtProductDesc.setText(product.getDescription());
+
+                ftxtPrice.setText(inventory.getPrice1().toString());
                 txtClient.requestFocus();
 
                 //                //for supplier
@@ -758,51 +820,51 @@ public class ProductSalesForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ftxtQuantityKeyPressed
 
-    private void loadTable(List<Inventory> list){
-        jTable1.setModel(this.getTableDataModel(list));
+    private void loadTable(DefaultTableModel model){
+        jTable1.setModel(model);
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
     }
     
-    private void loadTableDialog(){
-        jTableDialog.setModel(this.getProductDataModel(productController));
-        jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(0));//to hide the first column ID
-        jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(0));//to hide the first column ID
-    } 
+//    private void loadTableDialog(){
+//        //jTableDialog.setModel(this.getProductDataModel(productController));
+//        jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(0));//to hide the first column ID
+//        jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(0));//to hide the first column ID
+//    } 
     
-    private DefaultTableModel getProductDataModel(ProductJpaController productController){
-        String columns[] = {"ID_prod","ID Suplidor" ,"Codigo", "Descripcion", "Categoria", "Precio", "Costo", "Min Stock", "Ideal Stock"};
-        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
-             
-        productController.findProductEntities().forEach(prod -> {
-            tableModel.addRow(new Object[]{ prod.getIdProduct(),prod.getIdSupplier(), prod.getProductCode(), prod.getDescripcion(), prod.getCategory(), prod.getPrice1() ,prod.getCost(), prod.getMinStock(), prod.getMaxStock()});
-        }); 
-        
-        return tableModel;
-    }
-            
-    private DefaultTableModel getTableDataModel(List<Inventory> list){
-        String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Precio", "Total"};
-        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
-        
-        try {
-            if(list == null ){
-            //tableModel.addRow(new Object[]{ }); 
-            }else{
-                list.forEach(inv -> {
-                    product = productController.findProduct(inv.getIdProduct());
-                    BigDecimal total =  product.getPrice1().multiply(new BigDecimal(inv.getQuantity()));
-                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdProveedor(), product.getProductCode(), product.getDescripcion(), inv.getQuantity(), product.getPrice1(), total});
-                }); 
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-        
-        return tableModel;
-    }
+//    private DefaultTableModel getProductDataModel(ProductJpaController productController){
+//        String columns[] = {"ID_prod","ID Suplidor" ,"Codigo", "Descripcion", "Categoria", "Precio", "Costo", "Min Stock", "Ideal Stock"};
+//        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+//             
+//        productController.findProductEntities().forEach(prod -> {
+//            tableModel.addRow(new Object[]{ prod.getIdProduct(),prod.getIdSupplier(), prod.getProductCode(), prod.getDescripcion(), prod.getCategory(), prod.getPrice1() ,prod.getCost(), prod.getMinStock(), prod.getMaxStock()});
+//        }); 
+//        
+//        return tableModel;
+//    }
+//            
+//    private DefaultTableModel getTableDataModel(List<Inventory> list){
+//        String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Precio", "Total"};
+//        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+//        
+//        try {
+//            if(list == null ){
+//            //tableModel.addRow(new Object[]{ }); 
+//            }else{
+//                list.forEach(inv -> {
+//                    product = productController.findProduct(inv.getIdProduct());
+//                    BigDecimal total =  product.getPrice1().multiply(new BigDecimal(inv.getQuantity()));
+//                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdProveedor(), product.getProductCode(), product.getDescripcion(), inv.getQuantity(), product.getPrice1(), total});
+//                }); 
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
+//        
+//        return tableModel;
+//    }
     
     public String lastTrans(){        
         //numero o ID de la ultima transaccion en esta tabla.
@@ -891,10 +953,12 @@ public class ProductSalesForm extends javax.swing.JFrame {
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSave;
     private com.github.lgooddatepicker.components.DatePicker datePicker;
+    private javax.swing.JFormattedTextField ftxtPrice;
     private javax.swing.JFormattedTextField ftxtQuantity;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
