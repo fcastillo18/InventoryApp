@@ -136,3 +136,5 @@ select * from inventory;
 
 select *  from inventory_trans
 
+where id_supplier = 2
+

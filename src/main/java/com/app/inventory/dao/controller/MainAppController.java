@@ -12,6 +12,7 @@ import com.app.inventory.domain.Product;
 import com.app.inventory.domain.Supplier;
 import com.app.inventory.util.EntityManagerUtil;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -51,9 +52,60 @@ public class MainAppController {
     public static InventoryJpaController inventoryController = new InventoryJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
     public static InventoryTransJpaController invTransController = new InventoryTransJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
     
+    //otras variables
+    private DecimalFormat df = new DecimalFormat( "#,###,###,##0" );
     
     /************Metodos para retornar tabla
      * @return s*************/
+    public DefaultTableModel getClientTableModel(){
+        String columns[] = {"ID","Documento", "Nombre", "Telefono"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+    
+        listClient = clientController.findClientEntities();
+        
+        if (listClient == null) {
+            tableModel.addRow(new Object[]{ }); 
+        }else{
+            listClient.forEach(client -> {
+                if (client.getStatus()) {
+                    tableModel.addRow(new Object[]{client.getIdClient(), 
+                        client.getDocument(), client.getName(), client.getPhone()});
+                }
+
+            });
+        }
+        
+        return tableModel;
+    }
+    
+    public DefaultTableModel getProductTableModel(){
+        String columns[] = {"Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Precio"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+        
+        List<Inventory> listInv2 = inventoryController.findInventoryEntities();
+        
+        try {
+            if(listInv2 == null ){
+                tableModel.addRow(new Object[]{ }); 
+            }else{
+                listInv2.forEach(inv -> {
+                    product = productController.findProduct(inv.getIdProduct());
+    //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
+//                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
+                    tableModel.addRow(new Object[]{inv.getIdProduct(), inv.getIdSupplier(), 
+                        product.getProductCode(), product.getDescription(), inv.getStock(), 
+                        df.format(inv.getCost().doubleValue()), df.format(inv.getPrice1().doubleValue())
+                    });
+                }); 
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        
+        listInv2.clear();
+        return tableModel;
+    }
     public DefaultTableModel getPurchaseProductTableModel(){
         String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Total"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
@@ -66,7 +118,12 @@ public class MainAppController {
                     product = productController.findProduct(inv.getIdProduct());
     //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
                     BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
-                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdSupplier(), product.getProductCode(), product.getDescription(), inv.getStock(), inv.getCost(), total});
+                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), 
+                        inv.getIdSupplier(), product.getProductCode(), product.getDescription(), 
+                        df.format(inv.getStock().doubleValue()), 
+                        df.format(inv.getCost().doubleValue()), 
+                        df.format(total.doubleValue())
+                    });
                 }); 
             }
         } catch (Exception e) {
@@ -90,7 +147,12 @@ public class MainAppController {
                     product = productController.findProduct(inv.getIdProduct());
     //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
                     BigDecimal total =  inv.getPrice1().multiply(new BigDecimal(inv.getStock()));
-                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), inv.getIdSupplier(), product.getProductCode(), product.getDescription(), inv.getStock(), inv.getPrice1(), total});
+                    tableModel.addRow(new Object[]{inv.getIdInventory(), inv.getIdProduct(), 
+                        inv.getIdSupplier(), product.getProductCode(), product.getDescription(), 
+                        df.format(inv.getStock().doubleValue()), 
+                        df.format(inv.getPrice1().doubleValue()),
+                        df.format(total.doubleValue())
+                    });
                 }); 
             }
         } catch (Exception e) {

@@ -35,6 +35,8 @@ public class UtilInv {
     private ClientJpaController clientController = null;
     private DefaultTableModel tableModel = null;
     
+  
+    
     public static void clearTextFields(Container container) {
         for (Component c : container.getComponents()) {
        
@@ -112,6 +114,12 @@ public class UtilInv {
 	Date date = new Date();
        
         return new java.sql.Timestamp(date.getTime());
+    }
+    
+    public static String formatNumber(Object number){
+        DecimalFormat df = new DecimalFormat( "#,###,###,##0" );
+        
+        return df.format(number);
     }
     
     /*

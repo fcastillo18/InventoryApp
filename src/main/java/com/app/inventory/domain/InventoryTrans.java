@@ -43,7 +43,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "InventoryTrans.findByPricexunit", query = "SELECT i FROM InventoryTrans i WHERE i.pricexunit = :pricexunit")
     , @NamedQuery(name = "InventoryTrans.findByTax", query = "SELECT i FROM InventoryTrans i WHERE i.tax = :tax")
     , @NamedQuery(name = "InventoryTrans.findByTotal", query = "SELECT i FROM InventoryTrans i WHERE i.total = :total")
-    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")})
+    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")
+    , @NamedQuery(name = "InventoryTrans.findByIdInventoryAndProduct", query = "SELECT i FROM InventoryTrans i WHERE i.idInventory = :idInventory and i.idProduct = :idProduct")})
 public class InventoryTrans implements Serializable {
 
     private static final long serialVersionUID = 1L;

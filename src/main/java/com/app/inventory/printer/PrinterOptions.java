@@ -212,7 +212,7 @@ public class PrinterOptions {
     }
 
     public String addLineSeperator() {
-        String lineSpace = "----------------------------------------------\n";
+        String lineSpace = "------------------------------------------------\n";
         commandSet += lineSpace;
         return lineSpace;
     }

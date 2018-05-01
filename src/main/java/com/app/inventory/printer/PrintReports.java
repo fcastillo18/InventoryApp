@@ -7,11 +7,14 @@ package com.app.inventory.printer;
 
 import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.domain.Inventory;
+import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
+import com.app.inventory.util.EntityManagerUtil;
+import com.app.inventory.util.UtilInv;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import javax.persistence.Query;
 
 /**
  *
@@ -22,7 +25,7 @@ public class PrintReports {
     //MainAppController mainController = new MainAppController();
     int totalFinal = 0;
     
-    public void productSalesReport(List<Inventory> listInv, String[] values){
+    public void productSalesReport(List<Inventory> listInv, List<InventoryTrans> listInvTrans , String[] values){
         System.out.println("Preparando reporte de venta");
         p.resetAll();
         p.initialize();
@@ -61,17 +64,35 @@ public class PrintReports {
 //        product = productController.findProduct(inv.getIdProduct());
         
         listInv.forEach(inv ->{
+//            InventoryTrans invTrans = null;
             Product product = MainAppController.productController.findProduct(inv.getIdProduct()); 
-            BigDecimal total =  inv.getPrice1().multiply(new BigDecimal(inv.getStock()));
-            p.setText(product.getProductCode() + "\t" + (product.getDescription().length() < 7 ? product.getDescription() + "   \t" : product.getDescription()) +"   "+ inv.getStock() + "   " + inv.getPrice1().intValue() + "   " + total.intValue());
-            totalFinal = totalFinal + total.intValue();
-            p.newLine();
-            p.alignLeft();
+//            Query query = EntityManagerUtil.getEntityManager().createNamedQuery("InventoryTrans.findByIdInventoryAndProduct");
+//            query.setParameter("idInventory", inv.getIdInventory());
+//            query.setParameter("idProduct", product.getIdProduct());
+            //(InventoryTrans) query.getResultList().get(0);
+            listInvTrans.forEach(invTrans -> {
+                if (Objects.equals(invTrans.getIdInventory(), inv.getIdInventory()) 
+                        && Objects.equals(invTrans.getIdProduct(), inv.getIdProduct())) {
+                    BigDecimal total =  invTrans.getPricexunit().multiply(new BigDecimal(invTrans.getQuantity()));
+                    p.setText(product.getProductCode() + "\t" + 
+                            (product.getDescription().length() < 7 ? product.getDescription() + "   \t" : product.getDescription()) 
+                            +"     "+ invTrans.getQuantity()+ "    " 
+                            + UtilInv.formatNumber(invTrans.getPricexunit().intValue()) + "   " 
+                            + UtilInv.formatNumber(total.intValue()));
+                    totalFinal = totalFinal + total.intValue();
+                    p.newLine();
+                    p.alignLeft();
+                }
+            });
+            
+            
         });
         p.addLineSeperator();
-        p.setText("\t\t\t Total:RD$ "+totalFinal);
+        p.setText("\t\t\t    Total:  RD$ "+UtilInv.formatNumber(totalFinal));
         p.newLine();
-        p.setText("Fin documento");
+        p.newLine();
+        p.alignCenter();
+        p.setText("***** Fin documento *****");
 //        p.newLine();
 //        p.setText("No factura \t\t: "+values[0]);
 //        p.newLine();
