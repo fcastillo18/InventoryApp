@@ -628,7 +628,7 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtProductKeyPressed
 
     private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
-        loadTableDialog(mainController.getProductTableModel());
+        loadTableDialog(mainController.getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
         jDialog1.setSize(600, 350);
         jDialog1.setVisible(true);
     }//GEN-LAST:event_btnFindProductActionPerformed
@@ -736,7 +736,8 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
     private void loadTableDialog(DefaultTableModel model){
         jTableDialog.setModel(model);
         jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(0));//to hide the first column ID
-        jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(0));//to hide the first column ID
+        jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(0));
+        jTableDialog.removeColumn(jTableDialog.getColumnModel().getColumn(5));//to hide the first column ID
     } 
     
 //    private DefaultTableModel getProductDataModel(ProductJpaController productController){

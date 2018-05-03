@@ -13,8 +13,11 @@ import com.app.inventory.domain.Supplier;
 import com.app.inventory.util.EntityManagerUtil;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -54,9 +57,10 @@ public class MainAppController {
     
     //otras variables
     private DecimalFormat df = new DecimalFormat( "#,###,###,##0" );
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     
-    /************Metodos para retornar tabla
-     * @return s*************/
+    /************Metodos para retornar tabla**************/
+    
     public DefaultTableModel getClientTableModel(){
         String columns[] = {"ID","Documento", "Nombre", "Telefono"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
@@ -78,11 +82,34 @@ public class MainAppController {
         return tableModel;
     }
     
-    public DefaultTableModel getProductTableModel(){
-        String columns[] = {"Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Precio"};
+    public DefaultTableModel getProductInvTableModel(String productCode, String productDesc){
+    EntityManager em = EntityManagerUtil.getEntityManager();
+        em.getTransaction().begin();
+
+        Query query  = em.createQuery("SELECT i.idInventory ,p.productCode, p.description, i.stock, i.cost, i.price1 FROM Product p, Inventory i WHERE p.idProduct = i.idProduct "
+                + "and (LOWER(p.productCode) like :productCode or LOWER(p.description) like :description)");
+        query.setParameter("productCode", "%"+productCode.toLowerCase()+"%");
+        query.setParameter("description", "%"+productDesc.toLowerCase()+"%");
+        List<Object[]> results = query.getResultList();
+        List<Inventory> listInvFilter = new ArrayList<>();
+        
+        results.stream().map((result) -> {
+            //System.out.println(result[0] + " " + result[1] + " - " + result[2]);
+            return result;
+        }).map((result) -> inventoryController.findInventory(Integer.parseInt(result[0].toString()))).forEachOrdered((inv) -> {
+            listInvFilter.add(inv);
+        });
+        em.getTransaction().commit();
+        em.close();
+        
+        return getProductInvTableModel(listInvFilter);        
+    }
+    
+    public DefaultTableModel getProductInvTableModel(List<Inventory> listInv2){
+        String columns[] = {"Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Precio", "Min stock", };
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
         
-        List<Inventory> listInv2 = inventoryController.findInventoryEntities();
+        //List<Inventory> listInv2 = inventoryController.findInventoryEntities();
         
         try {
             if(listInv2 == null ){
@@ -94,7 +121,8 @@ public class MainAppController {
 //                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
                     tableModel.addRow(new Object[]{inv.getIdProduct(), inv.getIdSupplier(), 
                         product.getProductCode(), product.getDescription(), inv.getStock(), 
-                        df.format(inv.getCost().doubleValue()), df.format(inv.getPrice1().doubleValue())
+                        df.format(inv.getCost().doubleValue()), df.format(inv.getPrice1().doubleValue()),
+                        inv.getMinStock()
                     });
                 }); 
             }
@@ -106,6 +134,39 @@ public class MainAppController {
         listInv2.clear();
         return tableModel;
     }
+    
+    public DefaultTableModel getInventoryTransTableModel(){
+        String columns[] = {"ID_inv_trans","ID Inv","ID Prod","ID cliente", "ID user", 
+                            "Trans type", "Cantidad", "Costo-und", "Precio-und", "Total", "Fecha"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+        
+        listInvTrans = invTransController.findInventoryTransEntities();
+        
+        try {
+            if(listInvTrans == null ){
+                tableModel.addRow(new Object[]{ }); 
+            }else{
+                listInvTrans.forEach(inv -> {
+                    //product = productController.findProduct(inv.getIdProduct());
+                    //inventory = inventoryController.findInventory(inv.getIdInventory());
+    //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
+//                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
+                    tableModel.addRow(new Object[]{inv.getIdInvTrans(), inv.getIdInventory(),
+                        inv.getIdProduct(), inv.getIdClient(), inv.getIdUser(), 
+                        inv.getTransType(), inv.getQuantity(), inv.getCostxunit(),
+                        inv.getPricexunit(), inv.getTotal(), dateFormat.format(inv.getCreatedDate())
+                    });
+                }); 
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        
+        listInvTrans.clear();
+        return tableModel;
+    }
+    
     public DefaultTableModel getPurchaseProductTableModel(){
         String columns[] = {"ID","Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Total"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);

@@ -31,6 +31,7 @@ public class ProductEditForm extends javax.swing.JFrame {
         util = new UtilInv();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
     }
+    
     public int idProduct;
     private UtilInv util;
     private ProductJpaController productController = null;

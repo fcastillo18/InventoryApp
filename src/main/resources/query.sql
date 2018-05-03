@@ -138,3 +138,9 @@ select *  from inventory_trans
 
 where id_supplier = 2
 
+
+SELECT *
+FROM Product p, Inventory i WHERE p.ID_PRODUCT = i.ID_PRODUCT
+and ( p.DESCRIPTION like '%otr%')
+
+and (p.productCode like :productCode or p.description like :description

@@ -5,8 +5,15 @@
  */
 package com.app.inventory;
 
+import com.app.inventory.dao.controller.MainAppController;
+import com.app.inventory.domain.Inventory;
+import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.view.MainForm;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 
 //import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
@@ -29,9 +36,12 @@ public class App {
 
         MainForm mainForm = new MainForm();
         EntityManagerUtil.getEntityManager();
-        mainForm.setVisible(true);
+        //mainForm.setVisible(true);
+        //String formatted to use in report.
+        System.out.println(String.format("%-10s", "Texto"));
+        System.out.println(String.format("%-10.10s", "Texto"));
         
-        
+        System.exit(0);
 //        new ConnectionDB().startServer();
 //        SystemDaoJdbc daoJdbc = new SystemDaoJdbc();
 //        daoJdbc.execTask();
@@ -53,10 +63,8 @@ public class App {
 //                System.out.println(e.getMessage());
 //                e.printStackTrace();
 //                
-//            }
-        
-               
+//            }      
     }
     
-    
+   
 }

@@ -5,6 +5,7 @@
  */
 package com.app.inventory.view.product;
 
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.view.product.ProductNewForm;
 import com.app.inventory.view.product.ProductEditForm;
 import com.app.inventory.dao.controller.ProductJpaController;
@@ -26,7 +27,7 @@ public class ProductListForm extends javax.swing.JFrame {
      */
     public ProductListForm() {
         initComponents();
-        loadTable();
+        loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
     }
     private Integer idRowClicked;
     /**
@@ -199,7 +200,7 @@ public class ProductListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        loadTable();
+        loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -210,7 +211,7 @@ public class ProductListForm extends javax.swing.JFrame {
                 ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {
                     productController.destroy(idRowClicked);
-                    loadTable();
+                    loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
                 } catch (NonexistentEntityException ex) {
                     System.out.println("com.app.inventory.view.ProductListForm.btnDeleteProductActionPerformed()");
                     Logger.getLogger(ProductListForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -230,23 +231,25 @@ public class ProductListForm extends javax.swing.JFrame {
         clNewForm.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void loadTable(){
-        jTable1.setModel(this.getProductDataModel());
+    private void loadTable(DefaultTableModel model){
+        jTable1.setModel(model);
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
+        jTable1.removeColumn(jTable1.getColumnModel().getColumn(3));
+        jTable1.removeColumn(jTable1.getColumnModel().getColumn(5));
     }
     
-    private DefaultTableModel getProductDataModel(){
-        String columns[] = {"ID","ID Suplidor" ,"Codigo", "Descripcion", "Categoria", "Precio", "Costo", "Min Stock", "Ideal Stock"};
-        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
-        
-        ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
-                
-        productController.findProductEntities().forEach(product -> {
-            tableModel.addRow(new Object[]{ product.getIdProduct(),product.getIdSupplier(), product.getProductCode(), product.getDescripcion(), product.getCategory(), product.getPrice1() ,product.getCost(), product.getMinStock(), product.getMaxStock()});
-        }); 
-        
-        return tableModel;
-    }
+//    private DefaultTableModel getProductDataModel(){
+//        String columns[] = {"ID","ID Suplidor" ,"Codigo", "Descripcion", "Categoria", "Precio", "Costo", "Min Stock", "Ideal Stock"};
+//        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+//        
+//        ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+//                
+//        productController.findProductEntities().forEach(product -> {
+//            tableModel.addRow(new Object[]{ product.getIdProduct(),product.getIdSupplier(), product.getProductCode(), product.getDescripcion(), product.getCategory(), product.getPrice1() ,product.getCost(), product.getMinStock(), product.getMaxStock()});
+//        }); 
+//        
+//        return tableModel;
+//    }
 
     /**
      * @param args the command line arguments

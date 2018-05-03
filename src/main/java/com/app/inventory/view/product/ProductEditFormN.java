@@ -22,12 +22,12 @@ import javax.swing.JOptionPane;
  *
  * @author frank
  */
-public class ProductNewForm extends javax.swing.JFrame {
+public class ProductEditFormN extends javax.swing.JFrame {
 
     /**
      * Creates new form frmProduct
      */
-    public ProductNewForm() {
+    public ProductEditFormN() {
         initComponents();
         
         ftxtPrice1.setFormatterFactory(UtilInv.getDecimalFormatFactory());
@@ -115,11 +115,6 @@ public class ProductNewForm extends javax.swing.JFrame {
         jLabel11.setText("Proveedor:");
 
         jButton1.setText("Find");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jpInitialStock.setModel(new javax.swing.SpinnerNumberModel());
 
@@ -371,10 +366,6 @@ public class ProductNewForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
         UtilInv.clearTextFields(this.getContentPane());
     }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //agrgar proveedor
-    }//GEN-LAST:event_jButton1ActionPerformed
    
     /**
      * @param args the command line arguments
@@ -393,14 +384,46 @@ public class ProductNewForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProductNewForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductEditFormN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProductNewForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductEditFormN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProductNewForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductEditFormN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProductNewForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductEditFormN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -437,7 +460,7 @@ public class ProductNewForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProductNewForm().setVisible(true);
+                new ProductEditFormN().setVisible(true);
             }
         });
     }

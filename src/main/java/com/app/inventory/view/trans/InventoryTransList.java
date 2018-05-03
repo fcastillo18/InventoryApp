@@ -7,6 +7,7 @@ package com.app.inventory.view.trans;
 
 
 import com.app.inventory.dao.controller.InventoryTransJpaController;
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
@@ -30,7 +31,7 @@ public class InventoryTransList extends javax.swing.JFrame {
         inventoryTransController = new InventoryTransJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
         inventoryTransList = inventoryTransController.findInventoryTransEntities();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
-        loadTable(inventoryTransList);
+        loadTable(new MainAppController().getInventoryTransTableModel());
     }
     
     private InventoryTrans inventoryTrans = null;
@@ -106,7 +107,7 @@ public class InventoryTransList extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -151,8 +152,8 @@ public class InventoryTransList extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -169,38 +170,38 @@ public class InventoryTransList extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     
-    private void loadTable(List<InventoryTrans> list){
-        jTable1.setModel(this.getTableDataModel(list));
+    private void loadTable(DefaultTableModel model){
+        jTable1.setModel(model);
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
-        jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
+//        jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
 //        jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
     }
     
-    private DefaultTableModel getTableDataModel(List<InventoryTrans> list){
-        String columns[] = {"ID_inv_trans","ID Inv","ID Prod","ID cliente", "ID user", 
-                            "Trans type", "Cantidad", "PrecioXCant", "Total", "Fecha"};
-        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
-        
-        try {
-            if(list == null ){
-            //tableModel.addRow(new Object[]{ }); 
-            }else{
-                list.forEach(inv -> {
-                    product = productController.findProduct(inv.getIdProduct());
-                    BigDecimal total =  product.getPrice1().multiply(new BigDecimal(inv.getQuantity()));
-                    tableModel.addRow(new Object[]{inv.getIdInvTrans(), inv.getIdInventory(), 
-                        inv.getIdProduct(), inv.getIdClient(), inv.getIdUser(), 
-                        inv.getTransType(), inv.getQuantity(), inv.getPricexunit(), 
-                        inv.getTotal(), inv.getCreatedDate()});
-                }); 
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-        
-        return tableModel;
-    }
+//    private DefaultTableModel getTableDataModel(List<InventoryTrans> list){
+//        String columns[] = {"ID_inv_trans","ID Inv","ID Prod","ID cliente", "ID user", 
+//                            "Trans type", "Cantidad", "PrecioXCant", "Total", "Fecha"};
+//        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+//        
+//        try {
+//            if(list == null ){
+//            //tableModel.addRow(new Object[]{ }); 
+//            }else{
+//                list.forEach(inv -> {
+//                    product = productController.findProduct(inv.getIdProduct());
+//                    BigDecimal total =  product.getPrice1().multiply(new BigDecimal(inv.getQuantity()));
+//                    tableModel.addRow(new Object[]{inv.getIdInvTrans(), inv.getIdInventory(), 
+//                        inv.getIdProduct(), inv.getIdClient(), inv.getIdUser(), 
+//                        inv.getTransType(), inv.getQuantity(), inv.getPricexunit(), 
+//                        inv.getTotal(), inv.getCreatedDate()});
+//                }); 
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
+//        
+//        return tableModel;
+//    }
     
     /**
      * @param args the command line arguments

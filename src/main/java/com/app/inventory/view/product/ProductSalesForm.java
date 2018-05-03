@@ -863,7 +863,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtClientKeyPressed
 
     private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
-        loadTableDialogProduct(mainController.getProductTableModel());
+        loadTableDialogProduct(mainController.getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
         jDialogProduct.setSize(600, 350);
         jDialogProduct.setVisible(true);
     }//GEN-LAST:event_btnFindProductActionPerformed
@@ -963,6 +963,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         jTableDialogProduct.setModel(model);
         jTableDialogProduct.removeColumn(jTableDialogProduct.getColumnModel().getColumn(0));//to hide the first column ID
         jTableDialogProduct.removeColumn(jTableDialogProduct.getColumnModel().getColumn(0));//to hide the first column ID
+        jTableDialogProduct.removeColumn(jTableDialogProduct.getColumnModel().getColumn(5));
     } 
     
     private void loadTableDialogClient(DefaultTableModel model){
