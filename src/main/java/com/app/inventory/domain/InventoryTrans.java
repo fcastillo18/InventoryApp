@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "InventoryTrans.findAll", query = "SELECT i FROM InventoryTrans i")
     , @NamedQuery(name = "InventoryTrans.findByIdInvTrans", query = "SELECT i FROM InventoryTrans i WHERE i.idInvTrans = :idInvTrans")
+    , @NamedQuery(name = "InventoryTrans.findByNoDocument", query = "SELECT i FROM InventoryTrans i WHERE i.noDocument = :noDocument")
     , @NamedQuery(name = "InventoryTrans.findByIdInventory", query = "SELECT i FROM InventoryTrans i WHERE i.idInventory = :idInventory")
     , @NamedQuery(name = "InventoryTrans.findByIdProduct", query = "SELECT i FROM InventoryTrans i WHERE i.idProduct = :idProduct")
     , @NamedQuery(name = "InventoryTrans.findByIdSupplier", query = "SELECT i FROM InventoryTrans i WHERE i.idSupplier = :idSupplier")
@@ -43,8 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "InventoryTrans.findByPricexunit", query = "SELECT i FROM InventoryTrans i WHERE i.pricexunit = :pricexunit")
     , @NamedQuery(name = "InventoryTrans.findByTax", query = "SELECT i FROM InventoryTrans i WHERE i.tax = :tax")
     , @NamedQuery(name = "InventoryTrans.findByTotal", query = "SELECT i FROM InventoryTrans i WHERE i.total = :total")
-    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")
-    , @NamedQuery(name = "InventoryTrans.findByIdInventoryAndProduct", query = "SELECT i FROM InventoryTrans i WHERE i.idInventory = :idInventory and i.idProduct = :idProduct")})
+    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")})
 public class InventoryTrans implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,6 +53,8 @@ public class InventoryTrans implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_INV_TRANS")
     private Integer idInvTrans;
+    @Column(name = "NO_DOCUMENT")
+    private String noDocument;
     @Column(name = "ID_INVENTORY")
     private Integer idInventory;
     @Column(name = "ID_PRODUCT")
@@ -95,6 +97,14 @@ public class InventoryTrans implements Serializable {
 
     public void setIdInvTrans(Integer idInvTrans) {
         this.idInvTrans = idInvTrans;
+    }
+
+    public String getNoDocument() {
+        return noDocument;
+    }
+
+    public void setNoDocument(String noDocument) {
+        this.noDocument = noDocument;
     }
 
     public Integer getIdInventory() {

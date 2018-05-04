@@ -79,9 +79,9 @@ public class ClientEditForm extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Cliente"));
 
-        jLabel1.setText("Nombre:");
+        jLabel1.setText("Nombre:*");
 
-        jLabel2.setText("Documento:");
+        jLabel2.setText("Documento:*");
 
         jLabel3.setText("Apellido:");
 
@@ -104,39 +104,32 @@ public class ClientEditForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel5)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel9))))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel1))
+                .addGap(4, 4, 4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDocument)
+                            .addComponent(txtZone, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                            .addComponent(txtName))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                            .addComponent(txtPhone)
+                            .addComponent(txtEmail)))
                     .addComponent(txtAddress)
                     .addComponent(jScrollPane1))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtZone, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                    .addComponent(txtDocument)
-                    .addComponent(txtName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                    .addComponent(txtPhone)
-                    .addComponent(txtEmail))
                 .addGap(10, 10, 10))
         );
         jPanel1Layout.setVerticalGroup(
@@ -237,27 +230,31 @@ public class ClientEditForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	Date date = new Date();
-        
-        Client client = clientController.findClient(idClient);
-        client.setName(txtName.getText() + " " + txtLastName.getText());
-        client.setAddress(txtAddress.getText());
-        //client.setCreatedDate(new java.sql.Timestamp(date.getTime()));
-        client.setDocument(txtDocument.getText());
-        client.setEmail(txtEmail.getText());
-        client.setNote(txtAreaNote.getText());
-        client.setPhone(txtPhone.getText());
-        client.setStatus(true);//activo
-        client.setZone(txtZone.getText());
-        try {
-            clientController.edit(client);
-        } catch (Exception ex) {
-            System.out.println("com.app.inventory.view.ClientEditForm.btnSaveActionPerformed()");
-            Logger.getLogger(ClientEditForm.class.getName()).log(Level.SEVERE, null, ex);
+        if (!txtName.getText().equals("") && !txtDocument.getText().equals("")) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+
+            Client client = clientController.findClient(idClient);
+            client.setName(txtName.getText() + " " + txtLastName.getText());
+            client.setAddress(txtAddress.getText());
+            //client.setCreatedDate(new java.sql.Timestamp(date.getTime()));
+            client.setDocument(txtDocument.getText());
+            client.setEmail(txtEmail.getText());
+            client.setNote(txtAreaNote.getText());
+            client.setPhone(txtPhone.getText());
+            client.setStatus(true);//activo
+            client.setZone(txtZone.getText());
+            try {
+                clientController.edit(client);
+            } catch (Exception ex) {
+                System.out.println("com.app.inventory.view.ClientEditForm.btnSaveActionPerformed()");
+                Logger.getLogger(ClientEditForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
+            util.clearTextFields(this.getContentPane());
+        }else{
+            JOptionPane.showMessageDialog(this, "Favor completar los campos solicitados...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
-        JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-        util.clearTextFields(this.getContentPane());
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

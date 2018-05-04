@@ -12,8 +12,10 @@ import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
-import java.math.BigDecimal;
-import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,7 +33,7 @@ public class InventoryTransList extends javax.swing.JFrame {
         inventoryTransController = new InventoryTransJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
         inventoryTransList = inventoryTransController.findInventoryTransEntities();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
-        loadTable(new MainAppController().getInventoryTransTableModel());
+        loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
     }
     
     private InventoryTrans inventoryTrans = null;
@@ -39,6 +41,7 @@ public class InventoryTransList extends javax.swing.JFrame {
     private List<InventoryTrans> inventoryTransList = null;
     private Product product = null;
     private ProductJpaController productController= null;
+    MainAppController mainController = new MainAppController();
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,16 +52,19 @@ public class InventoryTransList extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        datePicker = new com.github.lgooddatepicker.components.DatePicker();
+        dateFrom = new com.github.lgooddatepicker.components.DatePicker();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        dateTo = new com.github.lgooddatepicker.components.DatePicker();
+        btSearch = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jcTransType = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        txtProductFilter = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -66,21 +72,38 @@ public class InventoryTransList extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros"));
 
-        datePicker.setName("datePicker"); // NOI18N
+        dateFrom.setName("dateFrom"); // NOI18N
 
         jLabel1.setText("Desde:");
 
         jLabel2.setText("Hasta:");
 
-        datePicker1.setName("datePicker"); // NOI18N
+        dateTo.setName("datePicker"); // NOI18N
 
-        jLabel3.setText("Producto:");
-
-        jButton3.setText("Buscar");
+        btSearch.setText("Buscar");
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSearchActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Type:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "In/Compras", "Out/Ventas" }));
+        jcTransType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Compra", "Venta" }));
+
+        jLabel5.setText("Buscar por:");
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
+        jRadioButton1.setText("Documento");
+
+        jRadioButton2.setText("Producto");
+
+        txtProductFilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtProductFilterKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,49 +111,53 @@ public class InventoryTransList extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(dateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dateTo, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(btSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(jcTransType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addComponent(jRadioButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtProductFilter)))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(jcTransType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
+                        .addComponent(jRadioButton1)
+                        .addComponent(jRadioButton2))
+                    .addComponent(txtProductFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(dateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(dateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(btSearch))
+                .addGap(15, 15, 15))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {dateFrom, dateTo, jcTransType});
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -152,7 +179,7 @@ public class InventoryTransList extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -168,13 +195,41 @@ public class InventoryTransList extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtProductFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductFilterKeyPressed
+//        if (txtProductFilter.getText().length() >= 1) {
+//            String textToFilter = txtProductFilter.getText().trim();
+//            System.out.println("Length: "+txtProductFilter.getText().length()+" - "+textToFilter);
+//            
+//            Date date1 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+//            Date date2 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()); 
+//            
+//            loadTable(mainController.getInventoryTransTableModel(jcTransType.getSelectedItem().toString().toLowerCase(), textToFilter, date1, date2));
+//        }else{
+//            loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
+//        }
+    }//GEN-LAST:event_txtProductFilterKeyPressed
+
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
+        if (txtProductFilter.getText().length() >= 1 || (!"".equals(dateFrom.getText()) && !"".equals(dateFrom.getText()))) {
+            String textToFilter = txtProductFilter.getText().trim();
+            System.out.println("Length: "+txtProductFilter.getText().length()+" - "+textToFilter);
+            
+            Date date1 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date date2 = dateTo.getText().equals("") ? null : Date.from(dateTo.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()); 
+            
+            loadTable(mainController.getInventoryTransTableModel(jcTransType.getSelectedItem().toString().toLowerCase(), textToFilter, date1, date2));
+        }else{
+            loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
+        }
+    }//GEN-LAST:event_btSearchActionPerformed
     
     
     private void loadTable(DefaultTableModel model){
         jTable1.setModel(model);
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
-//        jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
-//        jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
+        jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
+        jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));//to hide the first column ID
     }
     
 //    private DefaultTableModel getTableDataModel(List<InventoryTrans> list){
@@ -242,17 +297,20 @@ public class InventoryTransList extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.github.lgooddatepicker.components.DatePicker datePicker;
-    private com.github.lgooddatepicker.components.DatePicker datePicker1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btSearch;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private com.github.lgooddatepicker.components.DatePicker dateFrom;
+    private com.github.lgooddatepicker.components.DatePicker dateTo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox<String> jcTransType;
+    private javax.swing.JTextField txtProductFilter;
     // End of variables declaration//GEN-END:variables
 }

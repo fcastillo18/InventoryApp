@@ -17,11 +17,11 @@
 -- --     PHONE VARCHAR(20),
 -- --     EMAIL VARCHAR(50),
 -- --     NOTE VARCHAR(20),
--- --     CREATED_DATE TIMESTAMP DEFAULT 'NOW',
+-- --     CREATED_DATE DATE DEFAULT 'NOW',
 -- --     STATUS BOOLEAN
 -- -- )
 -- 
-drop table product
+drop table product;
 
 CREATE TABLE PRODUCT(
     ID_PRODUCT      INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
@@ -36,9 +36,9 @@ CREATE TABLE PRODUCT(
 --     AVG_COST        DECIMAL(10,2),
 --     MIN_STOCK       INTEGER,
 --     MAX_STOCK       INTEGER,
-    CREATED_DATE    TIMESTAMP,
+    CREATED_DATE    DATE DEFAULT 'NOW',
     STATUS          BOOLEAN
-)
+);
 
 -- 
 -- CREATE TABLE SUPPLIER(
@@ -50,7 +50,7 @@ CREATE TABLE PRODUCT(
 --     PHONE           VARCHAR(20),
 --     EMAIL           VARCHAR(50),
 --     NOTE            VARCHAR(20),
---     CREATED_DATE    TIMESTAMP
+--     CREATED_DATE    DATE
 --     STATUS          BOOLEAN
 -- )
 -- 
@@ -65,11 +65,11 @@ CREATE TABLE PRODUCT(
 --     PHONE           VARCHAR(20),
 --     EMAIL           VARCHAR(50),
 --     NOTE            VARCHAR(20),
---     CREATED_DATE    TIMESTAMP
+--     CREATED_DATE    DATE DEFAULT 'NOW',
 --     STATUS          BOOLEAN
 -- )
 -- 
-drop table inventory
+drop table inventory;
 CREATE TABLE INVENTORY(
     ID_INVENTORY    INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     ID_PRODUCT      INTEGER,
@@ -84,12 +84,13 @@ CREATE TABLE INVENTORY(
     STOCK           INTEGER,
     MIN_STOCK       INTEGER,
 --     IDEAL_STOCK       INTEGER,
-    LAST_UPDATED    TIMESTAMP
-)
+    LAST_UPDATED    DATE DEFAULT 'NOW'
+);
 
-DROP TABLE INVENTORY_TRANS
+DROP TABLE INVENTORY_TRANS;
 CREATE TABLE INVENTORY_TRANS(
     ID_INV_TRANS    INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    NO_DOCUMENT     VARCHAR(50),
     ID_INVENTORY    INTEGER,
     ID_PRODUCT      INTEGER,
     ID_SUPPLIER     INTEGER,
@@ -103,27 +104,33 @@ CREATE TABLE INVENTORY_TRANS(
     TAX             DECIMAL(10,2),-- Para compras: 0.18 si es calculado y 0 cuando el precio incluye ITBIS
     TOTAL           DECIMAL(10,2),-- = (QUANTITY * COSTXUNIT) + (QUANTITY * COSTXUNIT * TAX) para el caso de Compras
                                   -- = (QUANTITY * PRICEXUNIT) + (QUANTITY * PRICEXUNIT * TAX) para el caso de Ventas
-    CREATED_DATE    TIMESTAMP
-)
+    CREATED_DATE    DATE DEFAULT 'NOW'
+);
 
+DROP TABLE INV_TRANS_MASTER;
 CREATE TABLE INV_TRANS_MASTER(
-    ID_TRANS_MASTER
+    ID_TRANS_MASTER INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    NO_INVOICE      VARCHAR(20),
+    TOTAL           DECIMAL(10, 2),
+    CREATED_DATE    DATE DEFAULT 'NOW'
     
-)
+);
 
+DROP TABLE TAXES;
 CREATE TABLE TAXES(
     ID_TAX INTEGER,
     TAX_AMOUNT DECIMAL(10,2),
     TAX_DESCRIPTION VARCHAR(50)
-)
+);
 
+DROP TABLE INV_CONCEPTS;
 CREATE TABLE INV_CONCEPTS(
     ID INTEGER,
     NAME VARCHAR(50),
     DESCRIPTION VARCHAR(100)
-)
+);
 
-/**/
+
 
 select * from client;
 
@@ -135,6 +142,7 @@ select * from product;
 select * from inventory;
 
 select *  from inventory_trans
+--where CREATED_DATE between '20180504' and '20180504'
 
 where id_supplier = 2
 
@@ -144,3 +152,4 @@ FROM Product p, Inventory i WHERE p.ID_PRODUCT = i.ID_PRODUCT
 and ( p.DESCRIPTION like '%otr%')
 
 and (p.productCode like :productCode or p.description like :description
+*/

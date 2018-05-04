@@ -377,9 +377,13 @@ public class MainForm extends javax.swing.JFrame {
         i.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
+    ProductPurchaseForm p = new ProductPurchaseForm();
     private void btnInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInActionPerformed
-        ProductPurchaseForm p = new ProductPurchaseForm();
-        p.setVisible(true);
+        if (p.isVisible()) {
+            p.setVisible(true);
+        }else{
+            p.setVisible(true);
+        }
     }//GEN-LAST:event_btnInActionPerformed
 
     private void btnOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutActionPerformed

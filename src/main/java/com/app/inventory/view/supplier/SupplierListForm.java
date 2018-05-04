@@ -48,7 +48,7 @@ public class SupplierListForm extends javax.swing.JFrame {
         btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Listado de Clientes");
+        setTitle("Listado de Proveedores");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -68,7 +68,7 @@ public class SupplierListForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones cliente"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones proveedor"));
 
         btnEditClient1.setText("Registrar");
         btnEditClient1.setNextFocusableComponent(btnRefresh);
@@ -121,6 +121,7 @@ public class SupplierListForm extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones del reporte"));
 
         btnPrint.setText("Imprimir");
+        btnPrint.setEnabled(false);
         btnPrint.setNextFocusableComponent(this);
 
         btnRefresh.setText("Actualizar");
@@ -174,7 +175,7 @@ public class SupplierListForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(11, 11, 11))
         );
 

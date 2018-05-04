@@ -65,13 +65,15 @@ public class ProductSalesForm extends javax.swing.JFrame {
         listProduct = new ArrayList<Product>();
         listInvFromDB = inventoryController.findInventoryEntities();
         //lastNoTrans = inventoryController.getInventoryCount()+1; 
-        txtLastTrans.setText(lastTrans());
+        txtNoDocument.setText(lastTrans());
         
         //Habilitar cuando se vaya a implementar esta funcionalidad
         lbPrice.setVisible(false);
         jcPriceToChoose.setVisible(false);
 //        fillCombo("product");
 //        fillCombo("client");
+        jcPriceToChoose.setVisible(false);
+        lbPrice.setVisible(false);
     }
     //private DecimalFormat dFormat = new DecimalFormat( "#,###,###,##0" );
     
@@ -110,7 +112,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        txtLastTrans = new javax.swing.JTextField();
+        txtNoDocument = new javax.swing.JTextField();
         datePicker = new com.github.lgooddatepicker.components.DatePicker();
         jLabel9 = new javax.swing.JLabel();
         txtInStock = new javax.swing.JTextField();
@@ -268,8 +270,8 @@ public class ProductSalesForm extends javax.swing.JFrame {
 
         jLabel8.setText("Cantidad:");
 
-        txtLastTrans.setEditable(false);
-        txtLastTrans.setName("txtLastTrans"); // NOI18N
+        txtNoDocument.setEditable(false);
+        txtNoDocument.setName("txtNoDocument"); // NOI18N
 
         datePicker.setName("datePicker"); // NOI18N
 
@@ -364,7 +366,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtLastTrans, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                                .addComponent(txtNoDocument, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                                 .addComponent(txtClient, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,7 +399,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtLastTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNoDocument, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel2)
@@ -568,6 +570,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 
                 /*Inventory Transaction*/
                 invTrans = new InventoryTrans();
+                invTrans.setNoDocument(txtNoDocument.getText());
                 invTrans.setIdInventory(inv.getIdInventory());//sopesar el colocar el id del inventory creado en la linea de arriba
                 invTrans.setIdProduct(inv.getIdProduct());
                 invTrans.setIdSupplier(inv.getIdSupplier());
@@ -576,7 +579,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 invTrans.setTransType("venta");
                 invTrans.setDiscount(BigDecimal.ZERO);
                 invTrans.setQuantity(qtyOfItemOnList);
-                
+                invTrans.setCostxunit(inv.getAvgCost());
                 BigDecimal price = inventoryController.findInventory(inv.getIdInventory()).getPrice1();
                 invTrans.setPricexunit(price);
                 invTrans.setTotal(price.multiply(new BigDecimal(qtyOfItemOnList)));
@@ -593,7 +596,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
             
             /********************imprimir reporte*****************************/
             PrintReports printReport = new PrintReports();
-            String[] values = {txtLastTrans.getText(), datePicker.getDateStringOrEmptyString(), MainAppController.clientController.findClient(idClientClicked).getName()};
+            String[] values = {txtNoDocument.getText(), datePicker.getDateStringOrEmptyString(), MainAppController.clientController.findClient(idClientClicked).getName()};
             printReport.productSalesReport(mainController.getListInv(), mainController.getListInvTrans() ,values);
                     
             mainController.getListInv().clear(); //this lista has to be empty to store new products that will be shown on the table
@@ -625,7 +628,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
 //            } else {
 //              System.out.println("No Option");
 //            }
-            txtLastTrans.setText(lastTrans());
+            txtNoDocument.setText(lastTrans());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -746,7 +749,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         UtilInv.clearTextFields(this.getContentPane());
         loadTable(null);
-        txtLastTrans.setText(lastTrans());
+        txtNoDocument.setText(lastTrans());
         listInvFromDB = inventoryController.findInventoryEntities();
     }//GEN-LAST:event_btnClearActionPerformed
 
@@ -1006,8 +1009,13 @@ public class ProductSalesForm extends javax.swing.JFrame {
     
     public String lastTrans(){        
         //numero o ID de la ultima transaccion en esta tabla.
-        invTrans = invTransController.findInventoryTransEntities().get(invTransController.getInventoryTransCount()-1);
-        lastNoTrans = invTrans.getIdInvTrans();
+        if (Integer.valueOf(invTransController.getInventoryTransCount()) !=null && invTransController.getInventoryTransCount() > 0) {
+            invTrans = invTransController.findInventoryTransEntities().get(invTransController.getInventoryTransCount()-1);
+            lastNoTrans = Integer.parseInt(invTrans.getNoDocument());
+        }else{
+            lastNoTrans = 0;
+        }
+        
 
         //String anio = String.valueOf(invTrans.getCreatedDate().getYear()+1900);
         //System.out.println(anio+"F"+(lastNoTrans+1));
@@ -1117,7 +1125,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtClient;
     private javax.swing.JTextField txtClientName;
     private javax.swing.JTextField txtInStock;
-    private javax.swing.JTextField txtLastTrans;
+    private javax.swing.JTextField txtNoDocument;
     private javax.swing.JTextField txtNote;
     private javax.swing.JTextField txtProduct;
     private javax.swing.JTextField txtProductDesc;

@@ -275,17 +275,17 @@ public class ProductEditForm extends javax.swing.JFrame {
         
         Product product = productController.findProduct(idProduct);
         product.setCategory(txtCategory.getText());
-        product.setCost(BigDecimal.valueOf(Double.parseDouble(txtCost.getText().trim())));
-        product.setCreatedDate(new java.sql.Timestamp(date.getTime()));
-        product.setDescripcion(txtDescripcion.getText());
-        product.setIdSupplier(1);//Pendiente colocar el ID de un supplidor registrado
-        product.setMinStock(Integer.parseInt(jpStockMin.getValue().toString()));
-        product.setMaxStock(Integer.parseInt(jpStockMax.getValue().toString()));
-        product.setPrice1(BigDecimal.valueOf(Double.parseDouble(txtPrice1.getText().trim())));
-        product.setPrice2(BigDecimal.valueOf(Double.parseDouble(txtPrice2.getText().trim())));
-        product.setPrice3(BigDecimal.valueOf(Double.parseDouble(txtPrice3.getText().trim())));
-        product.setProductCode(txtCode.getText());
-        product.setStatus(true);
+//        product.setCost(BigDecimal.valueOf(Double.parseDouble(txtCost.getText().trim())));
+//        product.setCreatedDate(new java.sql.Timestamp(date.getTime()));
+//        product.setDescripcion(txtDescripcion.getText());
+//        product.setIdSupplier(1);//Pendiente colocar el ID de un supplidor registrado
+//        product.setMinStock(Integer.parseInt(jpStockMin.getValue().toString()));
+//        product.setMaxStock(Integer.parseInt(jpStockMax.getValue().toString()));
+//        product.setPrice1(BigDecimal.valueOf(Double.parseDouble(txtPrice1.getText().trim())));
+//        product.setPrice2(BigDecimal.valueOf(Double.parseDouble(txtPrice2.getText().trim())));
+//        product.setPrice3(BigDecimal.valueOf(Double.parseDouble(txtPrice3.getText().trim())));
+//        product.setProductCode(txtCode.getText());
+//        product.setStatus(true);
     
         try {
             productController.edit(product);
@@ -305,14 +305,14 @@ public class ProductEditForm extends javax.swing.JFrame {
         txtAreaNote.setText("");//pendiente guardar note
         txtCategory.setText(prod.getCategory());
         txtCode.setText(prod.getProductCode());
-        txtCost.setText(prod.getCost().toString());
-        txtDescripcion.setText(prod.getDescripcion());
-        txtPrice1.setText(prod.getPrice1().toString());
-        txtPrice2.setText(prod.getPrice2().toString());
-        txtPrice3.setText(prod.getPrice3().toString());
-        txtSupplier.setText(prod.getIdSupplier().toString());
-        jpStockMin.setValue(prod.getMinStock());
-        jpStockMax.setValue(prod.getMaxStock());
+//        txtCost.setText(prod.getCost().toString());
+//        txtDescripcion.setText(prod.getDescripcion());
+//        txtPrice1.setText(prod.getPrice1().toString());
+//        txtPrice2.setText(prod.getPrice2().toString());
+//        txtPrice3.setText(prod.getPrice3().toString());
+//        txtSupplier.setText(prod.getIdSupplier().toString());
+//        jpStockMin.setValue(prod.getMinStock());
+//        jpStockMax.setValue(prod.getMaxStock());
     }
     /**
      * @param args the command line arguments

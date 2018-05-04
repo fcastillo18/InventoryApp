@@ -5,6 +5,7 @@
  */
 package com.app.inventory.view.supplier;
 
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.view.supplier.*;
 import com.app.inventory.dao.controller.SupplierJpaController;
 import com.app.inventory.dao.jdbc.SystemDaoJdbc;
@@ -14,7 +15,9 @@ import com.app.inventory.util.UtilInv;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -65,15 +68,14 @@ public class SupplierNewForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registro de nuevo suplidor");
-        setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del suplidor"));
 
-        jLabel1.setText("Nombre:");
+        jLabel1.setText("Nombre:*");
 
-        jLabel2.setText("Documento:");
+        jLabel2.setText("Documento:*");
 
         jLabel3.setText("Apellido:");
 
@@ -96,19 +98,14 @@ public class SupplierNewForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel5)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel9))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,7 +145,7 @@ public class SupplierNewForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
                         .addComponent(txtDocument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
@@ -214,7 +211,7 @@ public class SupplierNewForm extends javax.swing.JFrame {
                     .addComponent(btnCancel)
                     .addComponent(btnSave)
                     .addComponent(btnClear))
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 16, Short.MAX_VALUE))
         );
 
         pack();
@@ -229,22 +226,38 @@ public class SupplierNewForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	Date date = new Date();
+        boolean valid = true;
         
-        Supplier supplier = new Supplier();
-        supplier.setName(txtName.getText() + " " + txtLastName.getText());
-        supplier.setAddress(txtAddress.getText());
-        supplier.setCreatedDate(new java.sql.Timestamp(date.getTime()));
-        supplier.setDocument(txtDocument.getText());
-        supplier.setEmail(txtEmail.getText());
-        supplier.setNote(txtAreaNote.getText());
-        supplier.setPhone(txtPhone.getText());
-        supplier.setStatus(true);//activo
-        supplier.setZone(txtZone.getText());
-        supplierController.create(supplier);
-        JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-        util.clearTextFields(this.getContentPane());
+//        for (Object comp : jPanel1.getComponents()) {
+//            if (comp instanceof JTextField) {
+//                boolean result = new MainAppController().verify((JComponent) comp);
+//                if (result == false) {
+//                    valid = false;
+//                }
+//            }
+//        }
+        
+        if (!txtName.getText().equals("") && !txtDocument.getText().equals("")) {
+//            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+
+            Supplier supplier = new Supplier();
+            supplier.setName(txtName.getText() + " " + txtLastName.getText());
+            supplier.setAddress(txtAddress.getText());
+            supplier.setCreatedDate(new java.sql.Timestamp(date.getTime()));
+            supplier.setDocument(txtDocument.getText());
+            supplier.setEmail(txtEmail.getText());
+            supplier.setNote(txtAreaNote.getText());
+            supplier.setPhone(txtPhone.getText());
+            supplier.setStatus(true);//activo
+            supplier.setZone(txtZone.getText());
+            supplierController.create(supplier);
+            JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
+            util.clearTextFields(this.getContentPane());
+        }else{
+            JOptionPane.showMessageDialog(this, "Favor completar los campos solicitados...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     /**

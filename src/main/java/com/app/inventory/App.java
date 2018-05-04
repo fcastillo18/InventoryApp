@@ -36,12 +36,12 @@ public class App {
 
         MainForm mainForm = new MainForm();
         EntityManagerUtil.getEntityManager();
-        //mainForm.setVisible(true);
+        mainForm.setVisible(true);
         //String formatted to use in report.
         System.out.println(String.format("%-10s", "Texto"));
         System.out.println(String.format("%-10.10s", "Texto"));
         
-        System.exit(0);
+        //System.exit(0);
 //        new ConnectionDB().startServer();
 //        SystemDaoJdbc daoJdbc = new SystemDaoJdbc();
 //        daoJdbc.execTask();

@@ -50,7 +50,7 @@ public class ProductListForm extends javax.swing.JFrame {
         btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Listado de Clientes");
+        setTitle("Listado de Productos");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -70,7 +70,7 @@ public class ProductListForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones cliente"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones producto"));
 
         btnAdd.setText("Registrar");
         btnAdd.setNextFocusableComponent(btnRefresh);
@@ -123,6 +123,7 @@ public class ProductListForm extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones del reporte"));
 
         btnPrint.setText("Imprimir");
+        btnPrint.setEnabled(false);
         btnPrint.setNextFocusableComponent(this);
 
         btnRefresh.setText("Actualizar");

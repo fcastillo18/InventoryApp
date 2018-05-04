@@ -120,6 +120,7 @@ public class ClientListForm extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones del reporte"));
 
         btnPrint.setText("Imprimir");
+        btnPrint.setEnabled(false);
         btnPrint.setNextFocusableComponent(this);
 
         btnRefresh.setText("Actualizar");

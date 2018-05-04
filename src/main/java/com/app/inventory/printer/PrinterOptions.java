@@ -242,6 +242,7 @@ public class PrinterOptions {
 
         job.print(doc, null);
         //pjDone.waitForDone();
+        attrSet.clear();
         System.out.println("Done !");
        
     } catch (javax.print.PrintException pex) {
