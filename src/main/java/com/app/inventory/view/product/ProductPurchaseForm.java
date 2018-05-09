@@ -501,6 +501,7 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
                 });
 //               //Registrar detalle de la transaccion
                 InventoryTrans invTrans = new InventoryTrans();
+                invTrans.setNoDocument(reference.equals("") ? "000000": reference);
                 invTrans.setCostxunit(inv.getCost());
                 invTrans.setCreatedDate(inv.getLastUpdated());
                 invTrans.setDiscount(BigDecimal.ZERO);

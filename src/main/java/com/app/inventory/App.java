@@ -6,14 +6,14 @@
 package com.app.inventory;
 
 import com.app.inventory.dao.controller.MainAppController;
-import com.app.inventory.domain.Inventory;
-import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.view.MainForm;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+//import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
+//import java.text.ParseException;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
+//import javax.swing.UIManager;
+//import javax.swing.UnsupportedLookAndFeelException;
 
 
 //import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
@@ -41,6 +41,9 @@ public class App {
         System.out.println(String.format("%-10s", "Texto"));
         System.out.println(String.format("%-10.10s", "Texto"));
         
+//          MainAppController app = new MainAppController();
+//          app.nextDocNo();
+
         //System.exit(0);
 //        new ConnectionDB().startServer();
 //        SystemDaoJdbc daoJdbc = new SystemDaoJdbc();

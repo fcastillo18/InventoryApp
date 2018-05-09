@@ -81,7 +81,7 @@ public class InventoryTrans implements Serializable {
     @Column(name = "TOTAL")
     private BigDecimal total;
     @Column(name = "CREATED_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date createdDate;
 
     public InventoryTrans() {

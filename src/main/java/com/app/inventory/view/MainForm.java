@@ -5,17 +5,17 @@
  */
 package com.app.inventory.view;
 
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.view.client.ClientListForm;
 import com.app.inventory.view.client.ClientNewForm;
-import com.app.inventory.view.product.ProductListForm;
 import com.app.inventory.view.product.ProductPurchaseForm;
 import com.app.inventory.view.product.ProductListForm;
 import com.app.inventory.view.product.ProductNewForm;
 import com.app.inventory.view.product.ProductSalesForm;
 import com.app.inventory.view.supplier.SupplierListForm;
-import com.app.inventory.view.supplier.SupplierListForm;
 import com.app.inventory.view.supplier.SupplierNewForm;
 import com.app.inventory.view.trans.InventoryList;
+import com.app.inventory.view.trans.InventoryProfits;
 import com.app.inventory.view.trans.InventoryTransList;
 
 /**
@@ -40,6 +40,11 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtNoDocument = new javax.swing.JTextField();
+        btnSearchAndPrint = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnOut = new javax.swing.JButton();
         btnIn = new javax.swing.JButton();
@@ -51,6 +56,7 @@ public class MainForm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem17 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -72,6 +78,58 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem14 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem15 = new javax.swing.JMenuItem();
+
+        jDialog1.setTitle("Reimprimir documento");
+
+        jLabel1.setText("No. documento:");
+
+        btnSearchAndPrint.setText("Imprimir");
+        btnSearchAndPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchAndPrintActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNoDocument, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSearchAndPrint)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoDocument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnSearchAndPrint))
+                .addGap(34, 34, 34))
+        );
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
+                .addContainerGap(42, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52))
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Inventario");
@@ -114,7 +172,12 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        btnReport.setText("Rep. al corte");
+        btnReport.setText("Rep. Ganancias");
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -133,7 +196,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(bntSupplier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReport)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,6 +229,14 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenuItem2.setText("Salir");
         jMenu1.add(jMenuItem2);
+
+        jMenuItem17.setText("Reimprimir factura");
+        jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem17ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem17);
 
         jMenuBar1.add(jMenu1);
 
@@ -262,7 +333,7 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem12.setText("Proveeedores");
         jMenu4.add(jMenuItem12);
 
-        jMenuItem13.setText("Compras/Entradas");
+        jMenuItem13.setText("Compras/Ventas");
         jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem13ActionPerformed(evt);
@@ -391,6 +462,26 @@ public class MainForm extends javax.swing.JFrame {
         p.setVisible(true);
     }//GEN-LAST:event_btnOutActionPerformed
 
+    InventoryProfits ip = new InventoryProfits();
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        if (ip.isVisible()) {
+            ip.setVisible(true);
+        }else{
+            ip.setVisible(true);
+        }
+    }//GEN-LAST:event_btnReportActionPerformed
+
+    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
+        jDialog1.setSize(400, 250);
+        jDialog1.setVisible(true);
+    }//GEN-LAST:event_jMenuItem17ActionPerformed
+
+    private void btnSearchAndPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAndPrintActionPerformed
+        String document = txtNoDocument.getText().toLowerCase().trim();
+        new MainAppController().getAndPrintInvTransByDocument(document);
+        
+    }//GEN-LAST:event_btnSearchAndPrintActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -434,7 +525,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnOut;
     private javax.swing.JButton btnProduct;
     private javax.swing.JButton btnReport;
+    private javax.swing.JButton btnSearchAndPrint;
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -449,6 +543,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -458,7 +553,9 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JTextField txtNoDocument;
     // End of variables declaration//GEN-END:variables
 }

@@ -28,12 +28,12 @@ public class ConnectionDB {
     public Connection getConnection(){
         try {
             /*For Embedded type, this will be use in productio*/
-            //Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            //connection = DriverManager.getConnection("jdbc:derby:inventory;create=true");
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            connection = DriverManager.getConnection("jdbc:derby:inventory;create=true");
             
             /*For Cliente-Server type, this will be use in development*/
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/inventory;user=sa;password=sa");
+//            Class.forName("org.apache.derby.jdbc.ClientDriver");
+//            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/inventory;user=sa;password=sa");
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

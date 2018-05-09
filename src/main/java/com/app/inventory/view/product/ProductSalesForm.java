@@ -1009,16 +1009,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     
     public String lastTrans(){        
         //numero o ID de la ultima transaccion en esta tabla.
-        if (Integer.valueOf(invTransController.getInventoryTransCount()) !=null && invTransController.getInventoryTransCount() > 0) {
-            invTrans = invTransController.findInventoryTransEntities().get(invTransController.getInventoryTransCount()-1);
-            lastNoTrans = Integer.parseInt(invTrans.getNoDocument());
-        }else{
-            lastNoTrans = 0;
-        }
-        
-
-        //String anio = String.valueOf(invTrans.getCreatedDate().getYear()+1900);
-        //System.out.println(anio+"F"+(lastNoTrans+1));
+        lastNoTrans = mainController.nextDocNo();
         System.out.println(String.format("%06d", lastNoTrans));
 
         return String.format("%06d", (lastNoTrans+1));

@@ -28,17 +28,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "SUPPLIER")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Supplier.findAll", query = "SELECT s FROM Supplier s"),
-    @NamedQuery(name = "Supplier.findByIdSupplier", query = "SELECT s FROM Supplier s WHERE s.idSupplier = :idSupplier"),
-    @NamedQuery(name = "Supplier.findByDocument", query = "SELECT s FROM Supplier s WHERE s.document = :document"),
-    @NamedQuery(name = "Supplier.findByName", query = "SELECT s FROM Supplier s WHERE s.name = :name"),
-    @NamedQuery(name = "Supplier.findByAddress", query = "SELECT s FROM Supplier s WHERE s.address = :address"),
-    @NamedQuery(name = "Supplier.findByZone", query = "SELECT s FROM Supplier s WHERE s.zone = :zone"),
-    @NamedQuery(name = "Supplier.findByPhone", query = "SELECT s FROM Supplier s WHERE s.phone = :phone"),
-    @NamedQuery(name = "Supplier.findByEmail", query = "SELECT s FROM Supplier s WHERE s.email = :email"),
-    @NamedQuery(name = "Supplier.findByNote", query = "SELECT s FROM Supplier s WHERE s.note = :note"),
-    @NamedQuery(name = "Supplier.findByCreatedDate", query = "SELECT s FROM Supplier s WHERE s.createdDate = :createdDate"),
-    @NamedQuery(name = "Supplier.findByStatus", query = "SELECT s FROM Supplier s WHERE s.status = :status")})
+    @NamedQuery(name = "Supplier.findAll", query = "SELECT s FROM Supplier s")
+    , @NamedQuery(name = "Supplier.findByIdSupplier", query = "SELECT s FROM Supplier s WHERE s.idSupplier = :idSupplier")
+    , @NamedQuery(name = "Supplier.findByDocument", query = "SELECT s FROM Supplier s WHERE s.document = :document")
+    , @NamedQuery(name = "Supplier.findByName", query = "SELECT s FROM Supplier s WHERE s.name = :name")
+    , @NamedQuery(name = "Supplier.findByAddress", query = "SELECT s FROM Supplier s WHERE s.address = :address")
+    , @NamedQuery(name = "Supplier.findByZone", query = "SELECT s FROM Supplier s WHERE s.zone = :zone")
+    , @NamedQuery(name = "Supplier.findByPhone", query = "SELECT s FROM Supplier s WHERE s.phone = :phone")
+    , @NamedQuery(name = "Supplier.findByEmail", query = "SELECT s FROM Supplier s WHERE s.email = :email")
+    , @NamedQuery(name = "Supplier.findByNote", query = "SELECT s FROM Supplier s WHERE s.note = :note")
+    , @NamedQuery(name = "Supplier.findByCreatedDate", query = "SELECT s FROM Supplier s WHERE s.createdDate = :createdDate")
+    , @NamedQuery(name = "Supplier.findByStatus", query = "SELECT s FROM Supplier s WHERE s.status = :status")})
 public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -176,7 +176,7 @@ public class Supplier implements Serializable {
 
     @Override
     public String toString() {
-        return "com.app.inventory.dao.controller.Supplier[ idSupplier=" + idSupplier + " ]";
+        return "com.app.inventory.domain.Supplier[ idSupplier=" + idSupplier + " ]";
     }
     
 }

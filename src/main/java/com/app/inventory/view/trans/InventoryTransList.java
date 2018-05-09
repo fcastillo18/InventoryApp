@@ -215,8 +215,8 @@ public class InventoryTransList extends javax.swing.JFrame {
             String textToFilter = txtProductFilter.getText().trim();
             System.out.println("Length: "+txtProductFilter.getText().length()+" - "+textToFilter);
             
-            Date date1 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date date2 = dateTo.getText().equals("") ? null : Date.from(dateTo.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()); 
+            java.sql.Date date1 = dateFrom.getText().equals("") ? null : java.sql.Date.valueOf(dateFrom.getDate());
+            java.sql.Date date2 = dateTo.getText().equals("") ? null : java.sql.Date.valueOf(dateTo.getDate()); 
             
             loadTable(mainController.getInventoryTransTableModel(jcTransType.getSelectedItem().toString().toLowerCase(), textToFilter, date1, date2));
         }else{

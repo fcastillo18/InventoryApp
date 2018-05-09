@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,19 +25,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Franklin Castillo
  */
 @Entity
+@Table(name = "CLIENT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c"),
-    @NamedQuery(name = "Client.findByIdClient", query = "SELECT c FROM Client c WHERE c.idClient = :idClient"),
-    @NamedQuery(name = "Client.findByDocument", query = "SELECT c FROM Client c WHERE c.document = :document"),
-    @NamedQuery(name = "Client.findByName", query = "SELECT c FROM Client c WHERE c.name = :name"),
-    @NamedQuery(name = "Client.findByAddress", query = "SELECT c FROM Client c WHERE c.address = :address"),
-    @NamedQuery(name = "Client.findByZone", query = "SELECT c FROM Client c WHERE c.zone = :zone"),
-    @NamedQuery(name = "Client.findByPhone", query = "SELECT c FROM Client c WHERE c.phone = :phone"),
-    @NamedQuery(name = "Client.findByEmail", query = "SELECT c FROM Client c WHERE c.email = :email"),
-    @NamedQuery(name = "Client.findByNote", query = "SELECT c FROM Client c WHERE c.note = :note"),
-    @NamedQuery(name = "Client.findByCreatedDate", query = "SELECT c FROM Client c WHERE c.createdDate = :createdDate"),
-    @NamedQuery(name = "Client.findByStatus", query = "SELECT c FROM Client c WHERE c.status = :status")})
+    @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c")
+    , @NamedQuery(name = "Client.findByIdClient", query = "SELECT c FROM Client c WHERE c.idClient = :idClient")
+    , @NamedQuery(name = "Client.findByDocument", query = "SELECT c FROM Client c WHERE c.document = :document")
+    , @NamedQuery(name = "Client.findByName", query = "SELECT c FROM Client c WHERE c.name = :name")
+    , @NamedQuery(name = "Client.findByAddress", query = "SELECT c FROM Client c WHERE c.address = :address")
+    , @NamedQuery(name = "Client.findByZone", query = "SELECT c FROM Client c WHERE c.zone = :zone")
+    , @NamedQuery(name = "Client.findByPhone", query = "SELECT c FROM Client c WHERE c.phone = :phone")
+    , @NamedQuery(name = "Client.findByEmail", query = "SELECT c FROM Client c WHERE c.email = :email")
+    , @NamedQuery(name = "Client.findByNote", query = "SELECT c FROM Client c WHERE c.note = :note")
+    , @NamedQuery(name = "Client.findByCreatedDate", query = "SELECT c FROM Client c WHERE c.createdDate = :createdDate")
+    , @NamedQuery(name = "Client.findByStatus", query = "SELECT c FROM Client c WHERE c.status = :status")})
 public class Client implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,16 +47,24 @@ public class Client implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_CLIENT")
     private Integer idClient;
+    @Column(name = "DOCUMENT")
     private String document;
+    @Column(name = "NAME")
     private String name;
+    @Column(name = "ADDRESS")
     private String address;
+    @Column(name = "ZONE")
     private String zone;
+    @Column(name = "PHONE")
     private String phone;
+    @Column(name = "EMAIL")
     private String email;
+    @Column(name = "NOTE")
     private String note;
     @Column(name = "CREATED_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date createdDate;
+    @Column(name = "STATUS")
     private Boolean status;
 
     public Client() {

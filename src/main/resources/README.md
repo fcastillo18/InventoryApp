@@ -33,6 +33,7 @@ contemplara un compra en algun momento y la compra tienen 000000
 -El find product en Sales, al agregar item a la lista se resta la cantidad disp, 
 pero el dialog lee directamente de la base de datos y muestra las mismas cantidades.
 
+-Validar que los codigos sean unicos al registrar en cualquier modulo
 
 -REPORTE DE GANANCIAS
 -OPCION DE REIMPRIMIR DOCUMENTO(FACTURA) INDICADO

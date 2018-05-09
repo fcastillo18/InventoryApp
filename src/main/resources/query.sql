@@ -8,19 +8,20 @@
  * Created: Apr 11, 2018
  */
 
--- -- CREATE TABLE CLIENT(
--- --     ID_CLIENT INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
--- --     DOCUMENT VARCHAR(20),
--- --     NAME VARCHAR(50),
--- --     ADDRESS VARCHAR(100),
--- --     ZONE VARCHAR(50),
--- --     PHONE VARCHAR(20),
--- --     EMAIL VARCHAR(50),
--- --     NOTE VARCHAR(20),
--- --     CREATED_DATE DATE DEFAULT 'NOW',
--- --     STATUS BOOLEAN
--- -- )
--- 
+drop table CLIENT;
+CREATE TABLE CLIENT(
+    ID_CLIENT INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    DOCUMENT VARCHAR(20),
+    NAME VARCHAR(50),
+    ADDRESS VARCHAR(100),
+    ZONE VARCHAR(50),
+    PHONE VARCHAR(20),
+    EMAIL VARCHAR(50),
+    NOTE VARCHAR(20),
+    CREATED_DATE DATE DEFAULT 'NOW',
+    STATUS BOOLEAN
+);
+
 drop table product;
 
 CREATE TABLE PRODUCT(
@@ -131,7 +132,6 @@ CREATE TABLE INV_CONCEPTS(
 );
 
 
-
 select * from client;
 
 select * from supplier;
@@ -152,4 +152,20 @@ FROM Product p, Inventory i WHERE p.ID_PRODUCT = i.ID_PRODUCT
 and ( p.DESCRIPTION like '%otr%')
 
 and (p.productCode like :productCode or p.description like :description
-*/
+
+
+select  NO_DOCUMENT, sum(QUANTITY * COSTXUNIT) as TOTAL_COST, sum(QUANTITY * PRICEXUNIT) AS TOTAL_SALES,
+   sum(QUANTITY * PRICEXUNIT) - sum(QUANTITY * COSTXUNIT) AS PROFIT , CREATED_DATE
+from inventory_trans
+WHERE TRANS_TYPE = 'venta'
+and date(CREATED_DATE) BETWEEN date('2018-05-03') and date('2018-05-04')
+group by NO_DOCUMENT, CREATED_DATE
+
+select *--no_document
+from inventory_trans i 
+where trans_type = 'venta'
+and id_inv_trans = (
+                    select max(id_inv_trans)
+                    from inventory_trans i 
+                    where trans_type = 'venta'
+                    )

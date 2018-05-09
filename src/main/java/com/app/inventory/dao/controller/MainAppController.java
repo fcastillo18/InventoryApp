@@ -10,18 +10,21 @@ import com.app.inventory.domain.Inventory;
 import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
 import com.app.inventory.domain.Supplier;
+import com.app.inventory.printer.PrintReports;
 import com.app.inventory.util.EntityManagerUtil;
 import java.awt.Color;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -66,6 +69,46 @@ public class MainAppController extends InputVerifier{
     
     /************Metodos para retornar tabla**************/
     
+    int idClient = 0;
+    String doc ="";
+    public List<InventoryTrans> getAndPrintInvTransByDocument(String noDocument){
+    EntityManager em = EntityManagerUtil.getEntityManager();
+        em.getTransaction().begin();
+
+        Query query  = em.createQuery("SELECT i from InventoryTrans i where i.noDocument = :noDocument");
+        query.setParameter("noDocument", noDocument);
+//        query.setParameter("description", "%"+textToFilter.toLowerCase()+"%");
+        
+        List<InventoryTrans> invTransResult = query.getResultList();
+        List<Inventory> inventoryList = new ArrayList<>();
+        
+        if (invTransResult.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }else{
+            invTransResult.forEach(invTrans -> {
+                doc = String.valueOf(invTrans.getIdClient());
+                inventoryList.add(inventoryController.findInventory(invTrans.getIdProduct()));
+            });
+            
+           /********************imprimir reporte*****************************/
+            PrintReports printReport = new PrintReports();
+            MainAppController.clientController.findClientEntities().forEach(cli -> {
+                if (cli.getDocument().equals(doc)) {
+                    idClient = cli.getIdClient();
+                }
+            });
+            DateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd");
+            String[] values = {noDocument, defaultDf.format(invTransResult.get(0).getCreatedDate()), MainAppController.clientController.findClient(idClient).getName()};
+            printReport.productSalesReport(inventoryList, invTransResult ,values);
+                    
+        }
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return invTransResult;        
+    }
+    
     public DefaultTableModel getSupplierTableModel(){
         String columns[] = {"ID","Documento", "Nombre", "Telefono", "Email", "Direccion"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
@@ -103,6 +146,29 @@ public class MainAppController extends InputVerifier{
             });
         }
         return tableModel;
+    }
+    
+    public int nextDocNo(){
+        int value = 0;
+        
+        EntityManager em = EntityManagerUtil.getEntityManager();
+        em.getTransaction().begin();
+
+        Query query  = em.createQuery("select i.noDocument from InventoryTrans i\n" +
+                                "where i.transType = 'venta'\n" +
+                                "and i.idInvTrans = (\n" +
+                                "                    select max(a.idInvTrans)\n" +
+                                "                    from InventoryTrans a \n" +
+                                "                    where a.transType = 'venta'\n" +
+                                "                    )\n");
+        List<Object> result = query.getResultList();
+        if (result.size() > 0) {
+            value = Integer.parseInt(result.get(0).toString());
+        }else{
+            value = 0;
+        }
+        
+        return value;
     }
     
     public DefaultTableModel getProductInvTableModel(String textToFilter){
@@ -155,6 +221,87 @@ public class MainAppController extends InputVerifier{
         }
         
         listInv2.clear();
+        return tableModel;
+    }
+    
+    public DefaultTableModel getInventoryProfitsTableModel(String transType, String textToFilter, Date dateFrom, Date dateTo){
+        EntityManager em = EntityManagerUtil.getEntityManager();
+        em.getTransaction().begin();
+
+        Query query = null;
+        String  statement= "select i.noDocument, sum(i.quantity * i.costxunit) as total_cost , "
+                + "sum(i.quantity * i.pricexunit) as total_sales,   "
+                + "sum(i.quantity * i.pricexunit) - sum(i.quantity * i.costxunit) as profit " //, i.createdDate "
+                + "from InventoryTrans i " ;
+        
+        String addFilter = " i.transType = '"+transType+"' ";
+        String groupBy = "  group by i.noDocument";       
+        
+        if (!"".equals(textToFilter.trim())) {
+            String value = statement + " where i.noDocument like :document and "+addFilter+groupBy;
+            query = em.createQuery(value);
+            query.setParameter("document", "%"+textToFilter+"%");
+        }else if(dateFrom != null && dateTo != null){
+            String value = statement + " where i.createdDate between :dateFrom and :dateTo and "+addFilter+groupBy;
+            query = em.createQuery(value);
+            query.setParameter("dateFrom", dateFrom);
+            query.setParameter("dateTo", dateTo);
+        }else{
+            query = em.createQuery(statement + "where" + addFilter + groupBy);//, i.createdDate");
+        }
+//        query.setParameter("productCode", "%"+textToFilter.toLowerCase()+"%");
+//        query.setParameter("description", "%"+textToFilter.toLowerCase()+"%");
+//        query.setParameter("document", "%"+textToFilter.toLowerCase()+"%");
+//        query.setParameter("dateFrom",Timestamp.from(dateFrom.toInstant()));
+//        query.setParameter("dateTo", Timestamp.from(dateTo.toInstant()));
+        //System.out.println(query.toString());
+        System.out.println(query.toString());
+        List<Object[]> results = query.getResultList();
+        List<Object[]> listInvTransFilter = new ArrayList<>();
+        
+        
+        results.forEach(obj -> {    
+            listInvTransFilter.add(obj);
+        });
+//        results.stream().map((result) -> {
+//            //System.out.println(result[0] + " " + result[1] + " - " + result[2]);
+//            listInvTransFilter.add(result);
+//            return result;
+//        });
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return getInventoryProfitTableModel(listInvTransFilter); //(listInvTransFilter);        
+    }
+    
+    public DefaultTableModel getInventoryProfitTableModel(List<Object[]> listInvTrans){
+        String columns[] = {"No Documento","Costo total","Precio vendido", "Ganancia"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
+        
+        //listInvTrans = invTransController.findInventoryTransEntities();
+        
+        try {
+            if(listInvTrans == null ){
+                tableModel.addRow(new Object[]{ }); 
+            }else{
+                listInvTrans.forEach(inv -> {
+//                    System.out.println(inv[0] +" - "+ inv[1] +" - "+ inv[2] +" - "+ inv[3] +" - "+ inv[4]);
+                    tableModel.addRow(new Object[]{inv[0], 
+//                        new BigDecimal(val)
+                        BigDecimal.valueOf(Double.parseDouble(inv[1].toString())), 
+                        BigDecimal.valueOf(Double.parseDouble(inv[2].toString())),
+                        BigDecimal.valueOf(Double.parseDouble(inv[3].toString()))
+                        });
+//                        inv[4]});
+                }); 
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        
+        listInvTrans.clear();
         return tableModel;
     }
     

@@ -75,7 +75,7 @@ public class Inventory implements Serializable {
     @Column(name = "MIN_STOCK")
     private Integer minStock;
     @Column(name = "LAST_UPDATED")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date lastUpdated;
 
     public Inventory() {
