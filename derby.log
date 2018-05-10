@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Thu May 10 16:52:27 BOT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-4bd3-9305-000003ba7080 
+on database directory C:\Users\FRANKLIN castillo\Google Drive\Personal Devs\InvApp\inventory with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Users/FRANKLIN%20castillo/Google%20Drive/Personal%20Devs/Librerias/Invlib/derby-10.14.1.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_111-b14
+user.dir=C:\Users\FRANKLIN castillo\Google Drive\Personal Devs\InvApp
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
