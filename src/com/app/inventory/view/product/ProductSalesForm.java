@@ -230,6 +230,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Salida de Inventario");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
@@ -489,14 +490,13 @@ public class ProductSalesForm extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtTotals, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnCancel)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnClear)
@@ -526,6 +526,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -614,20 +615,24 @@ public class ProductSalesForm extends javax.swing.JFrame {
             -Client
             -Inventory
         */
-        
         if (txtProduct.getText().isEmpty() || txtClient.getText().isEmpty() || ftxtQuantity.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Favor completar campos requerido", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }else{
             int inStock = Integer.parseInt(txtInStock.getText());
             int prodQty = Integer.parseInt(ftxtQuantity.getText().replace(",", ""));
             if (prodQty < inStock) {
+                
+                //verificando si el item exixte en la lista de productos added
+                boolean exist = mainController.getListInv().stream().filter(inv -> inv.hashCode() == inventory.hashCode()).findFirst().isPresent();
 
-                if (mainController.getListInv().indexOf(inventory) == -1) { //no existe en la lista
-                    inventory.setStock(prodQty);
-                    inventory.setIdProduct(product.getIdProduct());
+                if (!exist) { //no existe en la lista
+                    //Este objeto para evita el tema con la referencia al usar el inventory global
+                    Inventory inv = MainAppController.inventoryController.findInventory(inventory.getIdInventory());
+                    inv.setStock(prodQty);
+                    //inv.setIdProduct(product.getIdProduct());
     ////                inventory.setIdSupplier(client.getIdClient());
-                    inventory.setLastUpdated(UtilInv.getDateNow());
-                    mainController.getListInv().add(inventory);
+                    inv.setLastUpdated(UtilInv.getDateNow());
+                    mainController.getListInv().add(inv);
                 }else{
                     Inventory inv = mainController.getListInv().get(mainController.getListInv().indexOf(inventory));
                     inv.setStock(inv.getStock() + prodQty);
@@ -637,55 +642,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
                     inv.setLastUpdated(UtilInv.getDateNow());
                     //mainController.getListInv().add(inv);
                 }
-//                listInvFromDB.forEach(inve -> {
-//                    if(i.getIdProduct().equals(product.getIdProduct())){
-                        //se crear un objeto con el inventario de ese producto
-                        //Entrada inicial al inventario
-//                        Inventory inventory = new Inventory();
-//                        inventory.setIdSupplier(inv.getIdSupplier());
-//                        inventory.setCost(ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
-//                        inventory.setAvgCost(ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
-//                        inventory.setMinStock(Integer.parseInt(jpMinStock.getValue().toString()));
-//                        inventory.setStock(Integer.parseInt(jpInitialStock.getValue().toString()));
-//                        inventory.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :(BigDecimal) (ftxtPrice1.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim())))); 
-//                        inventory.setPrice2(ftxtPrice2.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice2.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim())))); 
-//                        inventory.setPrice3(ftxtPrice3.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice3.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim())))); 
-//                        inventory.setPrice4(BigDecimal.ZERO);
-//                        inventory.setIdProduct(product.getIdProduct());
-//                        inventory.setTax(inventory.getCost().multiply(BigDecimal.valueOf(0.18)).intValue());//Pending
-//                        inventory.setLastUpdated(new java.sql.Timestamp(date.getTime()));
-////                        inventory.setStock(i.getStock());
-//                        System.out.println(i.getStock());
-//                        System.out.println(inventory);
-//                        if (mainController.getListInv().indexOf(inve) == -1) { //no existe en la lista
-//                            inve.setStock(prodQty);
-//                            inve.setIdProduct(product.getIdProduct());
-//            ////                inventory.setIdSupplier(client.getIdClient());
-//                            inve.setLastUpdated(UtilInv.getDateNow());
-//                            mainController.getListInv().add(inve);
-//                        }else{
-//                            Inventory inv = mainController.getListInv().get(mainController.getListInv().indexOf(inve));
-//                            inv.setStock(inv.getStock() + prodQty);
-//        //                    inventory.setStock(prodQty);
-//                            inv.setIdProduct(product.getIdProduct());
-//            //                inventory.setIdSupplier(client.getIdClient());
-//                            inv.setLastUpdated(UtilInv.getDateNow());
-//                            mainController.getListInv().add(inv);
-//                        }
-//                    }
-//                });
-//                inventory.setStock(prodQty);
-//                inventory.setIdProduct(product.getIdProduct());
-//////                inventory.setIdSupplier(client.getIdClient());
-//                inventory.setLastUpdated(UtilInv.getDateNow());
-    //            inv.setQuantity(prodQty);
-    //            inv.setLastUpdated(date);
-                
-                
-//                listInv.add(inventory);
-//                product = productController.findProduct(inv.getIdProduct());
-//                client = clientController.findClient(inv.getIdProveedor());
-                
+    
                 int lastTotal = txtTotals.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtTotals.getText().replace(",", ""));
                 int newTotal = lastTotal + inventory.getPrice1().multiply(new BigDecimal(prodQty)).intValue(); //ojo
                 //Cargar tabla y limpiar los campos
@@ -724,7 +681,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         UtilInv.clearTextFields(this.getContentPane());
-        loadTable(null);
+        loadTable(mainController.getSalesProductTableModel());
         txtNoDocument.setText(lastTrans());
         listInvFromDB = inventoryController.findInventoryEntities();
     }//GEN-LAST:event_btnClearActionPerformed
@@ -803,6 +760,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         // crear dialog cliente
         loadTableDialogClient(mainController.getClientTableModel());
         jDialogClient.setSize(600, 350);
+        jDialogClient.setLocationRelativeTo(null);
         jDialogClient.setVisible(true);
     }//GEN-LAST:event_btnFindClientActionPerformed
 
@@ -844,6 +802,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
     private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
         loadTableDialogProduct(mainController.getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
         jDialogProduct.setSize(600, 350);
+        jDialogProduct.setLocationRelativeTo(null);
         jDialogProduct.setVisible(true);
     }//GEN-LAST:event_btnFindProductActionPerformed
 

@@ -232,7 +232,7 @@ public class PrinterOptions {
     public static boolean feedPrinter(byte[] b) {
     try {       
         AttributeSet attrSet = new HashPrintServiceAttributeSet(new PrinterName("EPSON TM-T20II", null)); //EPSON TM-U220 ReceiptE4
-
+        
         DocPrintJob job = PrintServiceLookup.lookupPrintServices(null, attrSet)[0].createPrintJob();       
         //PrintServiceLookup.lookupDefaultPrintService().createPrintJob();  
 

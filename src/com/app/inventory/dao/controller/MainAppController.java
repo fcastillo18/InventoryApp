@@ -71,8 +71,9 @@ public class MainAppController extends InputVerifier{
     
     int idClient = 0;
     String doc ="";
-    public List<InventoryTrans> getAndPrintInvTransByDocument(String noDocument){
-    EntityManager em = EntityManagerUtil.getEntityManager();
+    public boolean getAndPrintInvTransByDocument(String noDocument){
+        boolean success = true;
+        EntityManager em = EntityManagerUtil.getEntityManager();
         em.getTransaction().begin();
 
         Query query  = em.createQuery("SELECT i from InventoryTrans i where i.noDocument = :noDocument");
@@ -83,7 +84,7 @@ public class MainAppController extends InputVerifier{
         List<Inventory> inventoryList = new ArrayList<>();
         
         if (invTransResult.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            success = false;
         }else{
             invTransResult.forEach(invTrans -> {
                 doc = String.valueOf(invTrans.getIdClient());
@@ -106,7 +107,7 @@ public class MainAppController extends InputVerifier{
         em.getTransaction().commit();
         em.close();
         
-        return invTransResult;        
+        return success;        
     }
     
     public DefaultTableModel getSupplierTableModel(){
@@ -198,8 +199,7 @@ public class MainAppController extends InputVerifier{
         String columns[] = {"Idprod", "ID_Supplidor", "Codigo", "Descripcion", "Cantidad", "Costo", "Precio", "Min stock", };
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
         
-        //List<Inventory> listInv2 = inventoryController.findInventoryEntities();
-        
+//   
         try {
             if(listInv2 == null ){
                 tableModel.addRow(new Object[]{ }); 
@@ -208,8 +208,17 @@ public class MainAppController extends InputVerifier{
                     product = productController.findProduct(inv.getIdProduct());
     //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
 //                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
+                    //boolean exist = getListInv().stream().filter(i -> inv.hashCode() == inventory.hashCode()).findFirst().isPresent();
+                    boolean existPrevAddSales = getListInv().stream()
+                                            .filter(i -> i.getIdInventory() == inv.getIdInventory())
+                                            .findFirst().isPresent();
+                    
                     tableModel.addRow(new Object[]{inv.getIdProduct(), inv.getIdSupplier(), 
-                        product.getProductCode(), product.getDescription(), inv.getStock(), 
+                        product.getProductCode(), product.getDescription(), 
+                        existPrevAddSales ? inv.getStock() - getListInv().stream()
+                                                        .filter(i -> i.getIdInventory() == inv.getIdInventory())
+                                                        .findFirst().get().getStock() : inv.getStock(),
+                        //inv.getStock(), la linea de arriba es para descontar de la lista a mostrar la cantidad, de modo que se muestre actualizada 
                         df.format(inv.getCost().doubleValue()), df.format(inv.getPrice1().doubleValue()),
                         inv.getMinStock()
                     });

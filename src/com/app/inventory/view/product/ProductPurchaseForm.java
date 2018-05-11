@@ -179,6 +179,8 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Entrada de Inventario");
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle de la entrada"));
 
@@ -462,6 +464,7 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private boolean notFound = true;
@@ -625,6 +628,7 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
     private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
         loadTableDialog(mainController.getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
         jDialog1.setSize(600, 350);
+        jDialog1.setLocationRelativeTo(null);
         jDialog1.setVisible(true);
     }//GEN-LAST:event_btnFindProductActionPerformed
 

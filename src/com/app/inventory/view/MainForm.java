@@ -6,6 +6,7 @@
 package com.app.inventory.view;
 
 import com.app.inventory.dao.controller.MainAppController;
+import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.view.client.ClientListForm;
 import com.app.inventory.view.client.ClientNewForm;
 import com.app.inventory.view.product.ProductPurchaseForm;
@@ -17,6 +18,10 @@ import com.app.inventory.view.supplier.SupplierNewForm;
 import com.app.inventory.view.trans.InventoryList;
 import com.app.inventory.view.trans.InventoryProfits;
 import com.app.inventory.view.trans.InventoryTransList;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,6 +33,8 @@ public class MainForm extends javax.swing.JFrame {
      * Creates new form App
      */
     public MainForm() {
+//        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+//        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         initComponents();
     }
 
@@ -80,13 +87,25 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem15 = new javax.swing.JMenuItem();
 
         jDialog1.setTitle("Reimprimir documento");
+        jDialog1.setResizable(false);
 
         jLabel1.setText("No. documento:");
+
+        txtNoDocument.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNoDocumentKeyPressed(evt);
+            }
+        });
 
         btnSearchAndPrint.setText("Imprimir");
         btnSearchAndPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchAndPrintActionPerformed(evt);
+            }
+        });
+        btnSearchAndPrint.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnSearchAndPrintKeyPressed(evt);
             }
         });
 
@@ -133,7 +152,6 @@ public class MainForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Inventario");
-        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
@@ -196,7 +214,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(bntSupplier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReport)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,6 +246,11 @@ public class MainForm extends javax.swing.JFrame {
         jMenu1.setText("Archivo");
 
         jMenuItem2.setText("Salir");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jMenuItem17.setText("Reimprimir factura");
@@ -371,11 +394,12 @@ public class MainForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDesktopPane1))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -473,14 +497,53 @@ public class MainForm extends javax.swing.JFrame {
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
         jDialog1.setSize(400, 250);
+        jDialog1.setLocationRelativeTo(null);
         jDialog1.setVisible(true);
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void btnSearchAndPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAndPrintActionPerformed
+
         String document = txtNoDocument.getText().toLowerCase().trim();
-        new MainAppController().getAndPrintInvTransByDocument(document);
+        boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
+        if (success) {
+            JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
+        }else{
+            JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
         
     }//GEN-LAST:event_btnSearchAndPrintActionPerformed
+
+    private void txtNoDocumentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoDocumentKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String document = txtNoDocument.getText().toLowerCase().trim();
+            boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
+            }else{
+                JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+		
+    }//GEN-LAST:event_txtNoDocumentKeyPressed
+
+    private void btnSearchAndPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSearchAndPrintKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String document = txtNoDocument.getText().toLowerCase().trim();
+            boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
+            }else{
+                JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+		
+    }//GEN-LAST:event_btnSearchAndPrintKeyPressed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        EntityManagerUtil.getEntityManager().clear();
+        EntityManagerUtil.getEntityManager().close();
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments

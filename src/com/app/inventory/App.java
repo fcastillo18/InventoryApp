@@ -5,6 +5,7 @@
  */
 package com.app.inventory;
 
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.view.MainForm;
 import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
@@ -39,12 +40,13 @@ public class App {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        EntityManagerUtil.getEntityManager();
         MainForm mainForm = new MainForm();
         mainForm.setVisible(true);
         //String formatted to use in report.
-        System.out.println(String.format("%-10s", "Texto"));
-        System.out.println(String.format("%-10.10s", "Texto"));
+//        System.out.println(String.format("%-10s", "Texto"));
+//        System.out.println(String.format("%-10.10s", "Texto"));
+        
+        //new MainAppController().getAndPrintInvTransByDocument("000002");
         
 //          MainAppController app = new MainAppController();
 //          app.nextDocNo();

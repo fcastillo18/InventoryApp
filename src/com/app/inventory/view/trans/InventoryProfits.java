@@ -12,6 +12,7 @@ import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
+import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -82,6 +83,11 @@ public class InventoryProfits extends javax.swing.JFrame {
         btSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btSearchActionPerformed(evt);
+            }
+        });
+        btSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btSearchKeyPressed(evt);
             }
         });
 
@@ -169,20 +175,13 @@ public class InventoryProfits extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtProductFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductFilterKeyPressed
-//        if (txtProductFilter.getText().length() >= 1) {
-//            String textToFilter = txtProductFilter.getText().trim();
-//            System.out.println("Length: "+txtProductFilter.getText().length()+" - "+textToFilter);
-//            
-//            Date date1 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-//            Date date2 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()); 
-//            
-//            loadTable(mainController.getInventoryTransTableModel(jcTransType.getSelectedItem().toString().toLowerCase(), textToFilter, date1, date2));
-//        }else{
-//            loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
-//        }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btSearchActionPerformed(null);
+        }
     }//GEN-LAST:event_txtProductFilterKeyPressed
 
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
@@ -202,6 +201,12 @@ public class InventoryProfits extends javax.swing.JFrame {
            loadTable(mainController.getInventoryProfitsTableModel("venta", "", null, null));
         }
     }//GEN-LAST:event_btSearchActionPerformed
+
+    private void btSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btSearchKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btSearchActionPerformed(null);
+        }
+    }//GEN-LAST:event_btSearchKeyPressed
     
     
     private void loadTable(DefaultTableModel model){

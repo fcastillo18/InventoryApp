@@ -9,12 +9,17 @@ import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.domain.Inventory;
 import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
-import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.util.UtilInv;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Query;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,17 +29,33 @@ public class PrintReports {
     PrinterOptions p= new PrinterOptions();
     //MainAppController mainController = new MainAppController();
     int totalFinal = 0;
+    FileInputStream fileInput;
+    Properties properties;
+
+    public PrintReports() {
+        try {
+            this.fileInput = new FileInputStream(new File("config/project.properties"));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PrintReports.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public void productSalesReport(List<Inventory> listInv, List<InventoryTrans> listInvTrans , String[] values){
+        properties = new Properties();
+        try {
+            properties.load(fileInput);
+        } catch (IOException ex) {
+            Logger.getLogger(PrintReports.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("Preparando reporte de venta");
         p.resetAll();
         p.initialize();
         p.feedBack((byte)2);
 //        p.color(1);
         p.alignCenter();
-        p.setText("Company Name");
+        p.setText(properties.getProperty("COMP_NAME", "Company Name"));
         p.newLine();
-        p.setText("Little description");
+        p.setText(properties.getProperty("COMP_DESC","Little description"));
         p.newLine();
         p.addLineSeperator();
         //p.newLine();
@@ -56,7 +77,8 @@ public class PrintReports {
         p.alignLeft();
 //        p.newLine();
         p.addLineSeperator();// p.newLine();
-        p.setText("Codigo\t Producto     Qty   Precio   Total");
+        //p.setText("Producto     Qty     Total");
+        p.setText(formatStr(30, "Producto") + formatStr(10,"Cant") + formatStr(8,"Valor"));
         p.newLine();
         p.addLineSeperator();
         
@@ -74,33 +96,56 @@ public class PrintReports {
                 if (Objects.equals(invTrans.getIdInventory(), inv.getIdInventory()) 
                         && Objects.equals(invTrans.getIdProduct(), inv.getIdProduct())) {
                     BigDecimal total =  invTrans.getPricexunit().multiply(new BigDecimal(invTrans.getQuantity()));
-                    p.setText(product.getProductCode() + "\t" + 
-                            (product.getDescription().length() < 7 ? product.getDescription() + "   \t" : product.getDescription()) 
-                            +"     "+ invTrans.getQuantity()+ "    " 
-                            + UtilInv.formatNumber(invTrans.getPricexunit().intValue()) + "   " 
-                            + UtilInv.formatNumber(total.intValue()));
+                    p.setText(
+                            product.getProductCode() + "\t" 
+                            +"$" +UtilInv.formatNumber(invTrans.getPricexunit().intValue()) + "   \n" 
+//                            +p.newLine()
+                            +formatStr(30,(product.getDescription())) 
+                            +formatStr(10, invTrans.getQuantity().toString())
+                            +formatStr(8, UtilInv.formatNumber(total.intValue()))
+                            
+                                    );
                     totalFinal = totalFinal + total.intValue();
                     p.newLine();
-                    p.alignLeft();
+//                    p.addLineSeperator();
+//                    p.setText(
+//                            product.getProductCode() + "\t" + 
+//                            (product.getDescription().length() < 7 ? product.getDescription() + "   \t" : product.getDescription()) 
+//                            +"     "+ invTrans.getQuantity()+ "    " 
+//                            + UtilInv.formatNumber(invTrans.getPricexunit().intValue()) + "   " 
+//                            + UtilInv.formatNumber(total.intValue()));
+//                    totalFinal = totalFinal + total.intValue();
+//                    p.newLine();
+//                    p.alignLeft();
                 }
-            });
+            }); 
             
             
         });
+         p.newLine();
         p.addLineSeperator();
         p.setText("\t\t\t    Total:  RD$ "+UtilInv.formatNumber(totalFinal));
         p.newLine();
         p.newLine();
         p.alignCenter();
         p.setText("***** Fin documento *****");
+        p.newLine();
+        p.setText(properties.getProperty("COMP_FOOTER_QUOTE","Little quote"));
 //        p.newLine();
 //        p.setText("No factura \t\t: "+values[0]);
 //        p.newLine();
         System.out.println("Imprimiendo reporte");
         p.feed((byte)3);
         p.finit();
-
-        p.feedPrinter(p.finalCommandSet().getBytes());
+        
+        System.out.println(p.finalCommandSet());
+        System.out.println("******************************************************");
+        
+        //p.feedPrinter(p.finalCommandSet().getBytes());
+    }
+    
+    String formatStr(int amt, String text){
+        return String.format("%-"+amt+"s", text);
     }
     
     public void printTest(){

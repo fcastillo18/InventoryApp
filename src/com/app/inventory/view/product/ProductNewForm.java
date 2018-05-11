@@ -46,6 +46,10 @@ public class ProductNewForm extends javax.swing.JFrame {
         ftxtPrice2.setFormatterFactory(UtilInv.getDecimalFormatFactory());
         ftxtPrice3.setFormatterFactory(UtilInv.getDecimalFormatFactory());
         ftxtCost.setFormatterFactory(UtilInv.getDecimalFormatFactory());
+        jlPrice2.setVisible(false);
+        jlPrice3.setVisible(false);
+        ftxtPrice2.setVisible(false);
+        ftxtPrice3.setVisible(false);
     }
     
     /**
@@ -69,10 +73,10 @@ public class ProductNewForm extends javax.swing.JFrame {
         txtDescripcion = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtCategory = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        jlPrice3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jlPrice2 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaNote = new javax.swing.JTextArea();
@@ -157,13 +161,13 @@ public class ProductNewForm extends javax.swing.JFrame {
 
         jLabel3.setText("Categoria:");
 
-        jLabel4.setText("Precio 3:");
+        jlPrice3.setText("Precio 3:");
 
         jLabel5.setText("Precio 1:");
 
         jLabel7.setText("Costo:");
 
-        jLabel8.setText("Precio 2:");
+        jlPrice2.setText("Precio 2:");
 
         jLabel9.setText("Nota:");
 
@@ -280,8 +284,8 @@ public class ProductNewForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel4)
+                                    .addComponent(jlPrice2)
+                                    .addComponent(jlPrice3)
                                     .addComponent(jLabel5))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,10 +342,10 @@ public class ProductNewForm extends javax.swing.JFrame {
                             .addComponent(jLabel10)
                             .addComponent(jpInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jpMinStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
+                            .addComponent(jlPrice3)
                             .addComponent(ftxtPrice3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8)
+                        .addComponent(jlPrice2)
                         .addComponent(ftxtPrice2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,6 +404,7 @@ public class ProductNewForm extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -412,7 +417,7 @@ public class ProductNewForm extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         if (Integer.parseInt(jpInitialStock.getValue().toString()) <= 0) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe introducir cantidad en stock para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
         if (txtSupplier.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(this, "Campo de proveedor es obliigatorio", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -498,6 +503,7 @@ public class ProductNewForm extends javax.swing.JFrame {
     private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
         loadTableDialogSupplier(mainController.getSupplierTableModel());
         jDialogSupplier.setSize(600, 350);
+        jDialogSupplier.setLocationRelativeTo(null);
         jDialogSupplier.setVisible(true);
     }//GEN-LAST:event_btnFindProductActionPerformed
 
@@ -658,16 +664,16 @@ public class ProductNewForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableDialogSupplier;
+    private javax.swing.JLabel jlPrice2;
+    private javax.swing.JLabel jlPrice3;
     private javax.swing.JSpinner jpInitialStock;
     private javax.swing.JSpinner jpMinStock;
     private javax.swing.JRadioButton jrNo;
