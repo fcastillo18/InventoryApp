@@ -138,10 +138,10 @@ public class PrintReports {
         p.feed((byte)3);
         p.finit();
         
-        System.out.println(p.finalCommandSet());
-        System.out.println("******************************************************");
+//        System.out.println(p.finalCommandSet());
+//        System.out.println("******************************************************");
         
-        //p.feedPrinter(p.finalCommandSet().getBytes());
+        p.feedPrinter(p.finalCommandSet().getBytes());
     }
     
     String formatStr(int amt, String text){
