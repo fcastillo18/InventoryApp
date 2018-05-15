@@ -66,6 +66,9 @@ public class ProductSalesForm extends javax.swing.JFrame {
         listInvFromDB = inventoryController.findInventoryEntities();
         //lastNoTrans = inventoryController.getInventoryCount()+1; 
         txtNoDocument.setText(lastTrans());
+        jTable1.setDefaultEditor(Object.class, null);
+        jTableDialogClient.setDefaultEditor(Object.class, null);
+        jTableDialogProduct.setDefaultEditor(Object.class, null);
 
     }
     //private DecimalFormat dFormat = new DecimalFormat( "#,###,###,##0" );
@@ -131,6 +134,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
 
         jDialogProduct.setTitle("Listado de Productos");
 
+        jTableDialogProduct.setAutoCreateRowSorter(true);
         jTableDialogProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -145,6 +149,9 @@ public class ProductSalesForm extends javax.swing.JFrame {
         jTableDialogProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableDialogProductMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableDialogProductMousePressed(evt);
             }
         });
         jScrollPane2.setViewportView(jTableDialogProduct);
@@ -181,6 +188,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
 
         jDialogClient.setTitle("Listado de Productos");
 
+        jTableDialogClient.setAutoCreateRowSorter(true);
         jTableDialogClient.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -195,6 +203,9 @@ public class ProductSalesForm extends javax.swing.JFrame {
         jTableDialogClient.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableDialogClientMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableDialogClientMousePressed(evt);
             }
         });
         jScrollPane3.setViewportView(jTableDialogClient);
@@ -700,7 +711,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
 //        Product p = productController.findProduct(idProductRowClicked);
-        if (idProductRowClicked >= 0) {
+        if (idProductRowClicked >= 0 && mainController.getListInv().size() > 0) {
             mainController.getListInv().remove(idProductRowClicked);
     //        System.out.println(p+" remove: "+remove);
             loadTable(mainController.getSalesProductTableModel());
@@ -889,6 +900,22 @@ public class ProductSalesForm extends javax.swing.JFrame {
             btnDeleteActionPerformed(null);
         }
     }//GEN-LAST:event_jTable1KeyPressed
+
+    private void jTableDialogProductMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogProductMousePressed
+         if (evt.getClickCount() == 2 && jTableDialogProduct.getSelectedRow() != 1) {
+            System.out.println("Clicked twice");
+            jDialogProduct.setVisible(false);
+            txtProduct.requestFocus();
+        }
+    }//GEN-LAST:event_jTableDialogProductMousePressed
+
+    private void jTableDialogClientMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogClientMousePressed
+        if (evt.getClickCount() == 2 && jTableDialogClient.getSelectedRow() != 1) {
+            System.out.println("Clicked twice");
+            jDialogClient.setVisible(false);
+            txtClient.requestFocus();
+        }
+    }//GEN-LAST:event_jTableDialogClientMousePressed
 
     private void loadTable(DefaultTableModel model){
         jTable1.setModel(model);

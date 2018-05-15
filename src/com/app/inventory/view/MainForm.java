@@ -503,12 +503,16 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnSearchAndPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAndPrintActionPerformed
 
-        String document = txtNoDocument.getText().toLowerCase().trim();
-        boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
-        if (success) {
-            JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
-        }else{
-            JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        try {
+           String document = txtNoDocument.getText().toLowerCase().trim();
+           boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
+           if (success) {
+               JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
+           }else{
+               JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+           }   
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error, printing document failed before called.");
         }
         
     }//GEN-LAST:event_btnSearchAndPrintActionPerformed

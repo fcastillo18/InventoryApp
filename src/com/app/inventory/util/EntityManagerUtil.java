@@ -25,7 +25,7 @@ public class EntityManagerUtil {
     }
     
     public static EntityManager getEntityManager(){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("InvAppPU2"); 
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("InvAppPU3"); 
 //        EntityManagerFactory factory = Persistence.createEntityManagerFactory("Inventory_TPU_SQL");
 //        EntityManagerFactory factory = Persistence.createEntityManagerFactory("Inventory_TPU_Emb");
         EntityManager manager = factory.createEntityManager();

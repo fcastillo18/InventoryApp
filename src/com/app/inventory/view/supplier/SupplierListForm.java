@@ -26,6 +26,7 @@ public class SupplierListForm extends javax.swing.JFrame {
     public SupplierListForm() {
         initComponents();
         loadTable();
+        jTable1.setDefaultEditor(Object.class, null);
     }
     private Integer idRowClicked;
     /**
@@ -50,6 +51,7 @@ public class SupplierListForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Listado de Proveedores");
 
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -87,6 +89,7 @@ public class SupplierListForm extends javax.swing.JFrame {
         });
 
         btnDeleteClient.setText("Eliminar");
+        btnDeleteClient.setEnabled(false);
         btnDeleteClient.setNextFocusableComponent(btnRefresh);
         btnDeleteClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

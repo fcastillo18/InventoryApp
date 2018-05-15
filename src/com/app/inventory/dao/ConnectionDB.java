@@ -39,6 +39,9 @@ public class ConnectionDB {
         return connection;
     }
       
+//    public static void main(String[] args) {
+//        new ConnectionDB().getConnection();
+//    }
 //    public static void startServer(){
 //        HsqlProperties hsqlProperties = new HsqlProperties();
 //         hsqlProperties

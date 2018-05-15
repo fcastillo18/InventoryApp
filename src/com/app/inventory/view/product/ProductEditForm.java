@@ -5,7 +5,9 @@
  */
 package com.app.inventory.view.product;
 
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.dao.controller.ProductJpaController;
+import com.app.inventory.domain.Inventory;
 import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.util.UtilInv;
@@ -30,11 +32,17 @@ public class ProductEditForm extends javax.swing.JFrame {
         initComponents();
         util = new UtilInv();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+        jlPrice2.setVisible(false);
+        jlPrice3.setVisible(false);
+        txtPrice2.setVisible(false);
+        txtPrice3.setVisible(false);
     }
     
     public int idProduct;
     private UtilInv util;
     private ProductJpaController productController = null;
+    private Product product = null;
+    private Inventory inventory = null;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,13 +59,13 @@ public class ProductEditForm extends javax.swing.JFrame {
         txtDescripcion = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtCategory = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        jlPrice3 = new javax.swing.JLabel();
         txtPrice3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtPrice1 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtCost = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        jlPrice2 = new javax.swing.JLabel();
         txtPrice2 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -86,21 +94,26 @@ public class ProductEditForm extends javax.swing.JFrame {
 
         jLabel1.setText("Codigo:");
 
+        txtCode.setEnabled(false);
+
         jLabel2.setText("Descripcion:");
 
         jLabel3.setText("Categoria:");
 
-        jLabel4.setText("Precio 3:");
+        jlPrice3.setText("Precio 3:");
 
         txtPrice3.setText("0");
 
         jLabel5.setText("Precio 1:");
 
         txtPrice1.setText("0");
+        txtPrice1.setEnabled(false);
 
         jLabel7.setText("Costo:");
 
-        jLabel8.setText("Precio 2:");
+        txtCost.setEnabled(false);
+
+        jlPrice2.setText("Precio 2:");
 
         txtPrice2.setText("0");
 
@@ -128,9 +141,9 @@ public class ProductEditForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel8)
+                    .addComponent(jlPrice2)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel4)
+                    .addComponent(jlPrice3)
                     .addComponent(jLabel5)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -199,11 +212,11 @@ public class ProductEditForm extends javax.swing.JFrame {
                             .addComponent(txtPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
+                            .addComponent(jlPrice2)
                             .addComponent(txtPrice2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
+                            .addComponent(jlPrice3)
                             .addComponent(txtPrice3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -274,8 +287,10 @@ public class ProductEditForm extends javax.swing.JFrame {
         //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	Date date = new Date();
         
-        Product product = productController.findProduct(idProduct);
+        //Product product = productController.findProduct(idProduct);
         product.setCategory(txtCategory.getText());
+        product.setDescription(txtDescripcion.getText());
+        inventory.setMinStock(Integer.parseInt(jpStockMin.getValue().toString()));
 //        product.setCost(BigDecimal.valueOf(Double.parseDouble(txtCost.getText().trim())));
 //        product.setCreatedDate(new java.sql.Timestamp(date.getTime()));
 //        product.setDescripcion(txtDescripcion.getText());
@@ -289,7 +304,8 @@ public class ProductEditForm extends javax.swing.JFrame {
 //        product.setStatus(true);
     
         try {
-            productController.edit(product);
+            MainAppController.productController.edit(product);
+            MainAppController.inventoryController.edit(inventory);
         } catch (Exception ex) {
             Logger.getLogger(ProductEditForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -302,17 +318,19 @@ public class ProductEditForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
     
     private void loadClientDataOnForm(){
-        Product prod = productController.findProduct(idProduct);
+//        mainController.getListInv().stream().filter(inv -> inv.hashCode() == inventory.hashCode()).findFirst().isPresent();
+        product = productController.findProduct(idProduct);
+        inventory = MainAppController.inventoryController.findInventoryEntities().stream().filter(inv -> inv.getIdProduct() == idProduct).findFirst().get();
         txtAreaNote.setText("");//pendiente guardar note
-        txtCategory.setText(prod.getCategory());
-        txtCode.setText(prod.getProductCode());
-//        txtCost.setText(prod.getCost().toString());
-//        txtDescripcion.setText(prod.getDescripcion());
-//        txtPrice1.setText(prod.getPrice1().toString());
+        txtCategory.setText(product.getCategory());
+        txtCode.setText(product.getProductCode());
+        txtCost.setText(inventory.getCost().toString());
+        txtDescripcion.setText(product.getDescription());
+        txtPrice1.setText(inventory.getPrice1().toString());
 //        txtPrice2.setText(prod.getPrice2().toString());
 //        txtPrice3.setText(prod.getPrice3().toString());
-//        txtSupplier.setText(prod.getIdSupplier().toString());
-//        jpStockMin.setValue(prod.getMinStock());
+        txtSupplier.setText(product.getIdSupplier().toString());
+        jpStockMin.setValue(inventory.getMinStock());
 //        jpStockMax.setValue(prod.getMaxStock());
     }
     /**
@@ -422,14 +440,14 @@ public class ProductEditForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jlPrice2;
+    private javax.swing.JLabel jlPrice3;
     private javax.swing.JSpinner jpStockMin;
     private javax.swing.JTextArea txtAreaNote;
     private javax.swing.JTextField txtCategory;

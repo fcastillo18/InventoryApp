@@ -30,6 +30,7 @@ public class InventoryList extends javax.swing.JFrame {
         inventoryList = inventoryController.findInventoryEntities();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
         loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
+        jTable1.setDefaultEditor(Object.class, null);
     }
     
     private Inventory inventory = null;
@@ -103,6 +104,7 @@ public class InventoryList extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

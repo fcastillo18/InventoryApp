@@ -34,6 +34,7 @@ public class InventoryTransList extends javax.swing.JFrame {
         inventoryTransList = inventoryTransController.findInventoryTransEntities();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
         loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
+        jTable1.setDefaultEditor(Object.class, null);
     }
     
     private InventoryTrans inventoryTrans = null;
@@ -161,6 +162,7 @@ public class InventoryTransList extends javax.swing.JFrame {
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {dateFrom, dateTo, jcTransType});
 
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

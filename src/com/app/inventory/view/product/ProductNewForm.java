@@ -50,6 +50,7 @@ public class ProductNewForm extends javax.swing.JFrame {
         jlPrice3.setVisible(false);
         ftxtPrice2.setVisible(false);
         ftxtPrice3.setVisible(false);
+        jTableDialogSupplier.setDefaultEditor(Object.class, null);
     }
     
     /**
@@ -100,6 +101,7 @@ public class ProductNewForm extends javax.swing.JFrame {
 
         jDialogSupplier.setTitle("Listado de Productos");
 
+        jTableDialogSupplier.setAutoCreateRowSorter(true);
         jTableDialogSupplier.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -114,6 +116,9 @@ public class ProductNewForm extends javax.swing.JFrame {
         jTableDialogSupplier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableDialogSupplierMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableDialogSupplierMousePressed(evt);
             }
         });
         jScrollPane3.setViewportView(jTableDialogSupplier);
@@ -232,6 +237,7 @@ public class ProductNewForm extends javax.swing.JFrame {
         jLabel12.setText("ITBIS incluido:");
 
         buttonGroup1.add(jrYes);
+        jrYes.setSelected(true);
         jrYes.setText("Si");
 
         buttonGroup1.add(jrNo);
@@ -422,6 +428,9 @@ public class ProductNewForm extends javax.swing.JFrame {
         if (txtSupplier.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(this, "Campo de proveedor es obliigatorio", "Advertencia", JOptionPane.WARNING_MESSAGE);
             txtSupplier.requestFocus();
+        }else if(ftxtPrice1.getValue() == null || ftxtPrice1.getValue().toString().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Campo de precio es obliigatorio", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            ftxtPrice1.requestFocus();
         }else{
     //        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
@@ -443,8 +452,16 @@ public class ProductNewForm extends javax.swing.JFrame {
             //Entrada inicial al inventario
             Inventory inventory = new Inventory();
             inventory.setIdSupplier(idSupplierClicked);//(Integer.parseInt(txtSupplier.getText()));
-            inventory.setCost(ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
-            inventory.setAvgCost(ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))));
+            BigDecimal cost;
+            if (jrYes.isSelected()) {
+                //Costo viene con ITBIS
+                cost = ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", "")));
+            }else{
+                //Costo viene sin ITBIS
+                cost = ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))).multiply(new BigDecimal(1.18));
+            }
+            inventory.setCost(cost);
+            inventory.setAvgCost(cost);
             inventory.setMinStock(Integer.parseInt(jpMinStock.getValue().toString()));
             inventory.setStock(Integer.parseInt(jpInitialStock.getValue().toString()));
             inventory.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :(BigDecimal) (ftxtPrice1.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim())))); 
@@ -569,6 +586,14 @@ public class ProductNewForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jpInitialStockKeyTyped
+
+    private void jTableDialogSupplierMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogSupplierMousePressed
+        if (evt.getClickCount() == 2 && jTableDialogSupplier.getSelectedRow() != 1) {
+            System.out.println("Clicked twice");
+            jDialogSupplier.setVisible(false);
+            txtSupplier.requestFocus();
+        }
+    }//GEN-LAST:event_jTableDialogSupplierMousePressed
    
     private void loadTableDialogSupplier(DefaultTableModel model){
         jTableDialogSupplier.setModel(model);

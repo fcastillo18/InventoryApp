@@ -53,13 +53,15 @@ public class PrintReports {
         p.feedBack((byte)2);
 //        p.color(1);
         p.alignCenter();
+        p.emphasized(true);
         p.setText(properties.getProperty("COMP_NAME", "Company Name"));
         p.newLine();
         p.setText(properties.getProperty("COMP_DESC","Little description"));
         p.newLine();
         p.addLineSeperator();
         //p.newLine();
-        p.setText("Invoice"); 
+        p.setText(properties.getProperty("SUB_TITLE", "Invoice")); 
+        p.emphasized(true);
         p.newLine();
         p.addLineSeperator();
         p.alignLeft();
@@ -122,7 +124,7 @@ public class PrintReports {
             
             
         });
-         p.newLine();
+         //p.newLine();
         p.addLineSeperator();
         p.setText("\t\t\t    Total:  RD$ "+UtilInv.formatNumber(totalFinal));
         p.newLine();
@@ -138,8 +140,8 @@ public class PrintReports {
         p.feed((byte)3);
         p.finit();
         
-//        System.out.println(p.finalCommandSet());
-//        System.out.println("******************************************************");
+        System.out.println(p.finalCommandSet());
+        System.out.println("******************************************************");
         
         p.feedPrinter(p.finalCommandSet().getBytes());
     }

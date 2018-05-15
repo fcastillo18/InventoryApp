@@ -28,6 +28,7 @@ public class ProductListForm extends javax.swing.JFrame {
     public ProductListForm() {
         initComponents();
         loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
+        jTable1.setDefaultEditor(Object.class, null);
     }
     private Integer idRowClicked;
     /**
@@ -52,6 +53,7 @@ public class ProductListForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Listado de Productos");
 
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -81,7 +83,6 @@ public class ProductListForm extends javax.swing.JFrame {
         });
 
         btnEdit.setText("Modificar");
-        btnEdit.setEnabled(false);
         btnEdit.setNextFocusableComponent(btnRefresh);
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,7 +197,7 @@ public class ProductListForm extends javax.swing.JFrame {
             ProductEditForm clEditForm = new ProductEditForm();
             clEditForm.idProduct = idRowClicked;
             clEditForm.setVisible(true);
-            System.out.println("com.app.inventory.view.ProductListForm.btnEditProductActionPerformed()");
+            //System.out.println("com.app.inventory.view.ProductListForm.btnEditProductActionPerformed()");
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }

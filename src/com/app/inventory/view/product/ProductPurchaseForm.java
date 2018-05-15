@@ -64,7 +64,8 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
         datePicker.setName("datePicker");
         listInv = new ArrayList<Inventory>();
         //lastNoTrans = inventoryController.getInventoryCount()+1; 
-        
+        jTable1.setDefaultEditor(Object.class, null);
+        jTableDialog.setDefaultEditor(Object.class, null);
         fillCombo("product");
         fillCombo("supplier");
     }
@@ -125,6 +126,7 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
 
         jDialog1.setTitle("Listado de Productos");
 
+        jTableDialog.setAutoCreateRowSorter(true);
         jTableDialog.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -139,6 +141,9 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
         jTableDialog.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableDialogMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableDialogMousePressed(evt);
             }
         });
         jTableDialog.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -534,11 +539,10 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
 //        Product p = productController.findProduct(idProductRowClicked);
-        if (idProductRowClicked >= 0) {
+        if (idProductRowClicked >= 0 && listInv.size() > 0) {
             listInv.remove(idProductRowClicked);
     //        System.out.println(p+" remove: "+remove);
             loadTable(mainController.getPurchaseProductTableModel());
-
         }else{
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
@@ -683,7 +687,13 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
 
             //Registrar detalle de la transaccion
             invTrans = new InventoryTrans();
-            invTrans.setCostxunit(inventory.getCost());
+            if (jrYes.isSelected()) {
+                //costo tiene itbis
+                invTrans.setCostxunit(inventory.getCost());
+            }else{
+                //itbis calculado
+                invTrans.setCostxunit(inventory.getCost().multiply(new BigDecimal(1.18)));
+            }
             invTrans.setCreatedDate(inventory.getLastUpdated());
             invTrans.setDiscount(BigDecimal.ZERO);
             invTrans.setIdClient(0); //0 for purshasing
@@ -724,6 +734,14 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
             txtProduct.requestFocus();
         }
     }//GEN-LAST:event_txtRerenceKeyPressed
+
+    private void jTableDialogMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogMousePressed
+        if (evt.getClickCount() == 2 && jTableDialog.getSelectedRow() != 1) {
+            System.out.println("Clicked twice");
+            jDialog1.setVisible(false);
+            txtProduct.requestFocus();
+        }
+    }//GEN-LAST:event_jTableDialogMousePressed
 
     private void loadTable(DefaultTableModel model){
         jTable1.setModel(model);

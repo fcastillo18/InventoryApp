@@ -13,8 +13,12 @@ import com.app.inventory.domain.Supplier;
 import com.app.inventory.printer.PrintReports;
 import com.app.inventory.util.EntityManagerUtil;
 import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -24,9 +28,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -68,11 +78,55 @@ public class MainAppController extends InputVerifier{
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     
     /************Metodos para retornar tabla**************/
+   
+    short rowNo = 1;
+    int idx = 0;    
+    public static void writeExcelFile(ArrayList<Object[]> dataList, String[] columnNames, boolean includeHeaders ,String filePath ){
+        if(dataList != null && !dataList.isEmpty()){
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet();
+            Row headingRow = sheet.createRow(0);
+
+            for (int i = 0; i < columnNames.length; i++) {
+                //Seteando nombre de las columnas
+                headingRow.createCell((short)i).setCellValue(columnNames[i]);
+            } 
+            
+            short rowNo = 1;
+            int idx = 0;
+            for (Object[] obj : dataList) {
+                //creando linea o row
+                Row row = sheet.createRow(rowNo);
+                
+                for (Object obj1 : obj) {
+                    //Por cada columna o elemento en el row(arreglo) crea una celda
+                    row.createCell((short)idx).setCellValue(obj1.toString());
+                    idx++;
+                }
+                rowNo++;
+                idx = 0;
+            }
+             
+            try{
+                FileOutputStream fos = new FileOutputStream(filePath);
+                workbook.write(fos);
+                fos.flush();
+                fos.close();
+                workbook.close();
+            }catch(FileNotFoundException e){
+                e.printStackTrace();
+                System.out.println("Invalid directory or file not found");
+            }catch(IOException e){
+                e.printStackTrace();
+                System.out.println("Error occurred while writting excel file to directory");
+            }
+        }
+    }
     
     int idClient = 0;
     String doc ="";
     public boolean getAndPrintInvTransByDocument(String noDocument){
-        boolean success = true;
+        boolean success = false;
         EntityManager em = EntityManagerUtil.getEntityManager();
         em.getTransaction().begin();
 
@@ -101,6 +155,7 @@ public class MainAppController extends InputVerifier{
             DateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd");
             String[] values = {noDocument, defaultDf.format(invTransResult.get(0).getCreatedDate()), MainAppController.clientController.findClient(idClient).getName()};
             printReport.productSalesReport(inventoryList, invTransResult ,values);
+            success = true;
                     
         }
         

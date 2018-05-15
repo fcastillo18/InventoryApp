@@ -5,6 +5,11 @@
  */
 package com.app.inventory.printer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -13,6 +18,8 @@ import javax.print.SimpleDoc;
 import javax.print.attribute.AttributeSet;
 import javax.print.attribute.HashPrintServiceAttributeSet;
 import javax.print.attribute.standard.PrinterName;
+import javax.swing.JOptionPane;
+import org.apache.log4j.LogManager;
 
 /**
  *
@@ -20,6 +27,19 @@ import javax.print.attribute.standard.PrinterName;
  */
 public class PrinterOptions {
     String commandSet = "";
+    FileInputStream fileInput;
+    Properties properties;
+    private final org.apache.log4j.Logger logger;
+    
+    public PrinterOptions() {
+        this.logger = LogManager.getLogger(getClass());
+        try {
+            this.fileInput = new FileInputStream(new File("config/project.properties"));
+        } catch (FileNotFoundException ex) {
+            logger.fatal("Archivo de propiedades no encontrado" + ex);
+        }
+    }
+    
 
     public String initialize() {
         final byte[] Init = {27, 64};
@@ -229,12 +249,21 @@ public class PrinterOptions {
         return commandSet;
     }
     
-    public static boolean feedPrinter(byte[] b) {
+    public boolean feedPrinter(byte[] b) {
+        properties = new Properties();
+        try {
+            properties.load(fileInput);
+        } catch (IOException ex) {
+            logger.fatal(ex);
+            ex.printStackTrace();
+        }
     try {       
-        AttributeSet attrSet = new HashPrintServiceAttributeSet(new PrinterName("EPSON TM-T20II", null)); //EPSON TM-U220 ReceiptE4
+        AttributeSet attrSet = new HashPrintServiceAttributeSet(new PrinterName(properties.getProperty("PRINTER_NAME", "EPSON TM-T20II"), null)); //EPSON TM-U220 ReceiptE4        
         
-        DocPrintJob job = PrintServiceLookup.lookupPrintServices(null, attrSet)[0].createPrintJob();       
-        //PrintServiceLookup.lookupDefaultPrintService().createPrintJob();  
+        DocPrintJob job = PrintServiceLookup.lookupPrintServices(null, attrSet)[0].createPrintJob(); 
+        //System.out.println("Printed located and loaded");
+        logger.info("Printed located and loaded");
+//PrintServiceLookup.lookupDefaultPrintService().createPrintJob();  
 
         DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
         Doc doc = new SimpleDoc(b, flavor, null);
@@ -246,9 +275,16 @@ public class PrinterOptions {
         System.out.println("Done !");
        
     } catch (javax.print.PrintException pex) {
-        System.out.println("Printer Error " + pex.getMessage());
+        logger.fatal("Printer Error " + pex);
+        pex.printStackTrace();
         return false;
+    } catch(ArrayIndexOutOfBoundsException e){
+        logger.fatal("Printer not found " + e);
+        JOptionPane.showMessageDialog(null, "Printer not found...");
+        e.printStackTrace();
+        return false; 
     } catch(Exception e) {
+        logger.fatal("Printer Error " + e);
         e.printStackTrace();
         return false;
     }
