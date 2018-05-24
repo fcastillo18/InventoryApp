@@ -263,7 +263,7 @@ public class PrinterOptions {
         DocPrintJob job = PrintServiceLookup.lookupPrintServices(null, attrSet)[0].createPrintJob(); 
         //System.out.println("Printed located and loaded");
         logger.info("Printed located and loaded");
-//PrintServiceLookup.lookupDefaultPrintService().createPrintJob();  
+        //PrintServiceLookup.lookupDefaultPrintService().createPrintJob();  
 
         DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
         Doc doc = new SimpleDoc(b, flavor, null);

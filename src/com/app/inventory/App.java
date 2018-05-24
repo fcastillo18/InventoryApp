@@ -6,34 +6,15 @@
 package com.app.inventory;
 
 import com.app.inventory.dao.controller.MainAppController;
+import com.app.inventory.view.MainForm;
 import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-//import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
-//import java.text.ParseException;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
-//import javax.swing.UIManager;
-//import javax.swing.UnsupportedLookAndFeelException;
 
-
-//import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
 
 
 /**
@@ -52,8 +33,8 @@ public class App {
         }
         
 
-//        MainForm mainForm = new MainForm();
-//        mainForm.setVisible(true);
+        MainForm mainForm = new MainForm();
+        mainForm.setVisible(true);
         //String formatted to use in report.
 //        System.out.println(String.format("%-10s", "Texto"));
 //        System.out.println(String.format("%-10.10s", "Texto"));
@@ -87,17 +68,17 @@ public class App {
 //                
 //            }   
 
-        String[] columns = {"Column1", "Column2", "Column3", "Column4"};
-        String[] row = {"Cell1", "Cell2", "Cell3", "Cell4"};
-        String[] row2 = {"Cell11", "Cell22", "Cell33", "Cell44"};
-        String[] row3 = {"Cell111", "Cell222", "Cell333", "Cell444"};
-        ArrayList<Object[]> list = new ArrayList<>();
-        list.add(row);
-        list.add(row2);
-        list.add(row3);
-        String path= "C:/excel.xlsx";
-        
-        MainAppController.writeExcelFile(list, columns, true, path);
+//        String[] columns = {"Column1", "Column2", "Column3", "Column4"};
+//        String[] row = {"Cell1", "Cell2", "Cell3", "Cell4"};
+//        String[] row2 = {"Cell11", "Cell22", "Cell33", "Cell44"};
+//        String[] row3 = {"Cell111", "Cell222", "Cell333", "Cell444"};
+//        ArrayList<Object[]> list = new ArrayList<>();
+//        list.add(row);
+//        list.add(row2);
+//        list.add(row3);
+//        String path= "C:/excel.xlsx";
+//        
+//        MainAppController.writeExcelFile(list, columns, true, path);
         
     }
     

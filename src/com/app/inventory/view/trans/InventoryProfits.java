@@ -32,6 +32,7 @@ public class InventoryProfits extends javax.swing.JFrame {
      */
     public InventoryProfits() {
         initComponents();
+        mainController = new MainAppController();
         inventoryTransController = new InventoryTransJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
         inventoryTransList = inventoryTransController.findInventoryTransEntities();
         productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
@@ -45,7 +46,7 @@ public class InventoryProfits extends javax.swing.JFrame {
     private List<InventoryTrans> inventoryTransList = null;
     private Product product = null;
     private ProductJpaController productController= null;
-    MainAppController mainController = new MainAppController();
+    MainAppController mainController;
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,6 +70,7 @@ public class InventoryProfits extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Ganancias x factura");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros"));
 
@@ -126,10 +128,11 @@ public class InventoryProfits extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(btSearch)
-                    .addComponent(txtProductFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtProductFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(btSearch)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -196,8 +199,7 @@ public class InventoryProfits extends javax.swing.JFrame {
             
 //            mainController.getInventoryProfitsTableModel(jcTransType.getSelectedItem().toString().toLowerCase(), textToFilter, date1, date2);
             
-            loadTable(mainController.getInventoryProfitsTableModel("venta", textToFilter.toLowerCase(), 
-            date1, date2));
+            loadTable(mainController.getInventoryProfitsTableModel("venta", textToFilter.toLowerCase(), date1, date2));
 //new java.sql.Date(date1.getTime()), new java.sql.Date(date2.getTime())));
         }else{
            loadTable(mainController.getInventoryProfitsTableModel("venta", "", null, null));

@@ -30,9 +30,6 @@ import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -74,7 +71,7 @@ public class MainAppController extends InputVerifier{
     public static InventoryTransJpaController invTransController = new InventoryTransJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
     
     //otras variables
-    private DecimalFormat df = new DecimalFormat( "#,###,###,##0" );
+    private DecimalFormat df = new DecimalFormat( "#,###,###,##0.00" );
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     
     /************Metodos para retornar tabla**************/
@@ -141,17 +138,17 @@ public class MainAppController extends InputVerifier{
             success = false;
         }else{
             invTransResult.forEach(invTrans -> {
-                doc = String.valueOf(invTrans.getIdClient());
+                idClient = invTrans.getIdClient();
                 inventoryList.add(inventoryController.findInventory(invTrans.getIdProduct()));
             });
             
            /********************imprimir reporte*****************************/
             PrintReports printReport = new PrintReports();
-            MainAppController.clientController.findClientEntities().forEach(cli -> {
-                if (cli.getDocument().equals(doc)) {
-                    idClient = cli.getIdClient();
-                }
-            });
+//            MainAppController.clientController.findClientEntities().forEach(cli -> {
+//                if (cli.getDocument().equals(doc)) {
+//                    idClient = cli.getIdClient();
+//                }
+//            });
             DateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd");
             String[] values = {noDocument, defaultDf.format(invTransResult.get(0).getCreatedDate()), MainAppController.clientController.findClient(idClient).getName()};
             printReport.productSalesReport(inventoryList, invTransResult ,values);
@@ -373,14 +370,39 @@ public class MainAppController extends InputVerifier{
     EntityManager em = EntityManagerUtil.getEntityManager();
         em.getTransaction().begin();
 
-        Query query  = em.createQuery("SELECT i.idInvTrans, i.idInventory, i.idProduct,  "
+        Query query = null;  
+        String statement = "SELECT i.idInvTrans, i.idInventory, i.idProduct,  "
                 + "i.noDocument, p.productCode, i.idClient, i.idUser, i.transType, "
                 + "i.quantity, i.costxunit, i.pricexunit, i.total, i.createdDate "
-                + "FROM Product p, InventoryTrans i WHERE p.idProduct = i.idProduct "
-                + "and (LOWER(p.productCode) like :productCode or LOWER(p.description) like :description or LOWER(i.noDocument) like :document )");//or i.createdDate between :dateFrom and :dateTo)");
-        query.setParameter("productCode", "%"+textToFilter.toLowerCase()+"%");
-        query.setParameter("description", "%"+textToFilter.toLowerCase()+"%");
-        query.setParameter("document", "%"+textToFilter.toLowerCase()+"%");
+                + "FROM Product p, InventoryTrans i "
+                + "WHERE p.idProduct = i.idProduct ";
+
+        String addFilter = " i.transType = '"+transType+"' ";
+        
+        if (!"".equals(textToFilter.trim())) {
+            String value = "";
+            if (transType.equals("todas")) {
+                value = statement + " and (LOWER(p.productCode) like :productCode or LOWER(i.noDocument) like :document)";
+            }else{
+                value = statement + " and (LOWER(p.productCode) like :productCode or LOWER(i.noDocument) like :document) and "+addFilter;
+            }
+            query = em.createQuery(value);
+            query.setParameter("document", "%"+textToFilter.toLowerCase()+"%");
+            query.setParameter("productCode", "%"+textToFilter.toLowerCase()+"%");
+        }else if(dateFrom != null && dateTo != null){
+            String value = statement + " and i.createdDate between :dateFrom and :dateTo and "+addFilter;
+            query = em.createQuery(value);
+            query.setParameter("dateFrom", dateFrom);
+            query.setParameter("dateTo", dateTo);
+        }else if(transType.equals("venta") || transType.equals("compra")){
+            query = em.createQuery(statement + " and " + addFilter);//, i.createdDate");
+        }else{
+            query = em.createQuery(statement);
+        }
+        System.out.println(statement);
+//        query.setParameter("productCode", "%"+textToFilter.toLowerCase()+"%");
+//        query.setParameter("description", "%"+textToFilter.toLowerCase()+"%");
+//        query.setParameter("document", "%"+textToFilter.toLowerCase()+"%");
 //        query.setParameter("dateFrom",Timestamp.from(dateFrom.toInstant()));
 //        query.setParameter("dateTo", Timestamp.from(dateTo.toInstant()));
         //System.out.println(query.toString());

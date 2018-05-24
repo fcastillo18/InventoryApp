@@ -115,7 +115,7 @@ public class UtilInv {
     }
     
     public static String formatNumber(Object number){
-        DecimalFormat df = new DecimalFormat( "#,###,###,##0" );
+        DecimalFormat df = new DecimalFormat( "#,###,###,##0.00" );
         
         return df.format(number);
     }

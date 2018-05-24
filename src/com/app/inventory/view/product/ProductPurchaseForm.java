@@ -521,7 +521,7 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
             mainController.getListInv().clear(); //this lista has to be empty to store new products that will be shown on the table
             UtilInv.clearTextFields(this.getContentPane());
             loadTable(mainController.getPurchaseProductTableModel());
-            txtRerence.setText(reference);
+//            txtRerence.setText(reference);
         }
         
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -736,7 +736,7 @@ public class ProductPurchaseForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtRerenceKeyPressed
 
     private void jTableDialogMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogMousePressed
-        if (evt.getClickCount() == 2 && jTableDialog.getSelectedRow() != 1) {
+        if (evt.getClickCount() == 2 && jTableDialog.getSelectedRow() != -1) {
             System.out.println("Clicked twice");
             jDialog1.setVisible(false);
             txtProduct.requestFocus();

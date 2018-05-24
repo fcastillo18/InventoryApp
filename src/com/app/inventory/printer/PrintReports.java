@@ -20,23 +20,25 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.log4j.LogManager;
 
 /**
  *
  * @author frank
  */
 public class PrintReports {
-    PrinterOptions p= new PrinterOptions();
+    private PrinterOptions p= new PrinterOptions();
     //MainAppController mainController = new MainAppController();
-    int totalFinal = 0;
-    FileInputStream fileInput;
-    Properties properties;
+    private double totalFinal = 0;
+    private FileInputStream fileInput;
+    private Properties properties;
+    private final org.apache.log4j.Logger logger = LogManager.getLogger(getClass());
 
     public PrintReports() {
         try {
             this.fileInput = new FileInputStream(new File("config/project.properties"));
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(PrintReports.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Error trying loading the property file", ex);
         }
     }
     
@@ -100,14 +102,14 @@ public class PrintReports {
                     BigDecimal total =  invTrans.getPricexunit().multiply(new BigDecimal(invTrans.getQuantity()));
                     p.setText(
                             product.getProductCode() + "\t" 
-                            +"$" +UtilInv.formatNumber(invTrans.getPricexunit().intValue()) + "   \n" 
+                            +"$" +UtilInv.formatNumber(invTrans.getPricexunit().doubleValue()) + "   \n" 
 //                            +p.newLine()
                             +formatStr(30,(product.getDescription())) 
                             +formatStr(10, invTrans.getQuantity().toString())
-                            +formatStr(8, UtilInv.formatNumber(total.intValue()))
+                            +formatStr(8, UtilInv.formatNumber(total.doubleValue()))
                             
                                     );
-                    totalFinal = totalFinal + total.intValue();
+                    totalFinal = totalFinal + total.doubleValue();
                     p.newLine();
 //                    p.addLineSeperator();
 //                    p.setText(
@@ -132,16 +134,17 @@ public class PrintReports {
         p.alignCenter();
         p.setText("***** Fin documento *****");
         p.newLine();
+        p.newLine();
         p.setText(properties.getProperty("COMP_FOOTER_QUOTE","Little quote"));
 //        p.newLine();
 //        p.setText("No factura \t\t: "+values[0]);
 //        p.newLine();
-        System.out.println("Imprimiendo reporte");
+        logger.info("Imprimiendo reporte: "+values[0]);
         p.feed((byte)3);
         p.finit();
         
         System.out.println(p.finalCommandSet());
-        System.out.println("******************************************************");
+//        System.out.println("******************************************************");
         
         p.feedPrinter(p.finalCommandSet().getBytes());
     }

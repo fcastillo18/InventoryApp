@@ -70,6 +70,7 @@ public class InventoryTransList extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Compras y Ventas ");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros"));
 
@@ -90,7 +91,12 @@ public class InventoryTransList extends javax.swing.JFrame {
 
         jLabel4.setText("Type:");
 
-        jcTransType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Compra", "Venta" }));
+        jcTransType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todas", "Compra", "Venta" }));
+        jcTransType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcTransTypeItemStateChanged(evt);
+            }
+        });
 
         jLabel5.setText("Buscar por:");
 
@@ -202,17 +208,7 @@ public class InventoryTransList extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtProductFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductFilterKeyPressed
-//        if (txtProductFilter.getText().length() >= 1) {
-//            String textToFilter = txtProductFilter.getText().trim();
-//            System.out.println("Length: "+txtProductFilter.getText().length()+" - "+textToFilter);
-//            
-//            Date date1 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-//            Date date2 = dateFrom.getText().equals("") ? null : Date.from(dateFrom.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()); 
-//            
-//            loadTable(mainController.getInventoryTransTableModel(jcTransType.getSelectedItem().toString().toLowerCase(), textToFilter, date1, date2));
-//        }else{
-//            loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
-//        }
+        btSearchActionPerformed(null);
     }//GEN-LAST:event_txtProductFilterKeyPressed
 
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
@@ -228,7 +224,33 @@ public class InventoryTransList extends javax.swing.JFrame {
             loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
         }
     }//GEN-LAST:event_btSearchActionPerformed
+
+    private void jcTransTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcTransTypeItemStateChanged
+        switch (jcTransType.getSelectedItem().toString().toLowerCase()) {
+            case "todas":
+                loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
+                break;
+            case "compra":
+                loadCustomTable("compra");
+                break;
+            case "venta":
+                loadCustomTable("venta");
+                break;
+            default:
+                loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
+                break;
+        }
+    }//GEN-LAST:event_jcTransTypeItemStateChanged
     
+    private void loadCustomTable(String transType){
+        String textToFilter = txtProductFilter.getText().trim();
+        System.out.println("Length: "+txtProductFilter.getText().length()+" - "+textToFilter);
+
+        java.sql.Date date1 = dateFrom.getText().equals("") ? null : java.sql.Date.valueOf(dateFrom.getDate());
+        java.sql.Date date2 = dateTo.getText().equals("") ? null : java.sql.Date.valueOf(dateTo.getDate()); 
+
+        loadTable(mainController.getInventoryTransTableModel(transType, textToFilter, date1, date2));
+    }
     
     private void loadTable(DefaultTableModel model){
         jTable1.setModel(model);

@@ -562,7 +562,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 invTrans.setIdInventory(inv.getIdInventory());//sopesar el colocar el id del inventory creado en la linea de arriba
                 invTrans.setIdProduct(inv.getIdProduct());
                 invTrans.setIdSupplier(inv.getIdSupplier());
-                invTrans.setIdClient(Integer.parseInt(txtClient.getText()));
+                invTrans.setIdClient(idClientClicked);
                 invTrans.setIdUser(1);//modificar cuando se haga modulo de user
                 invTrans.setTransType("venta");
                 invTrans.setDiscount(BigDecimal.ZERO);
@@ -654,8 +654,8 @@ public class ProductSalesForm extends javax.swing.JFrame {
                     //mainController.getListInv().add(inv);
                 }
     
-                int lastTotal = txtTotals.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtTotals.getText().replace(",", ""));
-                int newTotal = lastTotal + inventory.getPrice1().multiply(new BigDecimal(prodQty)).intValue(); //ojo
+                double lastTotal = txtTotals.getText().trim().isEmpty() ? 0 : Double.valueOf(txtTotals.getText().replace(",", ""));
+                double newTotal = lastTotal + inventory.getPrice1().multiply(new BigDecimal(prodQty)).doubleValue(); //ojo
                 //Cargar tabla y limpiar los campos
                 /*Limpiar elementos de la pantalla*/
             //UtilInv.clearTextFields(this.getContentPane());
@@ -745,7 +745,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
                     }
                 });
             txtInStock.setText(inventory.getStock().toString());
-            ftxtPrice.setValue(inventory.getPrice1().intValue());
+            ftxtPrice.setValue(inventory.getPrice1().doubleValue());
 //            //for supplier
 //            supplier = supplierController.findSupplier(idSupplierRowClicked);
 //            comboSupplier.setSelectedItem(supplier.getIdSupplier()+"-"+supplier.getName());
@@ -902,16 +902,16 @@ public class ProductSalesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1KeyPressed
 
     private void jTableDialogProductMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogProductMousePressed
-         if (evt.getClickCount() == 2 && jTableDialogProduct.getSelectedRow() != 1) {
-            System.out.println("Clicked twice");
+        if (evt.getClickCount() == 2 && jTableDialogProduct.getSelectedRow() != -1) {
+           // System.out.println("Clicked twice");
             jDialogProduct.setVisible(false);
             txtProduct.requestFocus();
         }
     }//GEN-LAST:event_jTableDialogProductMousePressed
 
     private void jTableDialogClientMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogClientMousePressed
-        if (evt.getClickCount() == 2 && jTableDialogClient.getSelectedRow() != 1) {
-            System.out.println("Clicked twice");
+        if (evt.getClickCount() == 2 && jTableDialogClient.getSelectedRow() != -1) {
+           // System.out.println("Clicked twice");
             jDialogClient.setVisible(false);
             txtClient.requestFocus();
         }

@@ -588,7 +588,7 @@ public class ProductNewForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jpInitialStockKeyTyped
 
     private void jTableDialogSupplierMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDialogSupplierMousePressed
-        if (evt.getClickCount() == 2 && jTableDialogSupplier.getSelectedRow() != 1) {
+        if (evt.getClickCount() == 2 && jTableDialogSupplier.getSelectedRow() != -1) {
             System.out.println("Clicked twice");
             jDialogSupplier.setVisible(false);
             txtSupplier.requestFocus();

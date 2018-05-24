@@ -5,13 +5,18 @@
  */
 package com.app.inventory.util;
 
-import com.app.inventory.dao.ConnectionDB;
-import com.app.inventory.domain.Supplier;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -19,20 +24,50 @@ import javax.persistence.Query;
  */
 public class EntityManagerUtil {
     
-    public static void main(String[] args) {
-        getEntityManager();
-        //new ConnectionDB().getConnection();
-    }
+    private static FileInputStream fileInput;
+    private static Properties properties = new Properties();
+    private static final Logger logger = LogManager.getLogger(EntityManager.class);
+    
+//    protected EntityManager getEntityManager(String driver, String url, String username, String password) {
+//    EntityManager em = null;
+//    Map properties = new HashMap();
+//    properties.put("javax.persistence.jdbc.driver", driver);
+//    properties.put("javax.persistence.jdbc.url", url);
+//    properties.put("javax.persistence.jdbc.user", username);
+//    properties.put("javax.persistence.jdbc.password", password);
+//    try {
+//        emf = Persistence.createEntityManagerFactory("dynamicJPA", properties);
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//    }
+//    return em = (EntityManager) emf.createEntityManager();
+//}
+    
     
     public static EntityManager getEntityManager(){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("InvAppPU3"); 
-//        EntityManagerFactory factory = Persistence.createEntityManagerFactory("Inventory_TPU_SQL");
-//        EntityManagerFactory factory = Persistence.createEntityManagerFactory("Inventory_TPU_Emb");
-        EntityManager manager = factory.createEntityManager();
-//        Query q = manager.createQuery("select p from Supplier p");
-//        List<Supplier> list = q.getResultList();
-////        
-//        list.forEach(s -> System.out.println(s.getName()));
+        EntityManagerFactory factory = null;
+         EntityManager manager = null;
+        try {
+            fileInput = new FileInputStream(new File("config/project.properties"));
+            properties.load(fileInput);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(EntityManagerUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Map mapProp = new HashMap();
+        mapProp.put("javax.persistence.jdbc.driver", properties.getProperty("DRIVER"));
+        mapProp.put("javax.persistence.jdbc.url", properties.getProperty("URL"));
+        mapProp.put("javax.persistence.jdbc.user", properties.getProperty("USER"));
+        mapProp.put("javax.persistence.jdbc.password", properties.getProperty("PASSWORD"));
+        try { 
+            factory = Persistence.createEntityManagerFactory(properties.getProperty("CON_UNIT_NAME"), mapProp);
+            //System.out.println(factory.getProperties());
+            manager = factory.createEntityManager();
+        } catch (Exception e) {
+            System.out.println("Error creating the EntityManager ");
+            logger.fatal("Error creating the EntityManager", e);
+            e.printStackTrace();
+        }
         
         return manager;
     }

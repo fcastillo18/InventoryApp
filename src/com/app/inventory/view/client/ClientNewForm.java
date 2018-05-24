@@ -6,14 +6,20 @@
 package com.app.inventory.view.client;
 
 import com.app.inventory.dao.controller.ClientJpaController;
-import com.app.inventory.dao.jdbc.SystemDaoJdbc;
 import com.app.inventory.domain.Client;
 import com.app.inventory.util.EntityManagerUtil;
 import com.app.inventory.util.UtilInv;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -31,6 +37,7 @@ public class ClientNewForm extends javax.swing.JFrame {
     }
     private UtilInv util;
     private ClientJpaController clientController = null;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
