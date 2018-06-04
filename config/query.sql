@@ -7,7 +7,7 @@
  * Author:  Franklin Castillo
  * Created: Apr 11, 2018
  */
-
+select * from CLIENT
 
 drop table CLIENT;
 

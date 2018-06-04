@@ -5,9 +5,10 @@
  */
 package com.app.inventory.view.supplier;
 
-import com.app.inventory.view.client.*;
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.dao.controller.SupplierJpaController;
 import com.app.inventory.dao.controller.exceptions.NonexistentEntityException;
+import com.app.inventory.domain.Supplier;
 import com.app.inventory.util.EntityManagerUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,7 +90,6 @@ public class SupplierListForm extends javax.swing.JFrame {
         });
 
         btnDeleteClient.setText("Eliminar");
-        btnDeleteClient.setEnabled(false);
         btnDeleteClient.setNextFocusableComponent(btnRefresh);
         btnDeleteClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,10 +210,10 @@ public class SupplierListForm extends javax.swing.JFrame {
         if (idRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar el registro?", "Info", dialogButton);
-            if(dialogResult == 0) {
-                SupplierJpaController clientController = new SupplierJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+            if(dialogResult == 0 & new MainAppController().hasEntryOnInventory(idRowClicked, "supplier") == false) {
+                SupplierJpaController supplierController = new SupplierJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {
-                    clientController.destroy(idRowClicked);
+                    supplierController.destroy(idRowClicked);
                     loadTable();
                 } catch (NonexistentEntityException ex) {
                     System.out.println("com.app.inventory.view.SupplierListForm.btnDeleteSupplierActionPerformed()");
@@ -221,7 +221,16 @@ public class SupplierListForm extends javax.swing.JFrame {
                 }
                 JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente");
             } else {
-              System.out.println("No Option");
+                JOptionPane.showMessageDialog(this, "El proveedor tiene productos existentes asiganados...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+//              try {
+//                    //If have any entry in InvTrans, just Soft delete
+//                    Supplier supplier = MainAppController.supplierController.findSupplier(idRowClicked);
+//                    supplier.setStatus(false);
+//                    MainAppController.supplierController.edit(supplier);
+//                    JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente s");
+//                } catch (Exception ex) {
+//                    Logger.getLogger(SupplierListForm.class.getName()).log(Level.SEVERE, null, ex);
+//                }
             } 
         }else{
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -283,10 +292,12 @@ public class SupplierListForm extends javax.swing.JFrame {
         String columns[] = {"ID","Documento", "Nombre", "Direccion", "Sector", "Telefono", "Correo"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
         
-        SupplierJpaController clientController = new SupplierJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+        SupplierJpaController supplierController = new SupplierJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 
-        clientController.findSupplierEntities().forEach(client -> {
-            tableModel.addRow(new Object[]{ client.getIdSupplier(),client.getDocument(), client.getName(), client.getAddress(), client.getZone(), client.getPhone() ,client.getEmail()});
+        supplierController.findSupplierEntities().forEach(supplier -> {
+            if (supplier.getStatus()) {
+                tableModel.addRow(new Object[]{ supplier.getIdSupplier(),supplier.getDocument(), supplier.getName(), supplier.getAddress(), supplier.getZone(), supplier.getPhone() ,supplier.getEmail()});
+            }
         }); 
         
         return tableModel;

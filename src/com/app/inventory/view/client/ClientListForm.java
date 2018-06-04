@@ -6,7 +6,9 @@
 package com.app.inventory.view.client;
 
 import com.app.inventory.dao.controller.ClientJpaController;
+import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.dao.controller.exceptions.NonexistentEntityException;
+import com.app.inventory.domain.Client;
 import com.app.inventory.util.EntityManagerUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,7 +90,6 @@ public class ClientListForm extends javax.swing.JFrame {
         });
 
         btnDelete.setText("Eliminar");
-        btnDelete.setEnabled(false);
         btnDelete.setNextFocusableComponent(btnRefresh);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,7 +210,8 @@ public class ClientListForm extends javax.swing.JFrame {
         if (idRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar el registro?", "Info", dialogButton);
-            if(dialogResult == 0) {
+            if(dialogResult == 0 & new MainAppController().hasEntryOnInventory(idRowClicked, "client") == false) {
+                //if the client doesnt have any entry on InvTrans, DELETE
                 ClientJpaController clientController = new ClientJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {
                     clientController.destroy(idRowClicked);
@@ -220,7 +222,15 @@ public class ClientListForm extends javax.swing.JFrame {
                 }
                 JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente");
             } else {
-              System.out.println("No Option");
+                try {
+                    //If have any entry in InvTrans, just Soft delete
+                    Client client = MainAppController.clientController.findClient(idRowClicked);
+                    client.setStatus(false);
+                    MainAppController.clientController.edit(client);
+                    JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente s");
+                } catch (Exception ex) {
+                    Logger.getLogger(ClientListForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } 
         }else{
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -279,7 +289,9 @@ public class ClientListForm extends javax.swing.JFrame {
         ClientJpaController clientController = new ClientJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 
         clientController.findClientEntities().forEach(client -> {
-            tableModel.addRow(new Object[]{ client.getIdClient(),client.getDocument(), client.getName(), client.getAddress(), client.getZone(), client.getPhone() ,client.getEmail()});
+            if (client.getStatus()) {
+                tableModel.addRow(new Object[]{ client.getIdClient(),client.getDocument(), client.getName(), client.getAddress(), client.getZone(), client.getPhone() ,client.getEmail()});
+            }
         }); 
         
         return tableModel;

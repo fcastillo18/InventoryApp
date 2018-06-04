@@ -6,10 +6,9 @@
 package com.app.inventory.view.product;
 
 import com.app.inventory.dao.controller.MainAppController;
-import com.app.inventory.view.product.ProductNewForm;
-import com.app.inventory.view.product.ProductEditForm;
 import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.dao.controller.exceptions.NonexistentEntityException;
+import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,6 +68,9 @@ public class ProductListForm extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
         });
         jScrollPane1.setViewportView(jTable1);
 
@@ -91,7 +93,6 @@ public class ProductListForm extends javax.swing.JFrame {
         });
 
         btnDelete.setText("Eliminar");
-        btnDelete.setEnabled(false);
         btnDelete.setNextFocusableComponent(btnRefresh);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,7 +213,7 @@ public class ProductListForm extends javax.swing.JFrame {
         if (idRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar el registro?", "Info", dialogButton);
-            if(dialogResult == 0) {
+            if(dialogResult == 0 & new MainAppController().hasEntryOnInventory(idRowClicked, "product") == false) {
                 ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {
                     productController.destroy(idRowClicked);
@@ -223,7 +224,15 @@ public class ProductListForm extends javax.swing.JFrame {
                 }
                 JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente");
             } else {
-              System.out.println("No Option");
+              try {
+                    //If have any entry in InvTrans, just Soft delete
+                    Product product = MainAppController.productController.findProduct(idRowClicked);
+                    product.setStatus(false);
+                    MainAppController.productController.edit(product);
+                    JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente s");
+                } catch (Exception ex) {
+                    Logger.getLogger(ProductListForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } 
         }else{
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -235,6 +244,17 @@ public class ProductListForm extends javax.swing.JFrame {
         ProductNewForm clNewForm = new ProductNewForm();
         clNewForm.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        if (idRowClicked != null && evt.getClickCount() == 2 && jTable1.getSelectedRow() != -1) {
+            ProductEditForm clEditForm = new ProductEditForm();
+            clEditForm.idProduct = idRowClicked;
+            clEditForm.setVisible(true);
+//            System.out.println("Clicked twice");
+            //JDialog.setVisible(false);
+            //txtSupplier.requestFocus();
+        }
+    }//GEN-LAST:event_jTable1MousePressed
 
     private void loadTable(DefaultTableModel model){
         jTable1.setModel(model);

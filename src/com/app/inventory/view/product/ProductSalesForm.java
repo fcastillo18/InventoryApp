@@ -572,7 +572,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 invTrans.setPricexunit(price);
                 invTrans.setTotal(price.multiply(new BigDecimal(qtyOfItemOnList)));
                 invTrans.setCreatedDate(inv.getLastUpdated());
-            
+                invTrans.setStatus("Activo");
                 invTransController.create(invTrans);
                 
                 invTrans.setIdInventory(invTransController.findInventoryTransEntities().get(invTransController.findInventoryTransEntities().size()-1).getIdInventory());
@@ -631,7 +631,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
         }else{
             int inStock = Integer.parseInt(txtInStock.getText());
             int prodQty = Integer.parseInt(ftxtQuantity.getText().replace(",", ""));
-            if (prodQty < inStock) {
+            if (prodQty <= inStock && inStock != 0) {
                 
                 //verificando si el item exixte en la lista de productos added
                 boolean exist = mainController.getListInv().stream().filter(inv -> inv.hashCode() == inventory.hashCode()).findFirst().isPresent();
@@ -683,8 +683,11 @@ public class ProductSalesForm extends javax.swing.JFrame {
                 
             }else if(prodQty <= 0){
                 JOptionPane.showMessageDialog(this, "Debe digitar una cantidad mayor a cero...", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            }else{
-                JOptionPane.showMessageDialog(this, "Debe digitar una cantidad menor al stock...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }else if(inStock <= 0){
+                JOptionPane.showMessageDialog(this, "Producto no tiene stock disponible...", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Debe digitar una cantidad menor o igual al stock...", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
         }
         //arreglar total y limpiar elementos
@@ -715,7 +718,7 @@ public class ProductSalesForm extends javax.swing.JFrame {
             mainController.getListInv().remove(idProductRowClicked);
     //        System.out.println(p+" remove: "+remove);
             loadTable(mainController.getSalesProductTableModel());
-//                txtLastTrans.setText(String.valueOf(lastNoTrans--));    
+                txtTotals.setText("0");    
         }else{
             JOptionPane.showMessageDialog(this, "Debe seleccionar un registro para poder continuar...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }

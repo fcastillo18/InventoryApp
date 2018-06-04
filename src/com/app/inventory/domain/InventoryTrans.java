@@ -44,7 +44,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "InventoryTrans.findByPricexunit", query = "SELECT i FROM InventoryTrans i WHERE i.pricexunit = :pricexunit")
     , @NamedQuery(name = "InventoryTrans.findByTax", query = "SELECT i FROM InventoryTrans i WHERE i.tax = :tax")
     , @NamedQuery(name = "InventoryTrans.findByTotal", query = "SELECT i FROM InventoryTrans i WHERE i.total = :total")
-    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")})
+    , @NamedQuery(name = "InventoryTrans.findByCreatedDate", query = "SELECT i FROM InventoryTrans i WHERE i.createdDate = :createdDate")
+    , @NamedQuery(name = "InventoryTrans.findByStatus", query = "SELECT i FROM InventoryTrans i WHERE i.status = :status")
+    , @NamedQuery(name = "InventoryTrans.findByUpdateDate", query = "SELECT i FROM InventoryTrans i WHERE i.updateDate = :updateDate")})
 public class InventoryTrans implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,8 +83,13 @@ public class InventoryTrans implements Serializable {
     @Column(name = "TOTAL")
     private BigDecimal total;
     @Column(name = "CREATED_DATE")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
+    @Column(name = "STATUS")
+    private String status;
+    @Column(name = "UPDATE_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateDate;
 
     public InventoryTrans() {
     }
@@ -209,6 +216,22 @@ public class InventoryTrans implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override

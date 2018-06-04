@@ -17,13 +17,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.ResultSet;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.InputVerifier;
@@ -74,8 +76,96 @@ public class MainAppController extends InputVerifier{
     private DecimalFormat df = new DecimalFormat( "#,###,###,##0.00" );
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     
-    /************Metodos para retornar tabla**************/
-   
+    public boolean deleteInvoice(String invoice){
+        boolean success = true;
+        Date date = new Date();
+        
+        //validamos si el elemento entrante es una venta
+        invTrans = invTransController.findInventoryTransEntities()
+            .stream().filter(inv -> inv.getTransType().equals("venta"))
+            .findFirst().get();
+        if (invTrans != null) {
+
+                //Leyendo los registros por venta
+                invTransController.findInventoryTransEntities().forEach(inv -> {
+                    if (inv.getNoDocument().equals(invoice) & inv.getTransType().equals("venta")) {
+                        listInvTrans.add(inv);
+                    }
+                });
+                
+                //retornando las cantidades a inventario x cada venta
+                listInvTrans.forEach(inv -> {
+                    try {
+                        Inventory inventory = inventoryController.findInventory(inv.getIdInventory());
+                        inventory.setStock(inv.getQuantity() + inventory.getStock());
+                        inventoryController.edit(inventory);
+                        
+                        //Extract date and parse to SQL Date.
+                        inv.setStatus("Cancelado");
+                        inv.setUpdateDate(new java.sql.Timestamp(date.getTime()));
+                        invTransController.edit(inv);
+                    } catch (Exception ex) {
+                        Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                
+        }
+        else{
+            success = false; //el registro no es una venta
+        }
+       
+        return success;
+    }
+    
+    /**
+     * Evaluates if the object passed has an entry in the InventoryTrans table
+     * @param id  Id to filter
+     * @param filter  Entity to filter (client, product, supplier)
+     */
+    public boolean hasEntryOnInventory(int id, String filter){
+        boolean result= false;
+        switch (filter){
+            case "client":
+                try {
+                    invTrans = invTransController.findInventoryTransEntities()
+                        .stream().filter(inv -> inv.getIdClient() == id & inv.getStatus().equals("Activo"))
+                        .findFirst().get();
+                    if (invTrans != null) {
+                        result = true;
+                    }
+                } catch (NoSuchElementException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case "product":
+                try {
+                    invTrans = invTransController.findInventoryTransEntities()
+                        .stream().filter(inv -> inv.getIdProduct() == id & inv.getStatus().equals("Activo"))
+                        .findFirst().get();
+                    if (invTrans != null) {
+                        result = true;
+                    }
+                } catch (NoSuchElementException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case "supplier":
+                try {
+                    invTrans = invTransController.findInventoryTransEntities()
+                        .stream().filter(inv -> inv.getIdSupplier() == id & inv.getStatus().equals("Activo"))
+                        .findFirst().get();
+                    if (invTrans != null) {
+                        result = true;
+                    }
+                } catch (NoSuchElementException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;   
+        }
+        return result;
+    }
+    
+    
     short rowNo = 1;
     int idx = 0;    
     public static void writeExcelFile(ArrayList<Object[]> dataList, String[] columnNames, boolean includeHeaders ,String filePath ){
@@ -208,11 +298,11 @@ public class MainAppController extends InputVerifier{
         em.getTransaction().begin();
 
         Query query  = em.createQuery("select i.noDocument from InventoryTrans i\n" +
-                                "where i.transType = 'venta'\n" +
+                                "where i.transType = 'venta'\n"+
                                 "and i.idInvTrans = (\n" +
                                 "                    select max(a.idInvTrans)\n" +
                                 "                    from InventoryTrans a \n" +
-                                "                    where a.transType = 'venta'\n" +
+                                "                    where a.transType = 'venta'\n"+
                                 "                    )\n");
         List<Object> result = query.getResultList();
         if (result.size() > 0) {
@@ -258,22 +348,24 @@ public class MainAppController extends InputVerifier{
             }else{
                 listInv2.forEach(inv -> {
                     product = productController.findProduct(inv.getIdProduct());
-    //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
-//                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
-                    //boolean exist = getListInv().stream().filter(i -> inv.hashCode() == inventory.hashCode()).findFirst().isPresent();
-                    boolean existPrevAddSales = getListInv().stream()
-                                            .filter(i -> i.getIdInventory() == inv.getIdInventory())
-                                            .findFirst().isPresent();
-                    
-                    tableModel.addRow(new Object[]{inv.getIdProduct(), inv.getIdSupplier(), 
-                        product.getProductCode(), product.getDescription(), 
-                        existPrevAddSales ? inv.getStock() - getListInv().stream()
-                                                        .filter(i -> i.getIdInventory() == inv.getIdInventory())
-                                                        .findFirst().get().getStock() : inv.getStock(),
-                        //inv.getStock(), la linea de arriba es para descontar de la lista a mostrar la cantidad, de modo que se muestre actualizada 
-                        df.format(inv.getCost().doubleValue()), df.format(inv.getPrice1().doubleValue()),
-                        inv.getMinStock()
-                    });
+                    if (product.getStatus()) {
+        //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
+    //                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
+                        //boolean exist = getListInv().stream().filter(i -> inv.hashCode() == inventory.hashCode()).findFirst().isPresent();
+                        boolean existPrevAddSales = getListInv().stream()
+                                                .filter(i -> i.getIdInventory() == inv.getIdInventory())
+                                                .findFirst().isPresent();
+
+                        tableModel.addRow(new Object[]{inv.getIdProduct(), inv.getIdSupplier(), 
+                            product.getProductCode(), product.getDescription(), 
+                            existPrevAddSales ? inv.getStock() - getListInv().stream()
+                                                            .filter(i -> i.getIdInventory() == inv.getIdInventory())
+                                                            .findFirst().get().getStock() : inv.getStock(),
+                            //inv.getStock(), la linea de arriba es para descontar de la lista a mostrar la cantidad, de modo que se muestre actualizada 
+                            df.format(inv.getCost().doubleValue()), df.format(inv.getPrice1().doubleValue()),
+                            inv.getMinStock()
+                        });
+                    }
                 }); 
             }
         } catch (Exception e) {
@@ -296,7 +388,7 @@ public class MainAppController extends InputVerifier{
                 + "from InventoryTrans i " ;
         
         String addFilter = " i.transType = '"+transType+"' ";
-        String groupBy = "  group by i.noDocument";       
+        String groupBy = " and i.status = 'Activo' \n group by i.noDocument";       
         
         if (!"".equals(textToFilter.trim())) {
             String value = statement + " where i.noDocument like :document and "+addFilter+groupBy;
@@ -375,7 +467,8 @@ public class MainAppController extends InputVerifier{
                 + "i.noDocument, p.productCode, i.idClient, i.idUser, i.transType, "
                 + "i.quantity, i.costxunit, i.pricexunit, i.total, i.createdDate "
                 + "FROM Product p, InventoryTrans i "
-                + "WHERE p.idProduct = i.idProduct ";
+                + "WHERE p.idProduct = i.idProduct "
+                + " and i.status = 'Activo' ";
 
         String addFilter = " i.transType = '"+transType+"' ";
         
@@ -433,17 +526,22 @@ public class MainAppController extends InputVerifier{
                 tableModel.addRow(new Object[]{ }); 
             }else{
                 listInvTrans.forEach(inv -> {
-                    product = productController.findProduct(inv.getIdProduct());
-                    //product = productController.findProduct(inv.getIdProduct());
-                    //inventory = inventoryController.findInventory(inv.getIdInventory());
-    //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
-//                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
-                    tableModel.addRow(new Object[]{inv.getIdInvTrans(), inv.getIdInventory(),
-                        inv.getIdProduct(), inv.getNoDocument(), product.getProductCode(),
-                        inv.getIdClient(), inv.getIdUser(),inv.getTransType(), 
-                        inv.getQuantity(), inv.getCostxunit(),inv.getPricexunit(), 
-                        inv.getTotal(), dateFormat.format(inv.getCreatedDate())
-                    });
+                    if (inv.getStatus().equals("Activo")) {
+                        product = productController.findProduct(inv.getIdProduct());
+                        //product = productController.findProduct(inv.getIdProduct());
+                        //inventory = inventoryController.findInventory(inv.getIdInventory());
+        //                BigDecimal total = new BigDecimal(BigInteger.ZERO,  2);
+    //                    BigDecimal total =  inv.getCost().multiply(new BigDecimal(inv.getStock()));
+                        tableModel.addRow(new Object[]{inv.getIdInvTrans(), inv.getIdInventory(),
+                            inv.getIdProduct(), inv.getNoDocument(), product.getProductCode(),
+                            inv.getIdClient(), inv.getIdUser(),inv.getTransType(), 
+                            inv.getQuantity(), inv.getCostxunit(),inv.getPricexunit(), 
+                            inv.getTotal(), dateFormat.format(inv.getCreatedDate())
+                        });
+                    }else{
+                    //do nothing
+                    }
+                    
                 }); 
             }
         } catch (Exception e) {

@@ -168,7 +168,7 @@ public class ProductNewForm extends javax.swing.JFrame {
 
         jlPrice3.setText("Precio 3:");
 
-        jLabel5.setText("Precio 1:");
+        jLabel5.setText("Precio:");
 
         jLabel7.setText("Costo:");
 
@@ -225,6 +225,11 @@ public class ProductNewForm extends javax.swing.JFrame {
 
         ftxtCost.setText("0");
         ftxtCost.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        ftxtCost.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                ftxtCostFocusLost(evt);
+            }
+        });
         ftxtCost.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 ftxtCostKeyPressed(evt);
@@ -464,9 +469,9 @@ public class ProductNewForm extends javax.swing.JFrame {
             inventory.setAvgCost(cost);
             inventory.setMinStock(Integer.parseInt(jpMinStock.getValue().toString()));
             inventory.setStock(Integer.parseInt(jpInitialStock.getValue().toString()));
-            inventory.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :(BigDecimal) (ftxtPrice1.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim())))); 
-            inventory.setPrice2(ftxtPrice2.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice2.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim())))); 
-            inventory.setPrice3(ftxtPrice3.getText().trim().equals("") ? BigDecimal.ZERO : (BigDecimal) (ftxtPrice3.getText().trim().replace(",", "").isEmpty() ? 0 : BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim())))); 
+            inventory.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim().replace(",", ""))));
+            inventory.setPrice2(ftxtPrice2.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim().replace(",", ""))));
+            inventory.setPrice3(ftxtPrice3.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim().replace(",", ""))));
             inventory.setPrice4(BigDecimal.ZERO);
             inventory.setIdProduct(product.getIdProduct());
             inventory.setTax(inventory.getCost().multiply(BigDecimal.valueOf(0.18)).intValue());//Pending
@@ -489,6 +494,7 @@ public class ProductNewForm extends javax.swing.JFrame {
             invTrans.setTax(BigDecimal.ZERO);
             invTrans.setTotal(inventory.getCost().multiply(BigDecimal.valueOf(inventory.getStock().doubleValue())));
             invTrans.setTransType("compra");
+            invTrans.setStatus("Activo");
             invTransController.create(invTrans);
 
 
@@ -560,7 +566,8 @@ public class ProductNewForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSupplierKeyPressed
     String numberTyped = "";
     private void ftxtCostKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ftxtCostKeyTyped
-//        System.out.println("Pressed: " +evt.getKeyChar());
+        //System.out.println("Pressed: " +evt.getKeyChar());
+        //ftxtPrice1.setValue(ftxtCost.getValue());
 ////        for (char c : numberTyped.toCharArray()){
 //            if (Character.isDigit(evt.getKeyChar())) { //Solo entra si el caracter es un numero
 //                numberTyped = ftxtCost.getValue() == null ? "1" : ftxtCost.getValue().toString() + evt.getKeyChar() ;
@@ -594,6 +601,10 @@ public class ProductNewForm extends javax.swing.JFrame {
             txtSupplier.requestFocus();
         }
     }//GEN-LAST:event_jTableDialogSupplierMousePressed
+
+    private void ftxtCostFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ftxtCostFocusLost
+        //ftxtPrice1.setValue(ftxtCost.getValue());
+    }//GEN-LAST:event_ftxtCostFocusLost
    
     private void loadTableDialogSupplier(DefaultTableModel model){
         jTableDialogSupplier.setModel(model);

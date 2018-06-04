@@ -17,6 +17,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,6 +25,8 @@ import javax.swing.table.DefaultTableModel;
  * @author frank
  */
 public class InventoryTransList extends javax.swing.JFrame {
+
+    private int idRowClicked;
 
     /**
      * Creates new form InventoryTransList
@@ -66,6 +69,7 @@ public class InventoryTransList extends javax.swing.JFrame {
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         txtProductFilter = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -113,6 +117,13 @@ public class InventoryTransList extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Eliminar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -128,7 +139,7 @@ public class InventoryTransList extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dateTo, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                         .addComponent(btSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -142,7 +153,9 @@ public class InventoryTransList extends javax.swing.JFrame {
                         .addComponent(jRadioButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtProductFilter)))
-                .addGap(108, 108, 108))
+                .addGap(25, 25, 25)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,7 +175,9 @@ public class InventoryTransList extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addComponent(dateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1))
-                    .addComponent(btSearch))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btSearch)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
 
@@ -241,6 +256,23 @@ public class InventoryTransList extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_jcTransTypeItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String invoiceNo = (jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 3).toString());
+        int option = JOptionPane.YES_NO_CANCEL_OPTION;
+        int dialogOption = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar la fatura y retornar los items al inventario?", "Confirmacion", option);
+        
+        if (dialogOption==0 & !invoiceNo.equals("")) {
+            if (mainController.deleteInvoice(invoiceNo)) {
+                loadTable(new MainAppController().getInventoryTransTableModel(MainAppController.invTransController.findInventoryTransEntities()));
+                JOptionPane.showMessageDialog(this, "Factura eliminada satisfactoriamente");
+            }else{
+                JOptionPane.showMessageDialog(this, "El documento seleccionado no es una venta", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     private void loadCustomTable(String transType){
         String textToFilter = txtProductFilter.getText().trim();
@@ -328,6 +360,7 @@ public class InventoryTransList extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private com.github.lgooddatepicker.components.DatePicker dateFrom;
     private com.github.lgooddatepicker.components.DatePicker dateTo;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
