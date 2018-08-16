@@ -488,8 +488,8 @@ public class ProductSalesForm extends javax.swing.JFrame {
             }
         });
 
+        txtTotals.setEditable(false);
         txtTotals.setText("0");
-        txtTotals.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

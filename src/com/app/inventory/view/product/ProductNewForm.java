@@ -436,6 +436,11 @@ public class ProductNewForm extends javax.swing.JFrame {
         }else if(ftxtPrice1.getValue() == null || ftxtPrice1.getValue().toString().trim().equals("")){
             JOptionPane.showMessageDialog(this, "Campo de precio es obliigatorio", "Advertencia", JOptionPane.WARNING_MESSAGE);
             ftxtPrice1.requestFocus();
+        }else if(productController.findProductEntities()
+                                  .stream()
+                                  .filter(p -> p.getProductCode().equals(txtCode.getText().replace(",", "")))
+                                  .findFirst().isPresent()){
+        JOptionPane.showMessageDialog(this, "Este codigo de producto ya existe en la base de datos.\nIntente con otro codigo", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }else{
     //        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
@@ -447,61 +452,63 @@ public class ProductNewForm extends javax.swing.JFrame {
             product.setProductCode(txtCode.getText().replace(",", ""));
             product.setStatus(true);
             product.setDescription(txtDescripcion.getText());
-            productController.create(product);
 
-            //Obteniendo el ID_PRODUCT creado
-            Query query = EntityManagerUtil.getEntityManager().createNamedQuery("Product.findByProductCode");
-            query.setParameter("productCode", product.getProductCode());
-            product.setIdProduct(((Product)query.getResultList().get(0)).getIdProduct());
+                productController.create(product);
 
-            //Entrada inicial al inventario
-            Inventory inventory = new Inventory();
-            inventory.setIdSupplier(idSupplierClicked);//(Integer.parseInt(txtSupplier.getText()));
-            BigDecimal cost;
-            if (jrYes.isSelected()) {
-                //Costo viene con ITBIS
-                cost = ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", "")));
-            }else{
-                //Costo viene sin ITBIS
-                cost = ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))).multiply(new BigDecimal(1.18));
-            }
-            inventory.setCost(cost);
-            inventory.setAvgCost(cost);
-            inventory.setMinStock(Integer.parseInt(jpMinStock.getValue().toString()));
-            inventory.setStock(Integer.parseInt(jpInitialStock.getValue().toString()));
-            inventory.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim().replace(",", ""))));
-            inventory.setPrice2(ftxtPrice2.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim().replace(",", ""))));
-            inventory.setPrice3(ftxtPrice3.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim().replace(",", ""))));
-            inventory.setPrice4(BigDecimal.ZERO);
-            inventory.setIdProduct(product.getIdProduct());
-            inventory.setTax(inventory.getCost().multiply(BigDecimal.valueOf(0.18)).intValue());//Pending
-            inventory.setLastUpdated(new java.sql.Timestamp(date.getTime()));
-            inventoryController.create(inventory);
+                //Obteniendo el ID_PRODUCT creado
+                Query query = EntityManagerUtil.getEntityManager().createNamedQuery("Product.findByProductCode");
+                query.setParameter("productCode", product.getProductCode());
+                product.setIdProduct(((Product)query.getResultList().get(0)).getIdProduct());
 
-            //Registrar detalle de la transaccion
-            InventoryTrans invTrans = new InventoryTrans();
-            invTrans.setNoDocument("000000");
-            invTrans.setCostxunit(inventory.getCost());
-            invTrans.setCreatedDate(inventory.getLastUpdated());
-            invTrans.setDiscount(BigDecimal.ZERO);
-            invTrans.setIdClient(0); //0 for purshasing
-            invTrans.setIdInventory(inventory.getIdInventory());
-            invTrans.setIdProduct(inventory.getIdProduct());
-            invTrans.setIdSupplier(inventory.getIdSupplier());
-            invTrans.setIdUser(1);
-            invTrans.setPricexunit(BigDecimal.ZERO);//Para las compras este campo sera 0
-            invTrans.setQuantity(inventory.getStock());
-            invTrans.setTax(BigDecimal.ZERO);
-            invTrans.setTotal(inventory.getCost().multiply(BigDecimal.valueOf(inventory.getStock().doubleValue())));
-            invTrans.setTransType("compra");
-            invTrans.setStatus("Activo");
-            invTransController.create(invTrans);
+                //Entrada inicial al inventario
+                Inventory inventory = new Inventory();
+                inventory.setIdSupplier(idSupplierClicked);//(Integer.parseInt(txtSupplier.getText()));
+                BigDecimal cost;
+                if (jrYes.isSelected()) {
+                    //Costo viene con ITBIS
+                    cost = ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", "")));
+                }else{
+                    //Costo viene sin ITBIS
+                    cost = ftxtCost.getText().trim().equals("") ? BigDecimal.ZERO : BigDecimal.valueOf(Double.parseDouble(ftxtCost.getText().trim().replace(",", ""))).multiply(new BigDecimal(1.18));
+                }
+                inventory.setCost(cost);
+                inventory.setAvgCost(cost);
+                inventory.setMinStock(Integer.parseInt(jpMinStock.getValue().toString()));
+                inventory.setStock(Integer.parseInt(jpInitialStock.getValue().toString()));
+                inventory.setPrice1(ftxtPrice1.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice1.getText().trim().replace(",", ""))));
+                inventory.setPrice2(ftxtPrice2.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice2.getText().trim().replace(",", ""))));
+                inventory.setPrice3(ftxtPrice3.getText().trim().equals("") ? BigDecimal.ZERO :  BigDecimal.valueOf(Double.parseDouble(ftxtPrice3.getText().trim().replace(",", ""))));
+                inventory.setPrice4(BigDecimal.ZERO);
+                inventory.setIdProduct(product.getIdProduct());
+                inventory.setTax(inventory.getCost().multiply(BigDecimal.valueOf(0.18)).intValue());//Pending
+                inventory.setLastUpdated(new java.sql.Timestamp(date.getTime()));
+                inventoryController.create(inventory);
+
+                //Registrar detalle de la transaccion
+                InventoryTrans invTrans = new InventoryTrans();
+                invTrans.setNoDocument("000000");
+                invTrans.setCostxunit(inventory.getCost());
+                invTrans.setCreatedDate(inventory.getLastUpdated());
+                invTrans.setDiscount(BigDecimal.ZERO);
+                invTrans.setIdClient(0); //0 for purshasing
+                invTrans.setIdInventory(inventory.getIdInventory());
+                invTrans.setIdProduct(inventory.getIdProduct());
+                invTrans.setIdSupplier(inventory.getIdSupplier());
+                invTrans.setIdUser(1);
+                invTrans.setPricexunit(BigDecimal.ZERO);//Para las compras este campo sera 0
+                invTrans.setQuantity(inventory.getStock());
+                invTrans.setTax(BigDecimal.ZERO);
+                invTrans.setTotal(inventory.getCost().multiply(BigDecimal.valueOf(inventory.getStock().doubleValue())));
+                invTrans.setTransType("compra");
+                invTrans.setStatus("Activo");
+                invTransController.create(invTrans);
 
 
-            JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-            UtilInv.clearTextFields(this.getContentPane());
-            jpMinStock.setValue(0);
-            jpInitialStock.setValue(0);
+                JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
+                UtilInv.clearTextFields(this.getContentPane());
+                jpMinStock.setValue(0);
+                jpInitialStock.setValue(0);
+            
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 

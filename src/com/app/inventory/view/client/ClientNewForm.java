@@ -250,9 +250,16 @@ public class ClientNewForm extends javax.swing.JFrame {
             client.setPhone(txtPhone.getText());
             client.setStatus(true);//activo
             client.setZone(txtZone.getText());
-            clientController.create(client);
-            JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-            util.clearTextFields(this.getContentPane());
+            if(clientController.findClientEntities()
+                                  .stream()
+                                  .filter(p -> p.getDocument().equals(client.getDocument()))
+                                  .findFirst().isPresent()){
+            JOptionPane.showMessageDialog(this, "Este codigo de Cliente ya existe en la base de datos.\nIntente con otro codigo", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }else{
+                clientController.create(client);
+                JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
+                util.clearTextFields(this.getContentPane());
+            }
         }else{
             JOptionPane.showMessageDialog(this, "Favor completar los campos solicitados...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }

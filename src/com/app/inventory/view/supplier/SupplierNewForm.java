@@ -252,9 +252,16 @@ public class SupplierNewForm extends javax.swing.JFrame {
             supplier.setPhone(txtPhone.getText());
             supplier.setStatus(true);//activo
             supplier.setZone(txtZone.getText());
-            supplierController.create(supplier);
-            JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
-            util.clearTextFields(this.getContentPane());
+            if(supplierController.findSupplierEntities()
+                                  .stream()
+                                  .filter(p -> p.getDocument().equals(supplier.getDocument()))
+                                  .findFirst().isPresent()){
+            JOptionPane.showMessageDialog(this, "Este codigo de Proveedor ya existe en la base de datos.\nIntente con otro codigo", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }else{
+                supplierController.create(supplier);
+                JOptionPane.showMessageDialog(this, "Guardado satisfactoriamente");
+                util.clearTextFields(this.getContentPane());
+            }
         }else{
             JOptionPane.showMessageDialog(this, "Favor completar los campos solicitados...", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }

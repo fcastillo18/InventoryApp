@@ -5,9 +5,13 @@
  */
 package com.app.inventory.view.product;
 
+import com.app.inventory.dao.controller.InventoryJpaController;
+import com.app.inventory.dao.controller.InventoryTransJpaController;
 import com.app.inventory.dao.controller.MainAppController;
 import com.app.inventory.dao.controller.ProductJpaController;
 import com.app.inventory.dao.controller.exceptions.NonexistentEntityException;
+import com.app.inventory.domain.Inventory;
+import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
 import java.util.logging.Level;
@@ -213,10 +217,20 @@ public class ProductListForm extends javax.swing.JFrame {
         if (idRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar el registro?", "Info", dialogButton);
-            if(dialogResult == 0 & new MainAppController().hasEntryOnInventory(idRowClicked, "product") == false) {
+            if(dialogResult == 0 ){//& new MainAppController().hasEntryOnInventory(idRowClicked, "product") == false) {
                 ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+                InventoryJpaController inventoryController = new InventoryJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
+                InventoryTransJpaController invTransController = new InventoryTransJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {
                     productController.destroy(idRowClicked);
+                    Inventory inventory = inventoryController.findInventoryEntities().stream().filter( inv -> inv.getIdProduct() == idRowClicked ).findFirst().get();
+                    if (inventory != null) {
+                        inventoryController.destroy(inventory.getIdInventory());
+                    }
+                    InventoryTrans inventoryTrans = invTransController.findInventoryTransEntities().stream().filter( inv -> inv.getIdProduct() == idRowClicked ).findFirst().get();
+                    if (inventoryTrans != null) {
+                        invTransController.destroy(inventoryTrans.getIdInvTrans());
+                    }
                     loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
                 } catch (NonexistentEntityException ex) {
                     System.out.println("com.app.inventory.view.ProductListForm.btnDeleteProductActionPerformed()");
