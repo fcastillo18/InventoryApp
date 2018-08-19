@@ -14,8 +14,10 @@ import com.app.inventory.domain.Inventory;
 import com.app.inventory.domain.InventoryTrans;
 import com.app.inventory.domain.Product;
 import com.app.inventory.util.EntityManagerUtil;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Query;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,7 +35,7 @@ public class ProductListForm extends javax.swing.JFrame {
         loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
         jTable1.setDefaultEditor(Object.class, null);
     }
-    private Integer idRowClicked;
+    private Integer idProductRowClicked;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -194,13 +196,13 @@ public class ProductListForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        idRowClicked = Integer.parseInt(jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0).toString());
+        idProductRowClicked = Integer.parseInt(jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0).toString());
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        if (idRowClicked != null) {
+        if (idProductRowClicked != null) {
             ProductEditForm clEditForm = new ProductEditForm();
-            clEditForm.idProduct = idRowClicked;
+            clEditForm.idProduct = idProductRowClicked;
             clEditForm.setVisible(true);
             //System.out.println("com.app.inventory.view.ProductListForm.btnEditProductActionPerformed()");
         } else {
@@ -214,23 +216,30 @@ public class ProductListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        if (idRowClicked != null) {
+        if (idProductRowClicked != null) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Seguro que desea eliminar el registro?", "Info", dialogButton);
-            if(dialogResult == 0 ){//& new MainAppController().hasEntryOnInventory(idRowClicked, "product") == false) {
+            if(dialogResult == 0 ){//& new MainAppController().hasEntryOnInventory(idProductRowClicked, "product") == false) {
                 ProductJpaController productController = new ProductJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 InventoryJpaController inventoryController = new InventoryJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 InventoryTransJpaController invTransController = new InventoryTransJpaController(EntityManagerUtil.getEntityManager().getEntityManagerFactory());
                 try {
-                    productController.destroy(idRowClicked);
-                    Inventory inventory = inventoryController.findInventoryEntities().stream().filter( inv -> inv.getIdProduct() == idRowClicked ).findFirst().get();
+                    productController.destroy(idProductRowClicked);
+                    Inventory inventory = inventoryController.findInventoryEntities().stream().filter(inv -> inv.getIdProduct() == idProductRowClicked ).findFirst().get();
                     if (inventory != null) {
                         inventoryController.destroy(inventory.getIdInventory());
                     }
-                    InventoryTrans inventoryTrans = invTransController.findInventoryTransEntities().stream().filter( inv -> inv.getIdProduct() == idRowClicked ).findFirst().get();
-                    if (inventoryTrans != null) {
-                        invTransController.destroy(inventoryTrans.getIdInvTrans());
+                    //Obteniendo referencia al producto en la tabla de transacciones
+                    Query query = EntityManagerUtil.getEntityManager().createNamedQuery("InventoryTrans.findByIdProduct");
+                    query.setParameter("idProduct", idProductRowClicked);
+                    
+                    List<InventoryTrans> listInventoryTrans = query.getResultList();
+                    if (listInventoryTrans != null) {
+                        for (InventoryTrans inventoryTran : listInventoryTrans) {
+                            invTransController.destroy(inventoryTran.getIdInvTrans());
+                        }
                     }
+                    
                     loadTable(new MainAppController().getProductInvTableModel(MainAppController.inventoryController.findInventoryEntities()));
                 } catch (NonexistentEntityException ex) {
                     System.out.println("com.app.inventory.view.ProductListForm.btnDeleteProductActionPerformed()");
@@ -240,7 +249,7 @@ public class ProductListForm extends javax.swing.JFrame {
             } else {
               try {
                     //If have any entry in InvTrans, just Soft delete
-                    Product product = MainAppController.productController.findProduct(idRowClicked);
+                    Product product = MainAppController.productController.findProduct(idProductRowClicked);
                     product.setStatus(false);
                     MainAppController.productController.edit(product);
                     JOptionPane.showMessageDialog(this, "Eliminado satisfactoriamente s");
@@ -260,9 +269,9 @@ public class ProductListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
-        if (idRowClicked != null && evt.getClickCount() == 2 && jTable1.getSelectedRow() != -1) {
+        if (idProductRowClicked != null && evt.getClickCount() == 2 && jTable1.getSelectedRow() != -1) {
             ProductEditForm clEditForm = new ProductEditForm();
-            clEditForm.idProduct = idRowClicked;
+            clEditForm.idProduct = idProductRowClicked;
             clEditForm.setVisible(true);
 //            System.out.println("Clicked twice");
             //JDialog.setVisible(false);

@@ -76,7 +76,7 @@ public class PrintReports {
         p.alignLeft();
         p.addLineSeperator(); //p.newLine();
         p.alignCenter();
-        p.setText("Items");
+        p.setText("Articulos");
         p.newLine();
         p.alignLeft();
 //        p.newLine();
@@ -128,7 +128,7 @@ public class PrintReports {
         });
          //p.newLine();
         p.addLineSeperator();
-        p.setText("\t\t\t    Total:  RD$ "+UtilInv.formatNumber(totalFinal));
+        p.setText("Cant productos: "+listInv.size()+"\t    Total:  RD$ "+UtilInv.formatNumber(totalFinal));
         p.newLine();
         p.newLine();
         p.alignCenter();
@@ -143,8 +143,8 @@ public class PrintReports {
         p.feed((byte)3);
         p.finit();
         
-//        System.out.println(p.finalCommandSet());
-//        System.out.println("******************************************************");
+        System.out.println(p.finalCommandSet());
+        System.out.println("******************************************************");
         
         p.feedPrinter(p.finalCommandSet().getBytes());
     }

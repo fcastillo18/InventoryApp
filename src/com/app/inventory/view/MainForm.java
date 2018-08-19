@@ -501,6 +501,7 @@ public class MainForm extends javax.swing.JFrame {
            String document = txtNoDocument.getText().toLowerCase().trim();
            boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
            if (success) {
+               txtNoDocument.setText("");
                JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
            }else{
                JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -516,6 +517,7 @@ public class MainForm extends javax.swing.JFrame {
             String document = txtNoDocument.getText().toLowerCase().trim();
             boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
             if (success) {
+                txtNoDocument.setText("");
                 JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
             }else{
                 JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -529,6 +531,7 @@ public class MainForm extends javax.swing.JFrame {
             String document = txtNoDocument.getText().toLowerCase().trim();
             boolean success = new MainAppController().getAndPrintInvTransByDocument(document);
             if (success) {
+                txtNoDocument.setText("");
                 JOptionPane.showMessageDialog(this, "El documento fue encontrado y enviado a imprimir.");
             }else{
                 JOptionPane.showMessageDialog(null, "Documento no encontrado, intente nuevamente...", "Advertencia", JOptionPane.WARNING_MESSAGE);
